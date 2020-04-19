@@ -9,4 +9,11 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="plus">plus</string>
+    <string name="enter_cost">enter_cost</string>
+    <string name="type_in_the_expense">type_in_the_expense</string>
+    <string name="delete">delete</string>
+    <string name="plus_sign">+</string>
+    <string name="cost">Cost</string>
+    <string name="expense">Type In The Expense</string>
 </resources>
