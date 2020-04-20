@@ -64,8 +64,6 @@ public class ExpenseList extends AppCompatActivity {
                     Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
                     missingInformationWarning.show();
                 }
-
-
             }
         });
     }

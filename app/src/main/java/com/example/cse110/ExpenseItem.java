@@ -8,18 +8,40 @@ class ExpenseItem {
     private String cost, name, category;
     private double costValue;
     private int month, position;
-    private static final int  DECIMAL_PLACES = 2;
+    private static final int  DECIMAL_PLACES_2 = 2;
+    private static final int  DECIMAL_PLACES_1 = 1;
 
 
     //Constructor
     public ExpenseItem(String cost, String name, int month) {
+
+        // Throws a NullPointerException if the input names are null or the month is invalid
+        if (name.equals(null) || cost.equals(null) || month <= 0 || month > 12) {
+            throw new NullPointerException("Name and cost must not be null. Month must " +
+                    "be greater than or equal to 0.");
+        }
 
         // Add formatting for whole numbers
         if(cost.indexOf('.') == -1){
             cost = cost.concat(".00");
         }else{
             //Ensure only valid input
-            cost = cost.substring(0, cost.indexOf(".") + DECIMAL_PLACES + 1 );
+            int costLength = cost.length();
+            int decimalPlace = cost.indexOf(".");
+
+            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
+            if (costLength - decimalPlace == 1) {
+                cost = cost.substring(0, decimalPlace + 1) +  "00";
+            }
+            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
+            // appends a 0 to the end
+            else if (costLength - decimalPlace == 2) {
+                cost = cost.substring(0, decimalPlace + DECIMAL_PLACES_1 + 1) + "0";
+            }
+            // If the user inputs a number with >= 2 decimal places, only displays up to 2
+            else {
+                cost = cost.substring(0, cost.indexOf(".") + DECIMAL_PLACES_2 + 1);
+            }
         }
 
         //Store value of cost
