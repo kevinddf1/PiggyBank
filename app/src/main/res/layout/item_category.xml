@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ExpenseName"
+                android:layout_margin="5dp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ExpenseItem"
+                android:textColor="#0C0C0C" />
+
+            <TextView
+                android:id="@+id/ExpenseCost"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="end"
+                android:text="ExpenseCost"
+
+                android:textColor="#FF0000" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Category"
+                android:layout_width="231dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="#00FFFFFF"
+                android:gravity="left"
+                android:hint="Category"
+                android:inputType="textShortMessage|none"
+                android:textColor="#808080"
+                android:textSize="10sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:focusable="true">
+
+                <Button
+                    android:id="@+id/delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="#00FFFFFF"
+                    android:gravity="bottom|end"
+                    android:layoutDirection="inherit"
+                    android:text="@string/delete"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="#FF0000"
+                    android:textSize="10sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

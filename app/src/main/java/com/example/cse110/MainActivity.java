@@ -24,18 +24,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Bind button to go to expense list
-        /*
+
         expenseListButton = findViewById(R.id.ExpenseListButton);
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openExpenseList();
+                onExpensesCLick(v);
 
             }
         });
-
-         */
     }
 
     /*private void openExpenseList(){
@@ -61,3 +59,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }*/
 }
+

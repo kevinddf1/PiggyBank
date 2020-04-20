@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/category_name"
+            android:text="@string/categoryName"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="24sp"
+            android:textAllCaps="false"
+            android:gravity="start"
+            />
+
+        <TextView
+            android:id="@+id/budget_display"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|end"
+            android:text="@string/budgetDisplay"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>
