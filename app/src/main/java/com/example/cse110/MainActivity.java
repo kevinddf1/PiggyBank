@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Bind button to go to expense list
+        /*
         expenseListButton = findViewById(R.id.ExpenseListButton);
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {
@@ -33,10 +34,30 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+         */
     }
 
-    private void openExpenseList(){
+    /*private void openExpenseList(){
         Intent intent = new Intent(this, ExpenseList.class);
         startActivity(intent);
+    }*/
+    public void onExpensesCLick(View v) {
+        Intent intent = new Intent(getBaseContext(), ExpenseList.class);
+        startActivity(intent);
     }
+
+    /*
+    public void onHistoryCLick(View v) {
+        Intent intent = new Intent(getBaseContext(), MessagingPage.class);
+        startActivity(intent);
+    }
+    public void onLogoutCLick(View v) {
+        Intent intent = new Intent(getBaseContext(), MapPage.class);
+        startActivity(intent);
+    }
+    public void onSettingsCLick(View v) {
+        Intent intent = new Intent(getBaseContext(), FAQPage.class);
+        startActivity(intent);
+    }*/
 }
