@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     /*private void openExpenseList(){
@@ -61,3 +59,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }*/
 }
+
