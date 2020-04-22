@@ -2,7 +2,7 @@ package com.example.cse110;
 
 import org.junit.Test;
 
-public class ExpenseListTest {
+public class CategoriesListActivityTest {
 
     @Test
     public void onCreate() {
