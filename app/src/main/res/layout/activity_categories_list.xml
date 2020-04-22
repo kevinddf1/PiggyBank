@@ -18,7 +18,7 @@
 
 
         <EditText
-            android:id="@+id/ExpenseName"
+            android:id="@+id/category_name"
             android:layout_width="235dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
@@ -29,7 +29,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/ExpenseCost"
+            android:id="@+id/category_budget"
             android:layout_width="105dp"
             android:layout_height="match_parent"
             android:autofillHints=""
@@ -51,7 +51,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/Expenses"
+        android:id="@+id/Categories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"

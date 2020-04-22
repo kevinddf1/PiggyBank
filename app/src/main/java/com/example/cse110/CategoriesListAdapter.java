@@ -10,16 +10,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class CategoryListAdapter extends ArrayAdapter<CategoryItem> {
-
+public class CategoriesListAdapter extends ArrayAdapter<Category> {
     //Declare core elements that cause changes
     Button btnDelete, btnEdit;
-    final ArrayList<CategoryItem> itemsList;
+    final ArrayList<Category> itemsList;
+
+    private MonthlyData monthlyData;
 
     // Constructor
-    public CategoryListAdapter(Context context, ArrayList<CategoryItem> items) {
+    public CategoriesListAdapter(Context context, ArrayList<Category> items, MonthlyData monthlyData) {
         super(context, 0, items);
 
+        this.monthlyData = monthlyData;
         //Allow for class wide scope
         itemsList = items;
     }
@@ -34,37 +36,30 @@ public class CategoryListAdapter extends ArrayAdapter<CategoryItem> {
         }
 
         // Get the data item for this position
-        final CategoryItem item = getItem(position);
+        final Category item = getItem(position);
         assert item != null;
-        item.setPosition(position);
 
         // Lookup view for data population
-        TextView expenseName = convertView.findViewById(R.id.ExpenseName);
-        TextView expenseCost = convertView.findViewById(R.id.ExpenseCost);
-        TextView category = convertView.findViewById(R.id.Category);
-        category.setText(item.getCategory());
+        TextView categoryName = convertView.findViewById(R.id.category_name);
+        TextView categoryBudget = convertView.findViewById(R.id.category_budget);
+        categoryName.setText(item.getName());
+        categoryBudget.setText(item.getBudgetAsString());
 
         // Create buttons to delete row or edit category
         btnDelete = convertView.findViewById(R.id.delete);
-
 
         //Set event handler for delete item
         btnDelete.setTag(position);
         btnDelete.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(v.getTag() != null){
-
-                    //Remove Expense Item and update adapter
-                    itemsList.remove((int)v.getTag());
+                if (v.getTag() != null) {
+                    // Remove item from MonthlyData and update adapter
+                    monthlyData.deleteCategory(item.getName());
                     notifyDataSetChanged();
                 }
             }
         });
-
-        // Populate the data into the template view using the data object
-        expenseName.setText(item.getExpenseName());
-        expenseCost.setText(item.getExpenseCost());
 
         // Return the completed view to render on screen
         return convertView;
