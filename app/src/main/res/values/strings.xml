@@ -16,4 +16,7 @@
     <string name="plus_sign">+</string>
     <string name="cost">Cost</string>
     <string name="expense">Type In The Expense</string>
+    <string name="categoryName">Category</string>
+    <string name="budgetDisplay">Budget</string>
+    <string name="type_in_the_list_to_create">Type in the list to create</string>
 </resources>

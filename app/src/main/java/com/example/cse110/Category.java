@@ -1,41 +1,90 @@
 package com.example.cse110;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
-public class Category {
-    private int budget;
+public class Category extends AppCompatActivity {
+
+    private int month;
+    private EditText expenseName, expenseCost;
     private String name;
-    // This must be always be kept sorted by the expense's date
-    private ArrayList<Expense> expenses;
-    private int nextExpenseId;
+    //List Structure
+    private CategoryListAdapter categoryAdapter;
 
-    /*
-    Constructor for an empty Category.
-    */
-    public Category() {
-        nextExpenseId = 0;
-        budget = 0;
-        name = "";
-    }
 
-    /*
-    Constructor for a Category loaded from the database.
-    */
-    public Category(int budget, String name, ArrayList<Expense> expenses) {
-        // TODO: set nextExpenseId to be the (max of all IDs in expenses) + 1
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_category);
 
-    public void addExpense(String name, int cost, String category, Date date) {
-        // TODO
-    }
+        Intent intent = getIntent();
+        this.name = Objects.requireNonNull(intent.getExtras()).getString("category_name");
+        //Core values for the category
+        int budget = intent.getExtras().getInt("category_budget");
 
-    public void removeExpense(int id) {
-        // TODO
-    }
+        //Toolbar categoryToolBar = findViewById(R.id.categoryBar);
+        //setActionBar(categoryToolBar);
 
-    public Expense getExpense(int id) {
-        // TODO
-        return new Expense();
+        //textViews in the top bar
+        TextView categoryName = findViewById(R.id.category_name);
+        categoryName.setText( name);
+
+        TextView categoryBudget = findViewById((R.id.budget_display));
+        categoryBudget.setText("$" + Integer.toString(budget));
+
+        // Bind element from XML file
+        expenseName = findViewById(R.id.ExpenseName);
+        expenseCost = findViewById(R.id.ExpenseCost);
+        Button btnAdd = findViewById(R.id.AddToList);
+
+        // Initialize List
+        ArrayList<CategoryItem> arrayOfItems = CategoryItem.getItems();
+        categoryAdapter = new CategoryListAdapter(this, arrayOfItems);
+        ListView expensesList = findViewById(R.id.Expenses);
+        expensesList.setAdapter(categoryAdapter);
+
+        // Set Event Handler to add items to the list
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Create Date Object
+                Date today = new Date();
+
+                //Convert to calendar Object
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(today);
+
+                month = calendar.get(Calendar.MONTH);
+
+                // Ensure that both fields are filled.
+                if(!expenseCost.getText().toString().isEmpty() && !expenseName.getText().toString().isEmpty() ) {
+
+                    // Create new item and update adapter
+                    CategoryItem newItem = new CategoryItem(expenseCost.getText().toString(), expenseName.getText().toString(),name, month);
+                    categoryAdapter.add(newItem);
+                    expenseName.getText().clear();
+                    expenseCost.getText().clear();
+                }else{
+
+                    // Insufficient number of filled fields results in an error warning.
+                    Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
+                    missingInformationWarning.show();
+                }
+            }
+        });
     }
 }

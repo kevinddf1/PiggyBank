@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/overall"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F3F3"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".Category">
 
+
+    <include
+        android:id="@+id/categoryBar"
+        layout="@layout/category_bar"
+        app:layout_constraintBottom_toTopOf="@+id/Expenses" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:background="#26C6DA"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/Expenses"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryBar"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <EditText
@@ -25,7 +33,7 @@
             android:autofillHints=""
             android:ems="10"
             android:gravity="top|left"
-            android:hint="@string/type_in_the_list_to_create"
+            android:hint="@string/expense"
             android:inputType="textPersonName" />
 
         <EditText
@@ -34,7 +42,7 @@
             android:layout_height="match_parent"
             android:autofillHints=""
             android:ems="10"
-            android:hint="Budget"
+            android:hint="@string/cost"
             android:inputType="numberDecimal" />
 
         <Button
