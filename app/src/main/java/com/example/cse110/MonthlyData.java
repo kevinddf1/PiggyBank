@@ -3,6 +3,9 @@ package com.example.cse110;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MonthlyData implements Parcelable {
+    // Month and year should never be modified outside the constructor
     private int month;
     private int year;
     private Map<String, Category> categories;
@@ -33,7 +37,6 @@ public class MonthlyData implements Parcelable {
         categoriesArrayList = in.readArrayList(Category.class.getClassLoader());
     }
 
-    // TODO: idk what this is
     public static final Creator<MonthlyData> CREATOR = new Creator<MonthlyData>() {
         @Override
         public MonthlyData createFromParcel(Parcel in) {
@@ -64,20 +67,13 @@ public class MonthlyData implements Parcelable {
         // TODO
     }
 
-    public void updateToDatabase() {
-        // TODO
-    }
-
     public Category getCategory(String name) {
         // TODO: error handling?
-        if (!categories.containsKey(name)) {
-            return new Category();
-        }
         return categories.get(name);
     }
 
     public Category createCategory(String name, int budget) {
-        Category category = new Category();
+        Category category = new Category(month, year);
         category.setName(name);
         category.setBudget(budget);
         categories.put(name, category);

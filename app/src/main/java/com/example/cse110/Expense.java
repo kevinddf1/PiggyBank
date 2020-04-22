@@ -3,6 +3,8 @@ package com.example.cse110;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Calendar;
 
 /**
@@ -11,22 +13,29 @@ import java.util.Calendar;
 public class Expense implements Parcelable {
     private String name;
     private int cost;
-    private String category;
     private int year, month, day;
     private int id;
+    // parentCategoryName should not be saved in the database
+    private String parentCategoryName;
 
-    public Expense(int id) {
+    public Expense(int id, String name, int cost, int year, int month, int day, String parentCategoryName) {
         this.id = id;
+        this.name = name;
+        this.cost = cost;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.parentCategoryName = parentCategoryName;
     }
 
     protected Expense(Parcel in) {
         name = in.readString();
         cost = in.readInt();
-        category = in.readString();
         year = in.readInt();
         month = in.readInt();
         day = in.readInt();
         id = in.readInt();
+        parentCategoryName = in.readString();
     }
 
     public static final Creator<Expense> CREATOR = new Creator<Expense>() {
@@ -41,14 +50,21 @@ public class Expense implements Parcelable {
         }
     };
 
+    /**
+     * Update the database to reflect changes in Expense's fields.
+     * This is called every time any field in Expense is modified.
+     */
+    public void updateToDatabase() {
+        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // TODO: uid uniquely identifies the user; use it to update the database; Expense.id uniquely identifies the Expense within the Category
+        // use uid, id, and parentCategoryName
+    }
+
     public String getName() {
         return name;
     }
     public int getCost() {
         return cost;
-    }
-    public String getCategory() {
-        return category;
     }
     public int getYear() {
         return year;
@@ -69,21 +85,20 @@ public class Expense implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+        updateToDatabase();
     }
     public void setCost(int cost) {
         this.cost = cost;
+        updateToDatabase();
     }
-    public void setCategory(String category) {
-        this.category = category;
-    }
-    public void setYear(int year) {
+    public void setDate(int year, int month, int day) {
         this.year = year;
-    }
-    public void setMonth(int month) {
         this.month = month;
-    }
-    public void setDay(int day) {
         this.day = day;
+        updateToDatabase();
+    }
+    public void setParentCategoryName(String parentCategoryName) {
+        this.parentCategoryName = parentCategoryName;
     }
 
     @Override
@@ -95,10 +110,10 @@ public class Expense implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeInt(cost);
-        parcel.writeString(category);
         parcel.writeInt(year);
         parcel.writeInt(month);
         parcel.writeInt(day);
         parcel.writeInt(id);
+        parcel.writeString(parentCategoryName);
     }
 }
