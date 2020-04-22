@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Bind button to go to expense list
 
-        expenseListButton = findViewById(R.id.ExpenseListButton);
+        expenseListButton = findViewById(R.id.ExpensesButton);
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {
             @Override
