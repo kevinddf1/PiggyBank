@@ -20,6 +20,7 @@ public class MonthlyData implements Parcelable {
     private int month;
     private int year;
     private Map<String, Category> categories;
+    // This is not serialized but is repopulated from categories so that categories and categoriesArrayList refer to the same Category objects
     private ArrayList<Category> categoriesArrayList;
 
     /*
@@ -37,7 +38,10 @@ public class MonthlyData implements Parcelable {
         year = in.readInt();
         categories = new HashMap<String, Category>();
         in.readMap(categories, Category.class.getClassLoader());
-        categoriesArrayList = in.readArrayList(Category.class.getClassLoader());
+        categoriesArrayList = new ArrayList<>();
+        for (Category category : categories.values()) {
+            categoriesArrayList.add(category);
+        }
     }
 
     public static final Creator<MonthlyData> CREATOR = new Creator<MonthlyData>() {
@@ -63,7 +67,6 @@ public class MonthlyData implements Parcelable {
         parcel.writeInt(month);
         parcel.writeInt(year);
         parcel.writeMap(categories);
-        parcel.writeList(categoriesArrayList);
     }
 
     public void updateFromDatabase() {
