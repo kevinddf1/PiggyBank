@@ -67,7 +67,14 @@ public class CategoriesListActivity extends AppCompatActivity {
                 if(!categoryBudget.getText().toString().isEmpty() && !categoryName.getText().toString().isEmpty() ) {
 
                     // Create new item and update adapter
-                    monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
+                    boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
+
+                    // Verify that category was made
+                    if(!creationSuccessful){
+                        Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Clear inputs
                     categoryName.getText().clear();
                     categoryBudget.getText().clear();
                     myAdapter.notifyDataSetChanged();
@@ -81,7 +88,7 @@ public class CategoriesListActivity extends AppCompatActivity {
         });
     }
 
-    @Override
+   @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -94,8 +101,8 @@ public class CategoriesListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         setResult(RESULT_OK, intent);
+        intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         super.onBackPressed();
     }
 }

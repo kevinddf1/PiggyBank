@@ -1,7 +1,9 @@
 package com.example.cse110;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class MonthlyData implements Parcelable {
     // Month and year should never be modified outside the constructor
@@ -25,8 +28,8 @@ public class MonthlyData implements Parcelable {
     public MonthlyData(int month, int year) {
         this.month = month;
         this.year = year;
-        categories = new HashMap<String, Category>();
-        categoriesArrayList = new ArrayList<Category>();
+        categories = new HashMap<>();
+        categoriesArrayList = new ArrayList<>();
     }
 
     protected MonthlyData(Parcel in) {
@@ -71,25 +74,84 @@ public class MonthlyData implements Parcelable {
         // TODO: error handling?
         return categories.get(name);
     }
+    // Getters
+    public String getMonth(){
+            switch (month){
+                case 0 :
+                    return "January";
 
-    public Category createCategory(String name, int budget) {
-        Category category = new Category(month, year);
-        category.setName(name);
-        category.setBudget(budget);
-        categories.put(name, category);
-        categoriesArrayList.add(category);
-        return category;
+                case 1 :
+                    return "February";
+
+                case 2:
+                    return "March";
+
+
+                case 3:
+                    return "April";
+
+                case 4:
+                    return "May";
+
+
+                case 5:
+                    return "June";
+
+
+                case 6:
+                    return "July";
+
+
+                case 7:
+                    return "August";
+
+
+                case 8:
+                    return "September";
+
+
+                case 9:
+                    return "October";
+
+
+                case 10:
+                    return "November";
+
+                case 11:
+                    return "December";
+
+                default:
+                    throw new IllegalStateException("Unexpected value: " + month);
+            }
+
+    };
+
+    /*
+    /Return true if category was successfully made, false otherwise
+     */
+    public boolean createCategory(String name, int budget) {
+
+        //Check that no category exists with the same name
+        if(!categories.containsKey(name)) {
+            Category category = new Category(month, year);
+            category.setName(name);
+            category.setBudget(budget);
+            categories.put(name, category);
+            categoriesArrayList.add(category);
+            return true;
+        }
+        return false;
     }
 
     public void deleteCategory(String name) {
         categories.remove(name);
-        for (int i = 0; i < categoriesArrayList.size(); i++) {
-            if (categoriesArrayList.get(i).getName().equals(name)) {
-                categoriesArrayList.remove(i);
-                break;
-            }
+      //  for (int i = 0; i < categoriesArrayList.size(); i++) {
+            //if (categoriesArrayList.get(i).getName().equals(name)) {
+
+               // break;
+            //}
         }
-    }
+
 
     public ArrayList<Category> getCategoriesAsArray() {
         return categoriesArrayList;

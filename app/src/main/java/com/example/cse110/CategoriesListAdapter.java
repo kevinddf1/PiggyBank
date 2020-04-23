@@ -56,6 +56,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                 if (v.getTag() != null) {
                     // Remove item from MonthlyData and update adapter
                     monthlyData.deleteCategory(item.getName());
+                    itemsList.remove(item);
                     notifyDataSetChanged();
                 }
             }

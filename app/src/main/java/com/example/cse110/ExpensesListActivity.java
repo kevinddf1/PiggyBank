@@ -52,7 +52,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         Button btnAdd = findViewById(R.id.AddToList);
 
         // Initialize List
-        ArrayList<Expense> arrayOfItems = category.getExpenses();
+        final ArrayList<Expense> arrayOfItems = category.getExpenses();
         expenseAdapter = new ExpenseListAdapter(this, arrayOfItems, category);
         ListView expensesList = findViewById(R.id.Categories);
         expensesList.setAdapter(expenseAdapter);
@@ -80,7 +80,15 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                monthlyData = data.getParcelableExtra(ExpensesListActivity.MONTHLY_DATA_INTENT);
+            }
+        }
+    }
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

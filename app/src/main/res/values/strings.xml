@@ -19,4 +19,5 @@
     <string name="categoryName">Category</string>
     <string name="budgetDisplay">Budget</string>
     <string name="type_in_the_list_to_create">Type in the list to create</string>
+    <string name="expenses">Expenses</string>
 </resources>
