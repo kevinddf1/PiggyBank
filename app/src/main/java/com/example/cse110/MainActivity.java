@@ -11,7 +11,9 @@ import android.widget.Button;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton;
+    Button expenseListButton, historyButton;
+    public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
 
     private MonthlyData thisMonthsData;
 
@@ -20,10 +22,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
-
+        //Check if this a month should be re-instantiated
+        Intent intent = getIntent();
+        thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
         //Bind button to go to expense list
 
         expenseListButton = findViewById(R.id.ExpensesButton);
+        historyButton = findViewById(R.id.HistoryButton);
+
+        historyButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                onHistoryClick(v);
+            }
+        });
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,10 +46,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*private void openExpenseList(){
-        Intent intent = new Intent(this, ExpenseList.class);
-        startActivity(intent);
-    }*/
+    private void onHistoryClick(View v){
+        Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+        // TODO: grab this from the database
+        if (thisMonthsData == null) {
+            Calendar today = Calendar.getInstance();
+            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+        }
+        i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+        startActivityForResult(i, 1);
+
+    }
+
     public void onExpensesCLick(View v) {
         Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
 
