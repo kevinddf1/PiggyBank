@@ -1,93 +1,147 @@
 package com.example.cse110;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
 
-public class Category extends AppCompatActivity {
-
-    private int month;
-    private EditText expenseName, expenseCost;
+/**
+ * A Category should be instantiated only by MonthlyData.
+ */
+public class Category implements Parcelable {
+    private int month, year;
+    private int budget;
     private String name;
-    //List Structure
-    private CategoryListAdapter categoryAdapter;
+    private ArrayList<Expense> expenses;
+    private int nextExpenseId;
 
+    /**
+     * Constructor for an empty Category.
+     */
+    public Category(int month, int year) {
+        this.month = month;
+        this.year = year;
+        nextExpenseId = 0;
+        budget = 0;
+        name = "";
+        expenses = new ArrayList<Expense>();
+    }
+
+    /**
+     * Constructor for a Category loaded from the database.
+     * Only budget, name, and expenses should be stored in the database while
+     * month and year are passed in from the parent MonthlyData's month and year.
+     */
+    public Category(int budget, String name, ArrayList<Expense> expenses, int month, int year) {
+        this.budget = budget;
+        this.name = name;
+        this.expenses = expenses;
+        this.month = month;
+        this.year = year;
+
+        for (Expense e : expenses) {
+            nextExpenseId = Math.max(nextExpenseId, e.getId());
+        }
+        nextExpenseId++;
+    }
+
+    protected Category(Parcel in) {
+        budget = in.readInt();
+        name = in.readString();
+        expenses = in.readArrayList(Expense.class.getClassLoader());
+        nextExpenseId = in.readInt();
+        month = in.readInt();
+        year = in.readInt();
+    }
+
+    public static final Creator<Category> CREATOR = new Creator<Category>() {
+        @Override
+        public Category createFromParcel(Parcel in) {
+            return new Category(in);
+        }
+
+        @Override
+        public Category[] newArray(int size) {
+            return new Category[size];
+        }
+    };
+
+    /**
+     * Update the database to reflect changes in Category's budget or name ONLY (not necessarily the expenses).
+     * This is called when any of the Category's properties is modified, and when an Expense is created or deleted.
+     */
+    public void updateToDatabase() {
+        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // TODO: uid uniquely identifies the user; use it to update the database
+    }
+
+    public Expense createExpense(String name, int cost, int year, int month, int day) {
+        Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
+        // TODO: insert while keeping sorted order
+        expenses.add(expense);
+        updateToDatabase();
+        return expense;
+    }
+
+    public void deleteExpense(int id) {
+        // TODO: optimized search
+        for (int i = 0; i < expenses.size(); i++) {
+            if (expenses.get(i).getId() == id) {
+                expenses.remove(i);
+                break;
+            }
+        }
+        updateToDatabase();
+    }
+
+    /**
+     * Gets a list of Expenses sorted decreasing by the expenses' date.
+     */
+    public final ArrayList<Expense> getExpenses() {
+        // TODO: sorted by date
+        return expenses;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getBudgetAsString() {
+        // TODO
+        return Integer.toString(budget);
+    }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        for (Expense e : expenses) {
+            e.setParentCategoryName(name);
+        }
+        updateToDatabase();
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+        updateToDatabase();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+    public int describeContents() {
+        return 0;
+    }
 
-        Intent intent = getIntent();
-        this.name = Objects.requireNonNull(intent.getExtras()).getString("category_name");
-        //Core values for the category
-        int budget = intent.getExtras().getInt("category_budget");
-
-        //Toolbar categoryToolBar = findViewById(R.id.categoryBar);
-        //setActionBar(categoryToolBar);
-
-        //textViews in the top bar
-        TextView categoryName = findViewById(R.id.category_name);
-        categoryName.setText( name);
-
-        TextView categoryBudget = findViewById((R.id.budget_display));
-        categoryBudget.setText("$" + Integer.toString(budget));
-
-        // Bind element from XML file
-        expenseName = findViewById(R.id.ExpenseName);
-        expenseCost = findViewById(R.id.ExpenseCost);
-        Button btnAdd = findViewById(R.id.AddToList);
-
-        // Initialize List
-        ArrayList<CategoryItem> arrayOfItems = CategoryItem.getItems();
-        categoryAdapter = new CategoryListAdapter(this, arrayOfItems);
-        ListView expensesList = findViewById(R.id.Expenses);
-        expensesList.setAdapter(categoryAdapter);
-
-        // Set Event Handler to add items to the list
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create Date Object
-                Date today = new Date();
-
-                //Convert to calendar Object
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(today);
-
-                month = calendar.get(Calendar.MONTH);
-
-                // Ensure that both fields are filled.
-                if(!expenseCost.getText().toString().isEmpty() && !expenseName.getText().toString().isEmpty() ) {
-
-                    // Create new item and update adapter
-                    CategoryItem newItem = new CategoryItem(expenseCost.getText().toString(), expenseName.getText().toString(),name, month);
-                    categoryAdapter.add(newItem);
-                    expenseName.getText().clear();
-                    expenseCost.getText().clear();
-                }else{
-
-                    // Insufficient number of filled fields results in an error warning.
-                    Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
-                    missingInformationWarning.show();
-                }
-            }
-        });
-
-
-
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(budget);
+        parcel.writeString(name);
+        parcel.writeList(expenses);
+        parcel.writeInt(nextExpenseId);
+        parcel.writeInt(month);
+        parcel.writeInt(year);
     }
 }

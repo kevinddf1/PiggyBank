@@ -3,19 +3,17 @@ package com.example.cse110;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     Button expenseListButton;
+
+    private MonthlyData thisMonthsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +39,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }*/
     public void onExpensesCLick(View v) {
-        Intent intent = new Intent(getBaseContext(), ExpenseList.class);
-        startActivity(intent);
+        Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+
+        // TODO: grab this from the database
+        if (thisMonthsData == null) {
+            Calendar today = Calendar.getInstance();
+            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+        }
+
+        intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+
+        startActivityForResult(intent, 1);
     }
 
     /*
@@ -58,5 +65,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), FAQPage.class);
         startActivity(intent);
     }*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
+            }
+        }
+    }
 }
 

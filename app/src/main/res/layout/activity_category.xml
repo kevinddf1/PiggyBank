@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Category">
+    tools:context=".ExpensesListActivity">
 
 
     <include
         android:id="@+id/categoryBar"
         layout="@layout/category_bar"
-        app:layout_constraintBottom_toTopOf="@+id/Expenses" />
+        app:layout_constraintBottom_toTopOf="@+id/Categories" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -19,31 +19,29 @@
         android:layout_weight="0"
         android:background="#26C6DA"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/Expenses"
+        app:layout_constraintBottom_toBottomOf="@+id/Categories"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryBar"
         app:layout_constraintVertical_bias="0.0">
 
 
         <EditText
-            android:id="@+id/ExpenseName"
-            android:layout_width="235dp"
+            android:id="@+id/expense_name"
+            android:layout_width="196dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:autofillHints=""
             android:ems="10"
-            android:gravity="top|left"
-            android:hint="@string/expense"
+            android:hint="Name"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/ExpenseCost"
-            android:layout_width="105dp"
+            android:id="@+id/expense_cost"
+            android:layout_width="142dp"
             android:layout_height="match_parent"
-            android:autofillHints=""
+            android:layout_weight="0"
             android:ems="10"
-            android:hint="@string/cost"
-            android:inputType="numberDecimal" />
+            android:hint="Cost"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/AddToList"
@@ -59,7 +57,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/Expenses"
+        android:id="@+id/Categories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"
