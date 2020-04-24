@@ -13,17 +13,16 @@ import java.util.ArrayList;
 public class CategoriesListAdapter extends ArrayAdapter<Category> {
     //Declare core elements that cause changes
     Button btnDelete, btnEdit;
-    final ArrayList<Category> itemsList;
 
     private MonthlyData monthlyData;
+
+    private ArrayList<Category> itemsList;
 
     // Constructor
     public CategoriesListAdapter(Context context, ArrayList<Category> items, MonthlyData monthlyData) {
         super(context, 0, items);
-
+        this.itemsList = items;
         this.monthlyData = monthlyData;
-        //Allow for class wide scope
-        itemsList = items;
     }
 
 
@@ -46,7 +45,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         categoryBudget.setText(item.getBudgetAsString());
 
         // Create buttons to delete row or edit category
-        btnDelete = convertView.findViewById(R.id.delete);
+        btnDelete = convertView.findViewById(R.id.delete_category);
 
         //Set event handler for delete item
         btnDelete.setTag(position);
@@ -66,4 +65,8 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         return convertView;
     }
 
+    public void setMonthlyData(MonthlyData monthlyData) {
+        this.monthlyData = monthlyData;
+        itemsList = monthlyData.getCategoriesAsArray();
+    }
 }

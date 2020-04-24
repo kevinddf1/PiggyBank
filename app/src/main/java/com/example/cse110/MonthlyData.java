@@ -148,12 +148,13 @@ public class MonthlyData implements Parcelable {
 
     public void deleteCategory(String name) {
         categories.remove(name);
-      //  for (int i = 0; i < categoriesArrayList.size(); i++) {
-            //if (categoriesArrayList.get(i).getName().equals(name)) {
-
-               // break;
-            //}
+        for (int i = 0; i < categoriesArrayList.size(); i++) {
+            if (categoriesArrayList.get(i).getName().equals(name)) {
+                categoriesArrayList.remove(i);
+                break;
+            }
         }
+    }
 
 
     public ArrayList<Category> getCategoriesAsArray() {

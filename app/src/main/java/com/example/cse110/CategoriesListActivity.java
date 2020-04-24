@@ -94,6 +94,9 @@ public class CategoriesListActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 monthlyData = data.getParcelableExtra(ExpensesListActivity.MONTHLY_DATA_INTENT);
+
+                myAdapter = new CategoriesListAdapter(this, monthlyData.getCategoriesAsArray(), monthlyData);
+                categories.setAdapter(myAdapter);
             }
         }
     }
