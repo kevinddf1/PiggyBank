@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     public static final String USERNAME_FIELD = "com.example.test.USERNAME_FIELD";
 
     private FirebaseAuth mAuth;
@@ -49,7 +49,8 @@ public class Login extends AppCompatActivity {
                             userMessage.setTextColor(Color.GREEN);
                             userMessage.setText("Logging in...");
 
-                            // TODO: open home page; do other stuff on login
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            startActivity(intent);
                         } else {
                             userMessage.setTextColor(Color.RED);
                             userMessage.setText("Login failed. " + task.getException().getLocalizedMessage());
@@ -65,7 +66,7 @@ public class Login extends AppCompatActivity {
                 EditText usernameField = findViewById(R.id.username);
                 String enteredUsername = usernameField.getText().toString();
 
-                Intent intent = new Intent(Login.this, CreateAccount.class);
+                Intent intent = new Intent(LoginActivity.this, CreateAccount.class);
                 intent.putExtra(USERNAME_FIELD, enteredUsername);
                 startActivity(intent);
             }

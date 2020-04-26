@@ -95,5 +95,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing on back button press because we don't want the user to be able to go back to login page
+    }
 }
 
