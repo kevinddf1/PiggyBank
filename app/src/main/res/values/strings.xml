@@ -9,6 +9,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Strings for expense list -->
     <string name="plus">plus</string>
     <string name="enter_cost">enter_cost</string>
     <string name="type_in_the_expense">type_in_the_expense</string>
@@ -19,4 +21,10 @@
     <string name="categoryName">Category</string>
     <string name="budgetDisplay">Budget</string>
     <string name="type_in_the_list_to_create">Type in the list to create</string>
+
+    <!-- Strings for login and sign up page -->
+    <string name="sign_up">Don\'t have an account? Sign up</string>
+    <string name="sign_in">Sign in</string>
+    <string name="username">User name</string>
+    <string name="password">Password</string>
 </resources>

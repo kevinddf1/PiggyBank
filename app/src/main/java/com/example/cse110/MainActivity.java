@@ -12,17 +12,33 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     Button expenseListButton;
-
+    Button loginButton;
     private MonthlyData thisMonthsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.login_layout);
+
+        //Bind button to go to content main
+        loginButton = findViewById(R.id.signInButton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToExpenseList(v);
+            }
+        });
+    }
+
+    /**
+     *
+     *
+     * @param v
+     */
+    public void goToExpenseList(View v) {
         setContentView(R.layout.content_main);
-
-
         //Bind button to go to expense list
-
         expenseListButton = findViewById(R.id.ExpensesButton);
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {

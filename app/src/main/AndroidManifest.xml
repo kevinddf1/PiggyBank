@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:fullBackupContent="@xml/backup_descriptor">
+        <activity android:name=".Login"></activity>
         <activity android:name=".ExpensesListActivity"></activity>
         <activity android:name=".CategoriesListActivity" />
         <activity
