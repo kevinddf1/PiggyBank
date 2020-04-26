@@ -2,7 +2,6 @@ package com.example.cse110;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -16,6 +15,8 @@ public class Category implements Parcelable {
     private ArrayList<Expense> expenses;
     private int nextExpenseId;
 
+    private Database base; // create a Database object
+
     /**
      * Constructor for an empty Category.
      */
@@ -26,6 +27,8 @@ public class Category implements Parcelable {
         budget = 0;
         name = "";
         expenses = new ArrayList<Expense>();
+
+        this.base = new Database();
     }
 
     /**
@@ -44,6 +47,8 @@ public class Category implements Parcelable {
             nextExpenseId = Math.max(nextExpenseId, e.getId());
         }
         nextExpenseId++;
+
+        //this.base = new Database();
     }
 
     protected Category(Parcel in) {
@@ -78,10 +83,15 @@ public class Category implements Parcelable {
 //    }
 
     public Expense createExpense(String name, int cost, int year, int month, int day) {
+
+        this.base.insertExpenseName(name);
+        this.base.insertExpenseCost(cost);
+
         Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
         // TODO: insert while keeping sorted order
         expenses.add(expense);
         //updateToDatabase();
+
         return expense;
     }
 
@@ -123,11 +133,13 @@ public class Category implements Parcelable {
             e.setParentCategoryName(name);
         }
         //updateToDatabase();
+        this.base.insertCategoryName(name); // update the new category to database
     }
 
     public void setBudget(int budget) {
         this.budget = budget;
         //updateToDatabase();
+        this.base.insertCategoryBudget(budget); // update the new category to database
     }
 
     @Override
