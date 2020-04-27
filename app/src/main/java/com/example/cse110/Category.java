@@ -15,7 +15,7 @@ public class Category implements Parcelable {
     private ArrayList<Expense> expenses;
     private int nextExpenseId;
 
-    private Database base; // create a Database object
+    private Database base = new Database(); // create a Database object
 
     /**
      * Constructor for an empty Category.
@@ -28,7 +28,7 @@ public class Category implements Parcelable {
         name = "";
         expenses = new ArrayList<Expense>();
 
-        this.base = new Database();
+        //this.base = new Database();
     }
 
     /**
@@ -58,6 +58,8 @@ public class Category implements Parcelable {
         nextExpenseId = in.readInt();
         month = in.readInt();
         year = in.readInt();
+
+        //this.base = new Database();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -84,8 +86,9 @@ public class Category implements Parcelable {
 
     public Expense createExpense(String name, int cost, int year, int month, int day) {
 
-        this.base.insertExpenseName(name);
-        this.base.insertExpenseCost(cost);
+        this.base.insertExpense(cost, name, this.name);
+        //this.base.insertExpenseName(name);
+        //this.base.insertExpenseCost(cost);
 
         Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
         // TODO: insert while keeping sorted order
@@ -139,7 +142,7 @@ public class Category implements Parcelable {
     public void setBudget(int budget) {
         this.budget = budget;
         //updateToDatabase();
-        this.base.insertCategoryBudget(budget); // update the new category to database
+        this.base.insertCategoryBudget(budget, name); // update the new category to database
     }
 
     @Override
