@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        final Button createAccountButton = findViewById(R.id.signup);
+        final Button createAccountButton = findViewById(R.id.createAccountButton);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText usernameField = findViewById(R.id.username);
