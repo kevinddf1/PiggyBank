@@ -53,9 +53,21 @@ public class HistoryDetailAdapter extends ArrayAdapter<HistoryDetailedItem> {
 
         // Set the cost of the expense
         TextView expenseCost = convertView.findViewById(R.id.expense_cost);
-        expenseCost.setText(currentItem.getCost());
+        expenseCost.setText("$ " + formatMoneyString(currentItem.getCost()));
         return convertView;
 
 
+    }
+
+    private String formatMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 6;
+        int thousandthComma = valueToFormat.length() - 9;
+        if(valueToFormat.length() <= 6){
+            return valueToFormat;
+        }else if(valueToFormat.length() <= 9){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 }

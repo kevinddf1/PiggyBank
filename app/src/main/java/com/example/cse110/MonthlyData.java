@@ -23,7 +23,7 @@ public class MonthlyData implements Parcelable {
     // This is not serialized but is repopulated from categories so that categories and categoriesArrayList refer to the same Category objects
     private ArrayList<Category> categoriesArrayList;
 
-    /*
+    /*x
     Constructor for an empty MonthlyData.
     */
     public MonthlyData(int month, int year) {
@@ -71,6 +71,10 @@ public class MonthlyData implements Parcelable {
 
     public void updateFromDatabase() {
         // TODO
+    }
+
+    public int getYear() {
+        return year;
     }
 
     public Category getCategory(String name) {

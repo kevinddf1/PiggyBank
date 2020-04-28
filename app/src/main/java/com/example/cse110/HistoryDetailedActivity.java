@@ -85,15 +85,15 @@ public class HistoryDetailedActivity extends AppCompatActivity {
 
         //Display the month we are currently analyzing
         month_year = (TextView) findViewById(R.id.date_display);
-        month_year.setText(current_month.getMonth() );
+        month_year.setText(current_month.getMonth() + " " + current_month.getYear() );
         category_name = (TextView) findViewById(R.id.category_name);
         category_name.setText(currentCategory.getName());
         budget = (TextView) findViewById(R.id.budget_display);
 
         // The details for the budget and total expenditures.
-        budget.setText("Budget: $" + currentCategory.getBudgetAsString());
+        budget.setText("Budget: $" + formatIntMoneyString(currentCategory.getBudgetAsString()));
         totalExpenses = (TextView) findViewById(R.id.total_expenses);
-        totalExpenses.setText("Total Expenditure: $" +total);
+        totalExpenses.setText("Total Expenditure: $" + formatMoneyString(total));
 
 
 
@@ -120,5 +120,28 @@ public class HistoryDetailedActivity extends AppCompatActivity {
         for (Expense currentExpense : myExpenseList){
             historyDetailedItems.add(new HistoryDetailedItem(currentExpense.getName(), currentExpense.getCostAsString()));
         }
+    }
+
+    private String formatMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 6;
+        int thousandthComma = valueToFormat.length() - 9;
+        if(valueToFormat.length() <= 6){
+            return valueToFormat;
+        }else if(valueToFormat.length() <= 9){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
+
+    private String formatIntMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 3;
+        int thousandthComma = valueToFormat.length() - 6;
+
+        if (valueToFormat.length() <= 3){
+            return  valueToFormat;
+        }else if (valueToFormat.length() <= 6){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 }

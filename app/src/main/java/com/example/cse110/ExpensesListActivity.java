@@ -46,7 +46,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         categoryName.setText(categoryNameFromParent);
 
         TextView categoryBudget = findViewById((R.id.budget_display));
-        categoryBudget.setText("$" + category.getBudgetAsString());
+        categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
 
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
@@ -107,5 +107,17 @@ public class ExpensesListActivity extends AppCompatActivity {
         intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         setResult(RESULT_OK, intent);
         super.onBackPressed();
+    }
+
+    private String formatIntMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 3;
+        int thousandthComma = valueToFormat.length() - 6;
+
+        if (valueToFormat.length() <= 3){
+            return  valueToFormat;
+        }else if (valueToFormat.length() <= 6){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 }

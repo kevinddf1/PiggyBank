@@ -114,7 +114,7 @@ public class Expense implements Parcelable {
     }
     public String getCostAsString() {
         // TODO
-        return "$" + costString;
+        return costString;
     }
 
     public void setName(String name) {

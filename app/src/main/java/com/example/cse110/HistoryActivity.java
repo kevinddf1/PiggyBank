@@ -94,7 +94,7 @@ public class HistoryActivity extends AppCompatActivity {
         assert current_month != null;
         categoryArrayList = current_month.getCategoriesAsArray();
         month_year = (TextView) findViewById(R.id.month_year_display);
-        month_year.setText(current_month.getMonth());
+        month_year.setText(current_month.getMonth() + " " + current_month.getYear());
 
         //Set up our list
         fillInHistoryItemArrayList();
@@ -142,7 +142,6 @@ public class HistoryActivity extends AppCompatActivity {
             //Add up all the expenses for the category.
             //CURRENT BUG
             for(Expense currentExpense : currentCategory.getExpenses()){
-                System.out.println(currentExpense.getName());
                 totalExpenses = totalExpenses + (double)currentExpense.getCost();
             }
 
@@ -152,4 +151,6 @@ public class HistoryActivity extends AppCompatActivity {
             historyItemArrayList.add(new HistoryItem(currentCategory.getName(), currentCategory.getBudget(), totalExpenses));
         }
     }
+
+
 }

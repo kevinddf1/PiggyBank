@@ -52,7 +52,6 @@ public class CategoriesListActivity extends AppCompatActivity {
         categories.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("CLicked");
 
                 Category currentItem = myAdapter.getItem(position);
 
