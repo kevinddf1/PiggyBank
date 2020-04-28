@@ -36,6 +36,17 @@ public class MainActivity extends AppCompatActivity {
                 onHistoryClick(v);
             }
         });
+    }
+
+    /**
+     *
+     *
+     * @param v
+     */
+    public void goToExpenseList(View v) {
+        setContentView(R.layout.content_main);
+        //Bind button to go to expense list
+        expenseListButton = findViewById(R.id.ExpensesButton);
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing on back button press because we don't want the user to be able to go back to login page
     }
 }
 
