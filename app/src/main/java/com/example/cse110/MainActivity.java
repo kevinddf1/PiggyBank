@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToExpenseList(View v) {
         setContentView(R.layout.content_main);
         //Bind button to go to expense list
+
         expenseListButton = findViewById(R.id.ExpensesButton);
 
         expenseListButton.setOnClickListener(new View.OnClickListener() {
