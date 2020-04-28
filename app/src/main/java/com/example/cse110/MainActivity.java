@@ -11,20 +11,33 @@ import android.widget.Button;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton;
-    public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-
+    Button expenseListButton;
+    Button loginButton;
     private MonthlyData thisMonthsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.login_layout);
 
-        //Check if this a month should be re-instantiated
-        Intent intent = getIntent();
-        thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
+        //Bind button to go to content main
+        loginButton = findViewById(R.id.signInButton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToExpenseList(v);
+            }
+        });
+    }
+
+    /**
+     *
+     *
+     * @param v
+     */
+    public void goToExpenseList(View v) {
+        setContentView(R.layout.content_main);
         //Bind button to go to expense list
 
         expenseListButton = findViewById(R.id.ExpensesButton);
