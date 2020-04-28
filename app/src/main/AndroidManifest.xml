@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".HistoryDetailedActivity"></activity>
+        <activity android:name=".HistoryActivity" />
         <activity android:name=".ExpensesListActivity" />
         <activity android:name=".CategoriesListActivity" />
         <activity

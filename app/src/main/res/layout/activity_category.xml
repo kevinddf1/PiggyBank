@@ -41,7 +41,7 @@
             android:layout_weight="0"
             android:ems="10"
             android:hint="Cost"
-            android:inputType="number" />
+            android:inputType="number|numberDecimal" />
 
         <Button
             android:id="@+id/AddToList"

@@ -28,9 +28,10 @@ public class HistoryActivity extends AppCompatActivity {
      * @see #onCreate(Bundle) 
      */
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-    
-    public static final String HISTORY_DETAIL_INTENT = "HistoryDetail monthlyData";
-    public static final String CATEGORY_NAME_INTENT = "Category category";
+
+
+    private static String CATEGORY_NAME = "category_name";
+    private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
 
 
     //Display the month and year
@@ -115,10 +116,11 @@ public class HistoryActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HistoryItem currentItem = historyItemAdapter.getItem(position);
 
-              //  Intent i = new Intent(HistoryActivity.this, HistoryDetailedActivity.class);
-                //i.putExtra(HISTORY_DETAIL_INTENT, monthlyData);
-                //i.putExtra(CATEGORY_NAME_INTENT, currentItem.getName());
-                //startActivityForResult(i, 1);
+              Intent i = new Intent(getBaseContext(), HistoryDetailedActivity.class);
+                i.putExtra(HISTORY_DETAILED_INTENT, current_month);
+                i.putExtra(CATEGORY_NAME, currentItem.getName());
+                i.putExtra("total_expenses", currentItem.getFormattedTotalExpenses());
+                startActivityForResult(i, 1);
             }
         });
 
@@ -143,8 +145,9 @@ public class HistoryActivity extends AppCompatActivity {
                 System.out.println(currentExpense.getName());
                 totalExpenses = totalExpenses + (double)currentExpense.getCost();
             }
-            System.out.println("SKIPPED");
 
+
+            totalExpenses = totalExpenses/100;
             //Create new HistoryItem and Add to List
             historyItemArrayList.add(new HistoryItem(currentCategory.getName(), currentCategory.getBudget(), totalExpenses));
         }

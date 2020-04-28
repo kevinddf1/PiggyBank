@@ -44,7 +44,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         categoryName.setText(categoryNameFromParent);
 
         TextView categoryBudget = findViewById((R.id.budget_display));
-        categoryBudget.setText(category.getBudgetAsString());
+        categoryBudget.setText("$" + category.getBudgetAsString());
 
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
@@ -68,7 +68,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                 if(!expenseCost.getText().toString().isEmpty() && !expenseName.getText().toString().isEmpty() ) {
 
                     // Create new item and update adapter
-                    category.createExpense(expenseName.getText().toString(), Integer.parseInt(expenseCost.getText().toString()), today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+                    category.createExpense(expenseName.getText().toString(), Double.parseDouble(expenseCost.getText().toString()), today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
                     expenseName.getText().clear();
                     expenseCost.getText().clear();
                     expenseAdapter.notifyDataSetChanged();

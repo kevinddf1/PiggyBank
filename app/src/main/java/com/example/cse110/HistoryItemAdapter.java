@@ -62,8 +62,8 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         name.setText(item.getName());
         budget = convertView.findViewById(R.id.budget);
         budget.setText("Budget: $" + item.getBudget());
-        totalExpenses = convertView.findViewById(R.id.expenses);
-        totalExpenses.setText("Total Expenses: -$" + item.getTotalExpenses());
+        totalExpenses = convertView.findViewById(R.id.Categories);
+        totalExpenses.setText("Total Expenses: -$" + item.getFormattedTotalExpenses());
 
         return convertView;
 
