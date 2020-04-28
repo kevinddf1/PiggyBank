@@ -29,7 +29,7 @@ public class CreateAccount extends AppCompatActivity {
 
         // Extract username from previous screen
         Intent intent = getIntent();
-        ((EditText)findViewById(R.id.username)).setText(intent.getStringExtra(Login.USERNAME_FIELD));
+        ((EditText)findViewById(R.id.username)).setText(intent.getStringExtra(LoginActivity.USERNAME_FIELD));
 
         final Button createAccountButton = findViewById(R.id.loginButton);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +53,7 @@ public class CreateAccount extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Go back to login screen with a user message
-                                Intent intent = new Intent(CreateAccount.this, Login.class);
+                                Intent intent = new Intent(CreateAccount.this, LoginActivity.class);
                                 intent.putExtra(USER_MESSAGE_FIELD, "Account successfully created.");
                                 startActivity(intent);
                             } else {
