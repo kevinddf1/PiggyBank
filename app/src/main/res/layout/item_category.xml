@@ -20,7 +20,8 @@
         android:id="@+id/category_budget"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:textColor="#00C853" />
 
     <Button
         android:id="@+id/delete_category"

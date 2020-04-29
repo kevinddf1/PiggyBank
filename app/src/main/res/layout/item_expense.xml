@@ -27,7 +27,10 @@
                 android:layout_width="112dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:text="TextView" />
+                android:gravity="end"
+                android:inputType="none"
+                android:text="cost"
+                android:textColor="#D50000" />
 
         </LinearLayout>
 
@@ -44,13 +47,19 @@
                 android:orientation="horizontal"
                 android:focusable="true">
 
+                <TextView
+                    android:id="@+id/empty_space"
+                    android:layout_width="324dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0" />
+
                 <Button
                     android:id="@+id/delete"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0"
                     android:background="#00FFFFFF"
-                    android:gravity="bottom|end"
+                    android:gravity="bottom|center"
                     android:layoutDirection="inherit"
                     android:text="@string/delete"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"

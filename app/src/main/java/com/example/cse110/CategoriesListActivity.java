@@ -16,10 +16,15 @@ import java.util.ArrayList;
 public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
 
+    //Our max allowable int is 9,999,999 which is 7 place values
+    private static final int MAX_BUDGET =  7;
+
     EditText categoryName, categoryBudget;
     Button btnAdd;
     CategoriesListAdapter myAdapter;
     ListView categories;
+
+
 
     private MonthlyData monthlyData;
 
@@ -47,7 +52,6 @@ public class CategoriesListActivity extends AppCompatActivity {
         categories.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("CLicked");
 
                 Category currentItem = myAdapter.getItem(position);
 
@@ -66,18 +70,26 @@ public class CategoriesListActivity extends AppCompatActivity {
                 // Ensure that both fields are filled.
                 if(!categoryBudget.getText().toString().isEmpty() && !categoryName.getText().toString().isEmpty() ) {
 
-                    // Create new item and update adapter
-                    boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
+                    //Verify that max vale has not be reached.
+                    if(categoryBudget.getText().toString().length() > MAX_BUDGET){
+                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
 
-                    // Verify that category was made
-                    if(!creationSuccessful){
-                        Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        // Create new item and update adapter
+                        boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
+
+                        // Verify that category was made
+                        if (!creationSuccessful) {
+                            Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
+                        }
+                        //Clear inputs
+                        categoryName.getText().clear();
+                        categoryBudget.getText().clear();
+                        myAdapter.notifyDataSetChanged();
                     }
 
-                    //Clear inputs
-                    categoryName.getText().clear();
-                    categoryBudget.getText().clear();
-                    myAdapter.notifyDataSetChanged();
+
                 }else{
 
                     // Insufficient number of filled fields results in an error warning.

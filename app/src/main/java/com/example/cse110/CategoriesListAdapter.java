@@ -42,7 +42,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         TextView categoryName = convertView.findViewById(R.id.category_name);
         TextView categoryBudget = convertView.findViewById(R.id.category_budget);
         categoryName.setText(item.getName());
-        categoryBudget.setText(item.getBudgetAsString());
+        categoryBudget.setText("$" + formatIntMoneyString(item.getBudgetAsString()));
 
         // Create buttons to delete row or edit category
         btnDelete = convertView.findViewById(R.id.delete_category);
@@ -69,4 +69,17 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         this.monthlyData = monthlyData;
         itemsList = monthlyData.getCategoriesAsArray();
     }
+
+    private String formatIntMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 3;
+        int thousandthComma = valueToFormat.length() - 6;
+
+        if (valueToFormat.length() <= 3){
+            return  valueToFormat;
+        }else if (valueToFormat.length() <= 6){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
 }
+

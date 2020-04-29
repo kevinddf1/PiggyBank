@@ -9,6 +9,7 @@
         android:layout_width="119dp"
         android:layout_height="48dp"
         android:layout_weight="0"
+        android:paddingStart="10sp"
         android:paddingTop="5sp"
         android:text="@string/categoryName"
         android:textStyle="bold" />
@@ -23,7 +24,7 @@
         android:textColor="#00C853" />
 
     <TextView
-        android:id="@+id/expenses"
+        android:id="@+id/Categories"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_weight="0"
