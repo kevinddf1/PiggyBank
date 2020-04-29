@@ -32,7 +32,6 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
     public HistoryItemAdapter(@NonNull Context context, ArrayList<HistoryItem> items) {
         super(context,0,  items);
         this.items = items;
-
     }
 
 

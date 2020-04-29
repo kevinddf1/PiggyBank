@@ -11,9 +11,10 @@ import android.widget.Button;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton;
+    Button expenseListButton, historyButton, pieChartButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
 
@@ -28,14 +29,25 @@ public class MainActivity extends AppCompatActivity {
         //Bind button to go to expense list
 
         expenseListButton = findViewById(R.id.ExpensesButton);
-        historyButton = findViewById(R.id.HistoryButton);
 
+        historyButton = findViewById(R.id.HistoryButton);
         historyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 onHistoryClick(v);
             }
         });
+
+        pieChartButton= findViewById(R.id.PieChartButton);
+        pieChartButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                onPieCHartClick(v);
+            }
+        });
+
+
+
     }
 
     /**
@@ -68,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, 1);
 
     }
+
+    private void onPieCHartClick(View v){
+        Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+        // TODO: grab this from the database
+        if (thisMonthsData == null) {
+            Calendar today = Calendar.getInstance();
+            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+        }
+        i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+        startActivityForResult(i, 1);
+
+    }
+
 
     public void onExpensesCLick(View v) {
         Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
