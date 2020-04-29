@@ -77,7 +77,7 @@ public class Category implements Parcelable {
         // TODO: uid uniquely identifies the user; use it to update the database
     }
 
-    public Expense createExpense(String name, int cost, int year, int month, int day) {
+    public Expense createExpense(String name, double cost, int year, int month, int day) {
         Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
         // TODO: insert while keeping sorted order
         expenses.add(expense);

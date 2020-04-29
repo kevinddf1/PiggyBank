@@ -61,12 +61,36 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         name = convertView.findViewById(R.id.category_name);
         name.setText(item.getName());
         budget = convertView.findViewById(R.id.budget);
-        budget.setText("Budget: $" + item.getBudget());
-        totalExpenses = convertView.findViewById(R.id.expenses);
-        totalExpenses.setText("Total Expenses: -$" + item.getTotalExpenses());
+        budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
+        totalExpenses = convertView.findViewById(R.id.Categories);
+        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
 
         return convertView;
 
+    }
+
+    private String formatMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 6;
+        int thousandthComma = valueToFormat.length() - 9;
+        if(valueToFormat.length() <= 6){
+            return valueToFormat;
+        }else if(valueToFormat.length() <= 9){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
+
+    private String formatIntMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 3;
+        int thousandthComma = valueToFormat.length() - 6;
+
+        if (valueToFormat.length() <= 3){
+            return  valueToFormat;
+        }else if (valueToFormat.length() <= 6){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
     }

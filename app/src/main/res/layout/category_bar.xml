@@ -19,7 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom|end"
+            android:paddingEnd="10dp"
             android:text="@string/budgetDisplay"
+            android:textColor="#00C853"
             android:textSize="12sp" />
     </LinearLayout>
 
