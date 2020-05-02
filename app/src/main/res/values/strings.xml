@@ -30,4 +30,10 @@
     <string name="signIn">Sign in</string>
     <string name="signUpPrompt">Don\'t have an account? Sign up</string>
     <string name="signUp">Sign up</string>
+
+    <!-- Header name strings -->
+    <string name="expensesList">Expenses List</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="graphs">Graphs</string>
 </resources>

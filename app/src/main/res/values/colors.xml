@@ -8,4 +8,6 @@
     <color name="lightTeal">#45C9C3</color>
     <color name="gradientDark">#00BCD4</color>
     <color name="gradientLight">#77CFCB</color>
+    <color name="green">#26A81E</color>
+    <color name="lightGrey">#E9E9E9</color>
 </resources>
