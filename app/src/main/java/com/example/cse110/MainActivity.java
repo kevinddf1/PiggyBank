@@ -22,12 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
-
     private Database base = Database.Database(); // create a Database object
-    private ArrayList<Expense> expenses;
-    private int iYear;
-    private int iMonth;
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void onHistoryClick(View v){
         Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-        // TODO: grab this from the database
         if (thisMonthsData == null) {
             Calendar today = Calendar.getInstance();
             thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
@@ -91,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void onPieCHartClick(View v){
         Intent i = new Intent(getBaseContext(), PieChartActivity.class);
-        // TODO: grab this from the database
         if (thisMonthsData == null) {
             Calendar today = Calendar.getInstance();
             thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
@@ -104,47 +97,58 @@ public class MainActivity extends AppCompatActivity {
 
     // TODO: Month Year UPDATE FROM CATEGORY
     public void onExpensesCLick(View v) {
-            // Read from the database
+            /* Read from the database
+            / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+            / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+            */
             base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-                    if (thisMonthsData == null) {
+                    Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                    if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
                         Calendar today = Calendar.getInstance();
                         thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
 
-                        for (DataSnapshot ds : dataSnapshot.child("User").child(base.getkey()).getChildren()) {
-                            if (!ds.exists() || ds == null) {
-                                break;
+                        // this loop retrieve all the categories from database
+                        for (DataSnapshot ds : dataSnapshot.child("User").child(base.getUserKey()).getChildren()) {
+                            if (!ds.exists()) { // check if there are any category in user's account
+                                break; // if NOT, break the loop
                             }
-
-                            //String cate = ds.getKey();
+                            // get the data of current category
                             String cate_name = ds.child("Name").getValue().toString();
                             System.out.println(cate_name);
                             String c_budget = ds.child("Budget").getValue().toString();
                             int cate_budget = Integer.parseInt(c_budget);
+                            String c_year = ds.child("Year").getValue().toString();
+                            int cate_year = Integer.parseInt(c_year);
+                            String c_month = ds.child("Month").getValue().toString();
+                            int cate_month = Integer.parseInt(c_month);
 
-                            expenses = new ArrayList<Expense>();
-
+                            ArrayList<Expense> expenses = new ArrayList<Expense>();
+                            // this loop retrieve all the expenses in current category from database
                             for (DataSnapshot ds2 : ds.child("Expense").getChildren()) {
-                                //String exp = ds2.getKey();
+                                if (!ds2.exists()) { // check if there are any expenses in user's account
+                                    break; // if NOT, break the loop
+                                }
+                                // get the data of current expense
                                 String Cost = ds2.child("Cost").getValue().toString();
                                 String Year = ds2.child("Year").getValue().toString();
                                 String Month = ds2.child("Month").getValue().toString();
                                 String Day = ds2.child("Day").getValue().toString();
                                 String Name = ds2.child("Name").getValue().toString();
                                 String ID = ds2.child("ID").getValue().toString();
-
                                 int iCost = Integer.parseInt(Cost);
-                                iYear = Integer.parseInt(Year);
-                                iMonth = Integer.parseInt(Month);
+                                int iYear = Integer.parseInt(Year);
+                                int iMonth = Integer.parseInt(Month);
                                 int iDay = Integer.parseInt(Day);
                                 int iID = Integer.parseInt(ID);
-
+                                // create expense
                                 Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
                                 expenses.add(expense);
                             }
-                            thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, iMonth, iYear);
+                            // create category
+                            thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year);
                         }
                     }
                     intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);

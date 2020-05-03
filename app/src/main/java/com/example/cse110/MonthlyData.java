@@ -68,10 +68,6 @@ public class MonthlyData implements Parcelable {
         parcel.writeMap(categories);
     }
 
-    public void updateFromDatabase() {
-        // TODO
-    }
-
     public int getYear() {
         return year;
     }
@@ -153,7 +149,7 @@ public class MonthlyData implements Parcelable {
         return false;
     }
 
-    //create a category from database
+    // This function is used to create a category from database data
     public Category createExistCategory(String name, int budget, ArrayList<Expense> expenses, int Month, int Year) {
         Category category = new Category(budget, name, expenses, Month, Year);
         category.setName(name);
