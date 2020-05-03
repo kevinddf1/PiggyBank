@@ -9,48 +9,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/background"
         android:orientation="vertical"
-        android:paddingTop="300dp">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <TextView
-            android:id="@+id/userMessage"
-            android:layout_width="249dp"
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:textColor="#BF0D0D" />
+            android:paddingTop="50dp"
+            app:srcCompat="@drawable/logocombined" />
+
 
         <EditText
+            android:layout_marginTop="75dp"
             android:id="@+id/username"
             android:layout_width="249dp"
             android:layout_height="38dp"
             android:layout_gravity="center_horizontal"
-            android:ems="10"
-            android:hint="Username"
-            android:inputType="textEmailAddress" />
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/regular"
+            android:hint="@string/userName"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/white"
+            android:textSize="14dp" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="249dp"
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
-            android:ems="10"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/regular"
             android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColorHint="@color/white"
+            android:textSize="14dp" />
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="249dp"
-            android:layout_height="wrap_content"
+            android:layout_width="154dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:text="Log in" />
+            android:layout_marginTop="25dp"
+            android:background="@drawable/roundedbutton"
+            android:fontFamily="@font/semibold"
+            android:text="@string/signIn"
+            android:textAllCaps="false"
+            android:textColor="@color/gradientDark"
+            android:textSize="25dp" />
 
         <Button
             android:id="@+id/createAccountButton"
+            android:layout_marginTop="5dp"
             android:layout_width="249dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Create new account" />
+            android:text="@string/signUpPrompt"
+            android:textColor="@color/white"
+            android:stateListAnimator="@null"
+            android:background="@null"
+            android:textAllCaps="false"
+            android:fontFamily="@font/regular"
+            android:textSize="15dp"/>
 
     </LinearLayout>
 

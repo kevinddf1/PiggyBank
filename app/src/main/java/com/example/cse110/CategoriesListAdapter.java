@@ -42,7 +42,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         TextView categoryName = convertView.findViewById(R.id.category_name);
         TextView categoryBudget = convertView.findViewById(R.id.category_budget);
         categoryName.setText(item.getName());
-        categoryBudget.setText("$" + formatIntMoneyString(item.getBudgetAsString()));
+        categoryBudget.setText("Budget: " + "$" + formatIntMoneyString(item.getBudgetAsString()));
 
         // Create buttons to delete row or edit category
         btnDelete = convertView.findViewById(R.id.delete_category);

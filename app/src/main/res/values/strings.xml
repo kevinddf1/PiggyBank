@@ -20,4 +20,20 @@
     <string name="budgetDisplay">Budget</string>
     <string name="type_in_the_list_to_create">Type in the list to create</string>
     <string name="expenses">Expenses</string>
+    <string name="welcome">Welcome Back</string>
+    <string name="currentCash">Current Cash:</string>
+    <string name="totalExpenses">Total Expenses:</string>
+
+    <!-- Strings used for login -->
+    <string name="userName">User name</string>
+    <string name="password">Password</string>
+    <string name="signIn">Sign in</string>
+    <string name="signUpPrompt">Don\'t have an account? Sign up</string>
+    <string name="signUp">Sign up</string>
+
+    <!-- Header name strings -->
+    <string name="expensesList">Expenses List</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="graphs">Graphs</string>
 </resources>
