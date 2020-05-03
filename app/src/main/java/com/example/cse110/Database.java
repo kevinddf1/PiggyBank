@@ -79,6 +79,11 @@ public class Database {
         myRef.child("User").child(key).child("Category " + name).child("Budget").setValue(budget);
     }
 
+    public void insertCategoryDate(int year, int month, String name) {
+        myRef.child("User").child(key).child("Category " + name).child("Year").setValue(year);
+        myRef.child("User").child(key).child("Category " + name).child("Month").setValue(month);
+    }
+
     public void insertExpense(double cost, String name, String pname, int year, int month, int day, int nextExpenseId) {
         String str_ID = Integer.toString(nextExpenseId);
         myRef.child("User").child(key).child("Category " + pname).child("Expense").child(str_ID).child("Name").setValue(name);

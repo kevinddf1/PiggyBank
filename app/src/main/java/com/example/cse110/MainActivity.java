@@ -12,7 +12,6 @@ import java.util.Calendar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
@@ -23,10 +22,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
+
     private Database base = Database.Database(); // create a Database object
     private ArrayList<Expense> expenses;
     private int iYear;
     private int iMonth;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 onPieCHartClick(v);
             }
         });
-
-
-
     }
 
     /**
@@ -104,67 +102,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // TODO: Month Year UPDATE FROM CATEGORY
     public void onExpensesCLick(View v) {
-//        Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-        if (thisMonthsData == null) {
-            Calendar today = Calendar.getInstance();
-            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-        }
-//        intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-//        startActivityForResult(intent, 1);
+            // Read from the database
+            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                    if (thisMonthsData == null) {
+                        Calendar today = Calendar.getInstance();
+                        thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
 
-//        // Read from the database
-//        base.getMyRef().addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-//
-//                //if (dataSnapshot.child(base.getkey()).exists()) {
-//                    for (DataSnapshot ds : dataSnapshot.child("User").child(base.getkey()).getChildren()) {
-//                        if (!ds.exists()) {
-//                            break;
-//                        }
-//
-//                        //String cate = ds.getKey();
-//                        String cate_name = ds.child("Name").getValue().toString();
-//                        String c_budget = ds.child("Budget").getValue().toString();
-//                        int cate_budget = Integer.parseInt(c_budget);
-//
-//                        //Toast.makeText(getApplicationContext(), cate_name + " " + cate_budget, Toast.LENGTH_LONG).show();
-//
-//                        expenses = new ArrayList<Expense>();
-//
-//                        for (DataSnapshot ds2 : ds.child("Expense").getChildren()) {
-//                            //String exp = ds2.getKey();
-//                            String Cost = ds2.child("Cost").getValue().toString();
-//                            String Year = ds2.child("Year").getValue().toString();
-//                            String Month = ds2.child("Month").getValue().toString();
-//                            String Day = ds2.child("Day").getValue().toString();
-//                            String Name = ds2.child("Name").getValue().toString();
-//                            String ID = ds2.child("ID").getValue().toString();
-//
-//                            int iCost = Integer.parseInt(Cost);
-//                            iYear = Integer.parseInt(Year);
-//                            iMonth = Integer.parseInt(Month);
-//                            int iDay = Integer.parseInt(Day);
-//                            int iID = Integer.parseInt(ID);
-//
-//                            Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
-//                            expenses.add(expense);
-//                        }
-//                        thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, iMonth, iYear);
-//                    }
-//                //}
-//                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-//                startActivityForResult(intent, 1);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Failed to read value
-//            }
-//        });
+                        for (DataSnapshot ds : dataSnapshot.child("User").child(base.getkey()).getChildren()) {
+                            if (!ds.exists() || ds == null) {
+                                break;
+                            }
+
+                            //String cate = ds.getKey();
+                            String cate_name = ds.child("Name").getValue().toString();
+                            System.out.println(cate_name);
+                            String c_budget = ds.child("Budget").getValue().toString();
+                            int cate_budget = Integer.parseInt(c_budget);
+
+                            expenses = new ArrayList<Expense>();
+
+                            for (DataSnapshot ds2 : ds.child("Expense").getChildren()) {
+                                //String exp = ds2.getKey();
+                                String Cost = ds2.child("Cost").getValue().toString();
+                                String Year = ds2.child("Year").getValue().toString();
+                                String Month = ds2.child("Month").getValue().toString();
+                                String Day = ds2.child("Day").getValue().toString();
+                                String Name = ds2.child("Name").getValue().toString();
+                                String ID = ds2.child("ID").getValue().toString();
+
+                                int iCost = Integer.parseInt(Cost);
+                                iYear = Integer.parseInt(Year);
+                                iMonth = Integer.parseInt(Month);
+                                int iDay = Integer.parseInt(Day);
+                                int iID = Integer.parseInt(ID);
+
+                                Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
+                                expenses.add(expense);
+                            }
+                            thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, iMonth, iYear);
+                        }
+                    }
+                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                    startActivityForResult(intent, 1);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Failed to read value
+                }
+            });
     }
 
     /*

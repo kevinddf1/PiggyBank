@@ -5,12 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -142,7 +136,6 @@ public class MonthlyData implements Parcelable {
     /Return true if category was successfully made, false otherwise
      */
     public boolean createCategory(String name, int budget) {
-
         //Check that no category exists with the same name
         if(!categories.containsKey(name)) {
             Category category = new Category(month, year);
@@ -150,8 +143,11 @@ public class MonthlyData implements Parcelable {
             category.setBudget(budget);
             categories.put(name, category);
             categoriesArrayList.add(category);
-            this.base.insertCategoryName(name); // update the new category to database
-            this.base.insertCategoryBudget(budget, name); // update the new category to database
+            /****** update the new category info to database ******/
+            this.base.insertCategoryName(name);
+            this.base.insertCategoryBudget(budget, name);
+            this.base.insertCategoryDate(month, year, name);
+            /*************************************************/
             return true;
         }
         return false;
