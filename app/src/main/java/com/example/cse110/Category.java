@@ -16,6 +16,7 @@ public class Category implements Parcelable {
     private String name;
     private ArrayList<Expense> expenses;
     private int nextExpenseId;
+    private Database base = Database.Database(); // create a Database object
 
     /**
      * Constructor for an empty Category.
@@ -68,20 +69,20 @@ public class Category implements Parcelable {
         }
     };
 
-    /**
-     * Update the database to reflect changes in Category's budget or name ONLY (not necessarily the expenses).
-     * This is called when any of the Category's properties is modified, and when an Expense is created or deleted.
-     */
-    public void updateToDatabase() {
-        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // TODO: uid uniquely identifies the user; use it to update the database
-    }
+//    /**
+//     * Update the database to reflect changes in Category's budget or name ONLY (not necessarily the expenses).
+//     * This is called when any of the Category's properties is modified, and when an Expense is created or deleted.
+//     */
+//    public void updateToDatabase() {
+//        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        // TODO: uid uniquely identifies the user; use it to update the database
+//    }
 
     public Expense createExpense(String name, double cost, int year, int month, int day) {
         Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
         // TODO: insert while keeping sorted order
         expenses.add(expense);
-        updateToDatabase();
+        this.base.insertExpense(cost, name, this.name, year, month, day, nextExpenseId); // update category to database
         return expense;
     }
 
@@ -89,11 +90,11 @@ public class Category implements Parcelable {
         // TODO: optimized search
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {
+                base.delete_exp(name, id); // delete expense
                 expenses.remove(i);
                 break;
             }
         }
-        updateToDatabase();
     }
 
     /**
@@ -122,12 +123,10 @@ public class Category implements Parcelable {
         for (Expense e : expenses) {
             e.setParentCategoryName(name);
         }
-        updateToDatabase();
     }
 
     public void setBudget(int budget) {
         this.budget = budget;
-        updateToDatabase();
     }
 
     @Override

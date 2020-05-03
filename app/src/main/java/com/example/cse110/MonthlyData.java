@@ -7,6 +7,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +25,8 @@ public class MonthlyData implements Parcelable {
     private Map<String, Category> categories;
     // This is not serialized but is repopulated from categories so that categories and categoriesArrayList refer to the same Category objects
     private ArrayList<Category> categoriesArrayList;
+    // create a Database object
+    private Database base = Database.Database();
 
     /*x
     Constructor for an empty MonthlyData.
@@ -145,9 +150,21 @@ public class MonthlyData implements Parcelable {
             category.setBudget(budget);
             categories.put(name, category);
             categoriesArrayList.add(category);
+            this.base.insertCategoryName(name); // update the new category to database
+            this.base.insertCategoryBudget(budget, name); // update the new category to database
             return true;
         }
         return false;
+    }
+
+    //create a category from database
+    public Category createExistCategory(String name, int budget, ArrayList<Expense> expenses, int Month, int Year) {
+        Category category = new Category(budget, name, expenses, Month, Year);
+        category.setName(name);
+        category.setBudget(budget);
+        categories.put(name, category);
+        categoriesArrayList.add(category);
+        return category;
     }
 
     public void deleteCategory(String name) {
@@ -158,6 +175,7 @@ public class MonthlyData implements Parcelable {
                 break;
             }
         }
+        base.delete_cate(name); //delete category from database
     }
 
 
