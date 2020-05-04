@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final TextView userMessage = findViewById(R.id.userMessage);
         userMessage.setTextColor(Color.GREEN);
-        userMessage.setText(intent.getStringExtra(CreateAccount.USER_MESSAGE_FIELD));
+        userMessage.setText(intent.getStringExtra(CreateAccountActivity.USER_MESSAGE_FIELD));
 
         final Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 EditText usernameField = findViewById(R.id.username);
                 String enteredUsername = usernameField.getText().toString();
 
-                Intent intent = new Intent(LoginActivity.this, CreateAccount.class);
+                Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
                 intent.putExtra(USERNAME_FIELD, enteredUsername);
                 startActivity(intent);
             }
