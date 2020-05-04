@@ -4,10 +4,6 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,8 +18,10 @@ public class MonthlyData implements Parcelable {
     private Map<String, Category> categories;
     // This is not serialized but is repopulated from categories so that categories and categoriesArrayList refer to the same Category objects
     private ArrayList<Category> categoriesArrayList;
+    // create a Database object
+    private Database base = Database.Database();
 
-    /*x
+    /*
     Constructor for an empty MonthlyData.
     */
     public MonthlyData(int month, int year) {
@@ -69,9 +67,6 @@ public class MonthlyData implements Parcelable {
         parcel.writeMap(categories);
     }
 
-    public void updateFromDatabase() {
-        // TODO
-    }
 
     public int getYear() {
         return year;
@@ -93,33 +88,26 @@ public class MonthlyData implements Parcelable {
                 case 2:
                     return "March";
 
-
                 case 3:
                     return "April";
 
                 case 4:
                     return "May";
 
-
                 case 5:
                     return "June";
-
 
                 case 6:
                     return "July";
 
-
                 case 7:
                     return "August";
-
 
                 case 8:
                     return "September";
 
-
                 case 9:
                     return "October";
-
 
                 case 10:
                     return "November";
@@ -130,14 +118,12 @@ public class MonthlyData implements Parcelable {
                 default:
                     throw new IllegalStateException("Unexpected value: " + month);
             }
-
     };
 
     /*
     /Return true if category was successfully made, false otherwise
      */
     public boolean createCategory(String name, int budget) {
-
         //Check that no category exists with the same name
         if(!categories.containsKey(name)) {
             Category category = new Category(month, year);
@@ -145,9 +131,24 @@ public class MonthlyData implements Parcelable {
             category.setBudget(budget);
             categories.put(name, category);
             categoriesArrayList.add(category);
+            /****** update the new category info to database ******/
+            this.base.insertCategoryName(name);
+            this.base.insertCategoryBudget(budget, name);
+            this.base.insertCategoryDate(month, year, name);
+            /*************************************************/
             return true;
         }
         return false;
+    }
+
+    // This function is used to create a category from database data
+    public Category createExistCategory(String name, int budget, ArrayList<Expense> expenses, int Month, int Year) {
+        Category category = new Category(budget, name, expenses, Month, Year);
+        category.setName(name);
+        category.setBudget(budget);
+        categories.put(name, category);
+        categoriesArrayList.add(category);
+        return category;
     }
 
     public void deleteCategory(String name) {
@@ -158,6 +159,7 @@ public class MonthlyData implements Parcelable {
                 break;
             }
         }
+        base.delete_cate(name); //delete category from database
     }
 
 
