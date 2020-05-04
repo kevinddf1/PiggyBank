@@ -24,7 +24,6 @@ public class Database {
     private DatabaseReference myRef;
     private String key;
     private FirebaseAuth mAuth;
-    private FirebaseUser User;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     // static method to create single instance of Database class
@@ -39,42 +38,25 @@ public class Database {
     public Database() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
-
         mAuth = FirebaseAuth.getInstance();
-        //User = mAuth.getCurrentUser();
 
         mAuth.signInWithEmailAndPassword("test2@ucsd.edu", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser User = mAuth.getCurrentUser();
-                            key = User.getUid();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            //Toast.makeText(, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-                    }
-                });
-
-//        mAuth.signInWithEmailAndPassword("test2@ucsd.edu", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if (task.isSuccessful()) {
-//                    //key = myRef.push().getKey();
-//                    //key = User.getUid();
-//                    System.out.println("login suc");
-//                } else {
-//                    System.out.println("login fail: " + task.getException().getLocalizedMessage());
-//                }
-//            }
-//        });
-
-        //key = User.getUid();
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success");
+                    FirebaseUser User = mAuth.getCurrentUser();
+                    key = User.getUid();
+                    //updateUI(user);
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    //Toast.makeText(, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                    //updateUI(null);
+                }
+            }
+        });
     }
 
     public DatabaseReference getMyRef() {
