@@ -35,10 +35,8 @@ public class Database {
     public Database() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
-
         mAuth = FirebaseAuth.getInstance();
-        User = mAuth.getCurrentUser();
-        mAuth.signInWithEmailAndPassword("test@ucsd.edu", "q1w2e3r4t5y6").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword("test3@ucsd.edu", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -50,7 +48,9 @@ public class Database {
                 }
             }
         });
-        key = User.getUid();
+
+        User = mAuth.getCurrentUser();
+       key = User.getUid();
     }
 
     public DatabaseReference getMyRef() {
