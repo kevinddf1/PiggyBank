@@ -1,5 +1,8 @@
 package com.example.cse110;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Database {
+    private static final String TAG = "MyActivity";
     private static Database single_instance=null; // static variable single_instance of type Database
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
@@ -37,20 +41,40 @@ public class Database {
         myRef = mFirebaseDatabase.getReference();
 
         mAuth = FirebaseAuth.getInstance();
-        User = mAuth.getCurrentUser();
-        mAuth.signInWithEmailAndPassword("test@ucsd.edu", "q1w2e3r4t5y6").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    //key = myRef.push().getKey();
-                    //key = User.getUid();
-                    System.out.println("login suc");
-                } else {
-                    System.out.println("login fail: " + task.getException().getLocalizedMessage());
-                }
-            }
-        });
-        key = User.getUid();
+        //User = mAuth.getCurrentUser();
+
+        mAuth.signInWithEmailAndPassword("test2@ucsd.edu", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser User = mAuth.getCurrentUser();
+                            key = User.getUid();
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            //Toast.makeText(, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+                    }
+                });
+
+//        mAuth.signInWithEmailAndPassword("test2@ucsd.edu", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if (task.isSuccessful()) {
+//                    //key = myRef.push().getKey();
+//                    //key = User.getUid();
+//                    System.out.println("login suc");
+//                } else {
+//                    System.out.println("login fail: " + task.getException().getLocalizedMessage());
+//                }
+//            }
+//        });
+
+        //key = User.getUid();
     }
 
     public DatabaseReference getMyRef() {
