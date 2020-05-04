@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+
+    <TextView
+        android:id="@+id/category_name"
+        android:layout_width="119dp"
+        android:layout_height="48dp"
+        android:layout_weight="0"
+        android:paddingStart="10sp"
+        android:paddingTop="5sp"
+        android:text="@string/categoryName"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/budget"
+        android:layout_width="119dp"
+        android:layout_height="48dp"
+        android:layout_weight="0"
+        android:paddingTop="5sp"
+        android:text="@string/budgetDisplay"
+        android:textColor="#00C853" />
+
+    <TextView
+        android:id="@+id/Categories"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_weight="0"
+        android:gravity="end"
+        android:paddingTop="5sp"
+        android:paddingEnd="10sp"
+        android:text="@string/expenses"
+        android:textColor="#D50000" />
+
+
+
+</LinearLayout>

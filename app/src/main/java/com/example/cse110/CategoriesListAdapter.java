@@ -13,17 +13,16 @@ import java.util.ArrayList;
 public class CategoriesListAdapter extends ArrayAdapter<Category> {
     //Declare core elements that cause changes
     Button btnDelete, btnEdit;
-    final ArrayList<Category> itemsList;
 
     private MonthlyData monthlyData;
+
+    private ArrayList<Category> itemsList;
 
     // Constructor
     public CategoriesListAdapter(Context context, ArrayList<Category> items, MonthlyData monthlyData) {
         super(context, 0, items);
-
+        this.itemsList = items;
         this.monthlyData = monthlyData;
-        //Allow for class wide scope
-        itemsList = items;
     }
 
 
@@ -43,10 +42,10 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         TextView categoryName = convertView.findViewById(R.id.category_name);
         TextView categoryBudget = convertView.findViewById(R.id.category_budget);
         categoryName.setText(item.getName());
-        categoryBudget.setText(item.getBudgetAsString());
+        categoryBudget.setText("$" + formatIntMoneyString(item.getBudgetAsString()));
 
         // Create buttons to delete row or edit category
-        btnDelete = convertView.findViewById(R.id.delete);
+        btnDelete = convertView.findViewById(R.id.delete_category);
 
         //Set event handler for delete item
         btnDelete.setTag(position);
@@ -56,6 +55,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                 if (v.getTag() != null) {
                     // Remove item from MonthlyData and update adapter
                     monthlyData.deleteCategory(item.getName());
+                    itemsList.remove(item);
                     notifyDataSetChanged();
                 }
             }
@@ -65,4 +65,21 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         return convertView;
     }
 
+    public void setMonthlyData(MonthlyData monthlyData) {
+        this.monthlyData = monthlyData;
+        itemsList = monthlyData.getCategoriesAsArray();
+    }
+
+    private String formatIntMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 3;
+        int thousandthComma = valueToFormat.length() - 6;
+
+        if (valueToFormat.length() <= 3){
+            return  valueToFormat;
+        }else if (valueToFormat.length() <= 6){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
 }
+

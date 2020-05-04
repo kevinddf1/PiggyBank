@@ -35,7 +35,7 @@
             android:autofillHints=""
             android:ems="10"
             android:hint="Budget"
-            android:inputType="numberDecimal" />
+            android:inputType="number" />
 
         <Button
             android:id="@+id/AddToList"

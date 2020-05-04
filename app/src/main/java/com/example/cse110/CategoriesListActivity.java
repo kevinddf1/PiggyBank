@@ -16,10 +16,15 @@ import java.util.ArrayList;
 public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
 
+    //Our max allowable int is 9,999,999 which is 7 place values
+    private static final int MAX_BUDGET =  7;
+
     EditText categoryName, categoryBudget;
     Button btnAdd;
     CategoriesListAdapter myAdapter;
     ListView categories;
+
+
 
     private MonthlyData monthlyData;
 
@@ -47,7 +52,6 @@ public class CategoriesListActivity extends AppCompatActivity {
         categories.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("CLicked");
 
                 Category currentItem = myAdapter.getItem(position);
 
@@ -66,11 +70,26 @@ public class CategoriesListActivity extends AppCompatActivity {
                 // Ensure that both fields are filled.
                 if(!categoryBudget.getText().toString().isEmpty() && !categoryName.getText().toString().isEmpty() ) {
 
-                    // Create new item and update adapter
-                    monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
-                    categoryName.getText().clear();
-                    categoryBudget.getText().clear();
-                    myAdapter.notifyDataSetChanged();
+                    //Verify that max vale has not be reached.
+                    if(categoryBudget.getText().toString().length() > MAX_BUDGET){
+                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
+
+                    }else {
+
+                        // Create new item and update adapter
+                        boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
+
+                        // Verify that category was made
+                        if (!creationSuccessful) {
+                            Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
+                        }
+                        //Clear inputs
+                        categoryName.getText().clear();
+                        categoryBudget.getText().clear();
+                        myAdapter.notifyDataSetChanged();
+                    }
+
+
                 }else{
 
                     // Insufficient number of filled fields results in an error warning.
@@ -81,12 +100,15 @@ public class CategoriesListActivity extends AppCompatActivity {
         });
     }
 
-    @Override
+   @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 monthlyData = data.getParcelableExtra(ExpensesListActivity.MONTHLY_DATA_INTENT);
+
+                myAdapter = new CategoriesListAdapter(this, monthlyData.getCategoriesAsArray(), monthlyData);
+                categories.setAdapter(myAdapter);
             }
         }
     }
@@ -94,8 +116,8 @@ public class CategoriesListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         setResult(RESULT_OK, intent);
+        intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         super.onBackPressed();
     }
 }

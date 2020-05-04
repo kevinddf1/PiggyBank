@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <include
+        android:id="@+id/detailBar"
+        layout="@layout/history_detail_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/history"
+        />
+
+    <ListView
+        android:id="@+id/expenses"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:cacheColorHint="#FFFFFF"
+        android:clickable="true"
+        android:focusable="true"
+        android:longClickable="true"
+        android:smoothScrollbar="true" />
+
+</LinearLayout>

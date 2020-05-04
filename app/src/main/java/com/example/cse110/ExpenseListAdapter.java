@@ -43,7 +43,7 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
         TextView expenseName = listItemView.findViewById(R.id.expense_name);
         expenseName.setText(item.getName());
         TextView expenseCost = listItemView.findViewById(R.id.expense_cost);
-        expenseCost.setText(item.getCostAsString());
+        expenseCost.setText("$" + formatMoneyString(item.getCostAsString()));
 
         btnDelete = listItemView.findViewById(R.id.delete);
         btnDelete.setTag(position);
@@ -62,5 +62,16 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
         return listItemView;
     }
 
+    private String formatMoneyString(String valueToFormat){
+        int hundredthComma = valueToFormat.length() - 6;
+        int thousandthComma = valueToFormat.length() - 9;
+        if(valueToFormat.length() <= 6){
+            return valueToFormat;
+        }else if(valueToFormat.length() <= 9){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
 
 }
