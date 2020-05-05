@@ -12,6 +12,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".HistoryDetailedActivity"></activity>
         <activity android:name=".HistoryActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".ExpensesListActivity" />
         <activity android:name=".CategoriesListActivity" />
         <activity android:name=".PieChartActivity" />

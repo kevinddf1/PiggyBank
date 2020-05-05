@@ -11,12 +11,13 @@ import android.widget.Button;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton, pieChartButton;
+    Button expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +39,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pieChartButton= findViewById(R.id.PieChartButton);
+        pieChartButton = findViewById(R.id.PieChartButton);
         pieChartButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                onPieCHartClick(v);
+                onPieChartClick(v);
             }
         });
 
-
+        settingsButton = findViewById(R.id.SettingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                onSettingsClick(v);
+            }
+        });
 
     }
 
@@ -76,23 +83,42 @@ public class MainActivity extends AppCompatActivity {
             Calendar today = Calendar.getInstance();
             thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
+        // TODO: grab this from the database
+        if (settings == null) {
+            settings = new Settings();
+        }
         i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
         startActivityForResult(i, 1);
 
     }
 
-    private void onPieCHartClick(View v){
+    private void onPieChartClick(View v){
         Intent i = new Intent(getBaseContext(), PieChartActivity.class);
         // TODO: grab this from the database
         if (thisMonthsData == null) {
             Calendar today = Calendar.getInstance();
             thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
+        // TODO: grab this from the database
+        if (settings == null) {
+            settings = new Settings();
+        }
         i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
         startActivityForResult(i, 1);
 
     }
 
+    public void onSettingsClick(View v) {
+        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+
+        // TODO: grab this from the database
+        if (settings == null) {
+            settings = new Settings();
+        }
+        intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+        startActivityForResult(intent, 1);
+    }
 
     public void onExpensesCLick(View v) {
         Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
@@ -102,8 +128,12 @@ public class MainActivity extends AppCompatActivity {
             Calendar today = Calendar.getInstance();
             thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
         }
-
+        // TODO: grab this from the database
+        if (settings == null) {
+            settings = new Settings();
+        }
         intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+        intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
 
         startActivityForResult(intent, 1);
     }
@@ -128,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
+                settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
             }
         }
     }
