@@ -2,9 +2,13 @@ package com.example.cse110;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,7 +24,10 @@ public class ExpensesListActivity extends AppCompatActivity {
     public static final String CATEGORY_NAME_INTENT = "ExpenseListActivity categoryName";
     public static final String SETTINGS_INTENT = "ExpenseListActivity settings";
     private static  final int MAX_EXPENSE_VALUE = 9999999;
+    //Our max allowable int is 9,999,999 which is 7 place values
+    private static final int MAX_BUDGET =  7;
     private EditText expenseName, expenseCost;
+    private EditText categoryBudget;
     //List Structure
     private ExpenseListAdapter expenseAdapter;
 
@@ -46,7 +53,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         TextView categoryName = findViewById(R.id.category_name);
         categoryName.setText(categoryNameFromParent);
 
-        TextView categoryBudget = findViewById((R.id.budget_display));
+        categoryBudget = findViewById((R.id.budget_display));
         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
 
         // Bind element from XML file
@@ -59,6 +66,44 @@ public class ExpensesListActivity extends AppCompatActivity {
         expenseAdapter = new ExpenseListAdapter(this, arrayOfItems, category);
         ListView expensesList = findViewById(R.id.Categories);
         expensesList.setAdapter(expenseAdapter);
+
+        //Detect User Changes
+        categoryBudget.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && categoryBudget.getText().toString() != null) {
+
+                    if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
+                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
+
+                    } else if (categoryBudget.getText().toString().isEmpty()) {
+
+                        //In the case of of an empty string
+                        categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
+                    } else {
+
+
+
+                        //Ensure valid input
+                        try {
+
+                            // Create new item and update adapter
+                            category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
+                            categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
+                            Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
+
+                        }
+
+
+
+                    }
+                }else {
+                   categoryBudget.getText().clear();
+                }
+            }
+        });
 
         // Set Event Handler to add items to the list
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -124,5 +169,24 @@ public class ExpensesListActivity extends AppCompatActivity {
             return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
         }
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
+
+    //Handle pressing away from setting category
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
     }
 }
