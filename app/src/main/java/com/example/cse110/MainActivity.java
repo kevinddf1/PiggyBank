@@ -10,6 +10,11 @@ import android.widget.Button;
 
 import java.util.Calendar;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     Button expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
@@ -17,7 +22,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
+
     private Settings settings;
+
+    private Database base = Database.Database(); // create a Database object
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         settingsButton = findViewById(R.id.SettingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -54,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 onSettingsClick(v);
             }
         });
+
 
     }
 
@@ -77,36 +88,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onHistoryClick(View v){
-        Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-        // TODO: grab this from the database
-        if (thisMonthsData == null) {
-            Calendar today = Calendar.getInstance();
-            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-        }
-        // TODO: grab this from the database
-        if (settings == null) {
-            settings = new Settings();
-        }
-        i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
-        startActivityForResult(i, 1);
-
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                startActivityForResult(i, 1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
     }
 
     private void onPieChartClick(View v){
-        Intent i = new Intent(getBaseContext(), PieChartActivity.class);
-        // TODO: grab this from the database
-        if (thisMonthsData == null) {
-            Calendar today = Calendar.getInstance();
-            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-        }
-        // TODO: grab this from the database
-        if (settings == null) {
-            settings = new Settings();
-        }
-        i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
-        startActivityForResult(i, 1);
-
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                startActivityForResult(i, 1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
     }
+
+
 
     public void onSettingsClick(View v) {
         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
@@ -120,22 +135,30 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    // TODO: Month Year UPDATE FROM CATEGORY
     public void onExpensesCLick(View v) {
-        Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-
-        // TODO: grab this from the database
-        if (thisMonthsData == null) {
-            Calendar today = Calendar.getInstance();
-            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-        }
-        // TODO: grab this from the database
-        if (settings == null) {
-            settings = new Settings();
-        }
-        intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-        intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
-
-        startActivityForResult(intent, 1);
+                    /* Read from the database
+            / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+            / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+            */
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                if (settings == null) {
+                    settings = new Settings();
+                }
+                intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                startActivityForResult(intent, 1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
     }
 
     /*

@@ -17,7 +17,6 @@ public class Expense implements Parcelable {
     private int id;
     // parentCategoryName should not be saved in the database
     private String parentCategoryName;
-
     private String costString;
 
     public Expense(int id, String name, double cost, int year, int month, int day, String parentCategoryName) {
@@ -58,7 +57,12 @@ public class Expense implements Parcelable {
         this.year = year;
         this.day = day;
         this.parentCategoryName = parentCategoryName;
+
+//        this.base = new Database();
+//        base.insertExpenseName(name);
+//        base.insertExpenseCost(cost);
     }
+
 
     protected Expense(Parcel in) {
         name = in.readString();
@@ -84,15 +88,15 @@ public class Expense implements Parcelable {
         }
     };
 
-    /**
-     * Update the database to reflect changes in Expense's fields.
-     * This is called every time any field in Expense is modified.
-     */
-    public void updateToDatabase() {
-        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // TODO: uid uniquely identifies the user; use it to update the database; Expense.id uniquely identifies the Expense within the Category
-        // use uid, id, and parentCategoryName
-    }
+//    /**
+//     * Update the database to reflect changes in Expense's fields.
+//     * This is called every time any field in Expense is modified.
+//     */
+//    public void updateToDatabase() {
+//        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        // TODO: uid uniquely identifies the user; use it to update the database; Expense.id uniquely identifies the Expense within the Category
+//        // use uid, id, and parentCategoryName
+//    }
 
     public String getName() {
         return name;
@@ -119,17 +123,19 @@ public class Expense implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-        updateToDatabase();
+        //updateToDatabase();
+        //base.insertExpenseName(name);
     }
     public void setCost(int cost) {
         this.cost = cost;
-        updateToDatabase();
+        //updateToDatabase();
+        //base.insertExpenseCost(cost);
     }
     public void setDate(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
-        updateToDatabase();
+        //updateToDatabase();
     }
     public void setParentCategoryName(String parentCategoryName) {
         this.parentCategoryName = parentCategoryName;
