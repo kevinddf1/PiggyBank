@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,11 +29,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        Intent intent = getIntent();
-        final TextView userMessage = findViewById(R.id.userMessage);
-        userMessage.setTextColor(Color.GREEN);
-        userMessage.setText(intent.getStringExtra(CreateAccountActivity.USER_MESSAGE_FIELD));
-
         final Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -46,14 +42,12 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            userMessage.setTextColor(Color.GREEN);
-                            userMessage.setText("Logging in...");
+                            Toast.makeText(getBaseContext(), "Logged in.", Toast.LENGTH_LONG).show();
 
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             startActivity(intent);
                         } else {
-                            userMessage.setTextColor(Color.RED);
-                            userMessage.setText("Login failed. " + task.getException().getLocalizedMessage());
+                            Toast.makeText(getBaseContext(), "Login failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -71,5 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing on back button press because we don't want the user to be able to go back to wherever they were
     }
 }
