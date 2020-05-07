@@ -41,11 +41,11 @@ public class Category implements Parcelable {
         this.expenses = expenses;
         this.month = month;
         this.year = year;
-
+        nextExpenseId = 0;
         for (Expense e : expenses) {
             nextExpenseId = Math.max(nextExpenseId, e.getId());
         }
-        nextExpenseId++;
+        //nextExpenseId++;
 
         //this.base = new Database();
     }
@@ -82,11 +82,20 @@ public class Category implements Parcelable {
     }
 
     public void deleteExpense(int id) {
+        base.delete_exp(name, id); // delete expense from database
         // TODO: optimized search
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {
-                base.delete_exp(name, id); // delete expense from database
                 expenses.remove(i);
+
+//                for (int k = i; k < expenses.size(); k++) {
+//                    //expenses.get(k).setId(expenses.get(k).getId() - 1);
+//                    expenses.get(k).setId(k+1);
+//                    //base.insertExpenseId(expenses.get(k).getName(), name, k+1);
+//                }
+//
+//                nextExpenseId = expenses.size();
+
                 break;
             }
         }

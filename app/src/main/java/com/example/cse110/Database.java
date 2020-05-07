@@ -76,6 +76,16 @@ public class Database {
         myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("ID").setValue(nextExpenseId);
     }
 
+//    public void insertExpenseId(String name, String parent_name, int nextExpenseId) {
+//        String str_ID = Integer.toString(nextExpenseId);
+//        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("").setValue(name);
+//
+//        myRef = myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child();
+//        Map newUserData = new HashMap();
+//        newUserData.put(YOUR_NEW_DATA);
+//        userRef.updateChildren(newUserData);
+//    }
+
     public void delete_cate(String name) {
         myRef.child("User").child(key).child("Category " + name).removeValue();
     }
@@ -83,6 +93,10 @@ public class Database {
     public void delete_exp(String parent_name, int id) {
         String str_ID = Integer.toString(id);
         myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).removeValue();
+    }
+
+    public void delete_account() {
+        myRef.child("User").child(key).removeValue();
     }
 
     public MonthlyData RetrieveDatafromDatabase(DataSnapshot dataSnapshot, MonthlyData thisMonthsData) {

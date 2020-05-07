@@ -21,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
 
     private Settings settings;
+    private Database base = Database.Database(); // create a Database object
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                base.delete_account(); //delete data in this account
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
