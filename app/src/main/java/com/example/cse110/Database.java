@@ -40,23 +40,8 @@ public class Database {
         myRef = mFirebaseDatabase.getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        mAuth.signInWithEmailAndPassword("test@ucsd.edu", "q1w2e3r4t5y6").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success");
-                    FirebaseUser User = mAuth.getCurrentUser();
-                    key = User.getUid();
-                    //updateUI(user);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    //Toast.makeText(, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                    //updateUI(null);
-                }
-            }
-        });
+        FirebaseUser User = mAuth.getCurrentUser();
+        key = User.getUid();
     }
 
     public DatabaseReference getMyRef() {

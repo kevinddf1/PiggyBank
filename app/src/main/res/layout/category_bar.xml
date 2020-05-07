@@ -7,6 +7,8 @@
         <TextView
             android:id="@+id/category_name"
             android:text="@string/categoryName"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="24sp"
@@ -14,14 +16,21 @@
             android:gravity="start"
             />
 
-        <TextView
+        <EditText
             android:id="@+id/budget_display"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:cursorVisible="true"
+            android:fontFamily="@font/semibold"
             android:gravity="bottom|end"
+            android:inputType="number"
+            android:outlineProvider="none"
             android:paddingEnd="10dp"
+            android:singleLine="true"
             android:text="@string/budgetDisplay"
-            android:textColor="#00C853"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/green"
             android:textSize="12sp" />
     </LinearLayout>
 

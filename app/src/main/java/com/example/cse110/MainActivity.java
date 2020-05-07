@@ -16,13 +16,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton, pieChartButton;
+    Button expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
+
+    private Settings settings;
+
     private Database base = Database.Database(); // create a Database object
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +48,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pieChartButton= findViewById(R.id.PieChartButton);
+        pieChartButton = findViewById(R.id.PieChartButton);
         pieChartButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                onPieCHartClick(v);
+                onPieChartClick(v);
             }
         });
+
+
+        settingsButton = findViewById(R.id.SettingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                onSettingsClick(v);
+            }
+        });
+
+
     }
 
     /**
@@ -73,10 +88,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onHistoryClick(View v){
-        /* Read from the database
-            / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-            / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-            */
         base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
@@ -91,14 +102,9 @@ public class MainActivity extends AppCompatActivity {
                 // Failed to read value
             }
         });
-
     }
 
-    private void onPieCHartClick(View v){
-        /* Read from the database
-            / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-            / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-            */
+    private void onPieChartClick(View v){
         base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
@@ -113,30 +119,46 @@ public class MainActivity extends AppCompatActivity {
                 // Failed to read value
             }
         });
-
     }
 
 
+
+    public void onSettingsClick(View v) {
+        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+
+        // TODO: grab this from the database
+        if (settings == null) {
+            settings = new Settings();
+        }
+        intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+        startActivityForResult(intent, 1);
+    }
+
     // TODO: Month Year UPDATE FROM CATEGORY
     public void onExpensesCLick(View v) {
-            /* Read from the database
+                    /* Read from the database
             / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
             / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
             */
-            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
-                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-                    thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
-                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                    startActivityForResult(intent, 1);
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                if (settings == null) {
+                    settings = new Settings();
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Failed to read value
-                }
-            });
+                intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                startActivityForResult(intent, 1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
     }
 
     /*
@@ -159,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
+                settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
             }
         }
     }
