@@ -40,7 +40,7 @@ public class Database {
         myRef = mFirebaseDatabase.getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        mAuth.signInWithEmailAndPassword("test2@ucsd.edu", "password").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword("test@ucsd.edu", "q1w2e3r4t5y6").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
