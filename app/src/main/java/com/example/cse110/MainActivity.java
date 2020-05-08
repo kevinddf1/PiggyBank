@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
 
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+                thisMonthsData = base.RetrieveDataforPast(dataSnapshot, thisMonthsData, year, month);
 
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
