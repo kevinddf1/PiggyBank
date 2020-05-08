@@ -19,7 +19,7 @@ import java.util.Calendar;
 
 public class Database {
     private static final String TAG = "MyActivity";
-    private static Database single_instance=null; // static variable single_instance of type Database
+    private static Database single_instance = null; // static variable single_instance of type Database
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private String key;
@@ -52,28 +52,36 @@ public class Database {
         return key;
     }
 
-    public void insertCategoryName(String name) {
-        myRef.child("User").child(key).child("Category " + name).child("Name").setValue(name);
+    public void insertMonthlydata(int year, int month) {
+        DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year);
+        ref.child("Year").setValue(year);
+        ref.child("Month").setValue(month);
+        ref.child("Total Expense").setValue(999);
     }
 
-    public void insertCategoryBudget(int budget, String name) {
-        myRef.child("User").child(key).child("Category " + name).child("Budget").setValue(budget);
+    public void insertCategoryName(String name, int year, int month) {
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).child("Name").setValue(name);
+    }
+
+    public void insertCategoryBudget(int budget, String name, int year, int month) {
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).child("Budget").setValue(budget);
     }
 
     public void insertCategoryDate(int year, int month, String name) {
-        myRef.child("User").child(key).child("Category " + name).child("Year").setValue(year);
-        myRef.child("User").child(key).child("Category " + name).child("Month").setValue(month);
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).child("Year").setValue(year);
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).child("Month").setValue(month);
     }
 
     public void insertExpense(double cost, String name, String parent_name, int year, int month, int day, int nextExpenseId) {
         String str_ID = Integer.toString(nextExpenseId);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("Name").setValue(name);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("Cost").setValue(cost);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("Date").setValue(month + "/" + day + "/" + year);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("Year").setValue(year);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("Month").setValue(month);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("Day").setValue(day);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("ID").setValue(nextExpenseId);
+        DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID);
+        ref.child("Name").setValue(name);
+        ref.child("Cost").setValue(cost);
+        ref.child("Date").setValue(month + "/" + day + "/" + year);
+        ref.child("Year").setValue(year);
+        ref.child("Month").setValue(month);
+        ref.child("Day").setValue(day);
+        ref.child("ID").setValue(nextExpenseId);
     }
 
 //    public void insertExpenseId(String name, String parent_name, int nextExpenseId) {
@@ -86,26 +94,25 @@ public class Database {
 //        userRef.updateChildren(newUserData);
 //    }
 
-    public void delete_cate(String name) {
-        myRef.child("User").child(key).child("Category " + name).removeValue();
+    public void delete_cate(String name, int year, int month) {
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).removeValue();
     }
 
-    public void delete_exp(String parent_name, int id) {
+    public void delete_exp(String parent_name, int id, int year, int month) {
         String str_ID = Integer.toString(id);
-        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).removeValue();
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID).removeValue();
     }
 
     public void delete_account() {
         myRef.child("User").child(key).removeValue();
     }
 
-    public MonthlyData RetrieveDatafromDatabase(DataSnapshot dataSnapshot, MonthlyData thisMonthsData) {
+    public MonthlyData RetrieveDatafromDatabase(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, int year, int month) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
-            Calendar today = Calendar.getInstance();
-            thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+            thisMonthsData = new MonthlyData(month, year);
 
             // this loop retrieve all the categories from database
-            for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+            for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
                 if (!ds.exists()) { // check if there are any category in user's account
                     break; // if NOT, break the loop
                 }
@@ -147,6 +154,51 @@ public class Database {
         }
         return thisMonthsData;
     }
+
+
+    public String getMonth(int month) {
+        switch (month) {
+            case 0:
+                return "January";
+
+            case 1:
+                return "February";
+
+            case 2:
+                return "March";
+
+            case 3:
+                return "April";
+
+            case 4:
+                return "May";
+
+            case 5:
+                return "June";
+
+            case 6:
+                return "July";
+
+            case 7:
+                return "August";
+
+            case 8:
+                return "September";
+
+            case 9:
+                return "October";
+
+            case 10:
+                return "November";
+
+            case 11:
+                return "December";
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
+    }
+
 }
 
 

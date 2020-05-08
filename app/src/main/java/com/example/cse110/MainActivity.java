@@ -93,7 +93,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }
@@ -110,7 +116,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent i = new Intent(getBaseContext(), PieChartActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+
                 i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }
@@ -137,16 +149,23 @@ public class MainActivity extends AppCompatActivity {
 
     // TODO: Month Year UPDATE FROM CATEGORY
     public void onExpensesCLick(View v) {
-                    /* Read from the database
-            / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-            / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-            */
+        /* Read from the database
+        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+        / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+        */
         base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                base.insertMonthlydata(year, month);
+
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+
                 intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
                 if (settings == null) {
                     settings = new Settings();

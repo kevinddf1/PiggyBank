@@ -82,7 +82,7 @@ public class Category implements Parcelable {
     }
 
     public void deleteExpense(int id) {
-        base.delete_exp(name, id); // delete expense from database
+        base.delete_exp(name, id, year, month); // delete expense from database
         // TODO: optimized search
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {

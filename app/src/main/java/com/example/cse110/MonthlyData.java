@@ -132,9 +132,9 @@ public class MonthlyData implements Parcelable {
             categories.put(name, category);
             categoriesArrayList.add(category);
             /****** update the new category info to database ******/
-            this.base.insertCategoryName(name);
-            this.base.insertCategoryBudget(budget, name);
-            this.base.insertCategoryDate(month, year, name);
+            this.base.insertCategoryName(name, year, month);
+            this.base.insertCategoryBudget(budget, name, year, month);
+            this.base.insertCategoryDate(year, month, name);
             /*************************************************/
             return true;
         }
@@ -159,7 +159,7 @@ public class MonthlyData implements Parcelable {
                 break;
             }
         }
-        base.delete_cate(name); //delete category from database
+        base.delete_cate(name, year, month); //delete category from database
     }
 
 
