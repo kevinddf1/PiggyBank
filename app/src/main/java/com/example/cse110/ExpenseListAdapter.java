@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -61,7 +62,9 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
 
 
                     //Allow the updating of the expense list activity
-                    String totalExpenseString = Double.toString(category.getTotalExpenses()/100);
+                    double calculatedRemainder = (double) category.getTotalExpenses() / 100.00;
+                    String totalExpenseString = Double.valueOf(calculatedRemainder).toString();
+
                     ((ExpensesListActivity)context).updateTotalExpenseDisplay("$" + formatMoneyString(totalExpenseString));
 
                     //Add fine tuning on expense Display
