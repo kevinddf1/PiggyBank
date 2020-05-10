@@ -72,32 +72,21 @@ public class ExpensesListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus && categoryBudget.getText().toString() != null) {
-
                     if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
                         Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
-
                     } else if (categoryBudget.getText().toString().isEmpty()) {
-
                         //In the case of of an empty string
                         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                     } else {
-
-
-
                         //Ensure valid input
                         try {
-
                             // Create new item and update adapter
                             category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
                             Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
-
                         }
-
-
-
                     }
                 }else {
                    categoryBudget.getText().clear();
