@@ -3,8 +3,4 @@
     android:shape="rectangle">
     <!-- you can use any color you want I used here gray color-->
     <solid android:color="@color/white"/>
-    <corners android:bottomLeftRadius="25dp"
-        android:bottomRightRadius="25dp"
-        android:topLeftRadius="25dp"
-        android:topRightRadius="25dp" />
 </shape>
