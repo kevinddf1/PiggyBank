@@ -1,9 +1,12 @@
 package com.example.cse110;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -11,7 +14,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
@@ -34,7 +40,12 @@ public class CategoriesListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories_list);
-
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
         // Bind element from XML file
         // Core elements of the activity
         categoryName = findViewById(R.id.category_name);
@@ -128,4 +139,42 @@ public class CategoriesListActivity extends AppCompatActivity {
         intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         super.onBackPressed();
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            setResult(RESULT_OK, intent);
+                            intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_lists:
+                            return true;
+/*
+                        case R.id.navigation_history:
+                            Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+                            setResult(RESULT_OK, i);
+                            //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                            // TODO: grab this from the database
+
+                            if (monthlyData == null) {
+                                Calendar today = Calendar.getInstance();
+                                monthlyData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+                            }
+
+                            i.putExtra(HISTORY_DATA_INTENT, monthlyData);
+                            startActivityForResult(i, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+*/
+
+                    }
+                    return false;
+                }
+            };
 }

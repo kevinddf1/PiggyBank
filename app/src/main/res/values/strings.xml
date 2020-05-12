@@ -44,4 +44,11 @@
     <string name="about_us">About us</string>
     <string name="delete_account">Delete account</string>
     <string name="change_password">Change password</string>
+
+    <!-- nav bar strings -->
+    <string name="title_home">Home</string>
+    <string name="title_lists">Lists</string>
+    <string name="title_graphs">Graphs</string>
+    <string name="title_history">History</string>
+    <string name="title_settings">Settings</string>
 </resources>
