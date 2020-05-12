@@ -109,6 +109,11 @@ public class Expense implements Parcelable {
     public String getName() {
         return name;
     }
+
+    /**
+     * As cents.
+     * @return
+     */
     public int getCost() {
         return cost;
     }

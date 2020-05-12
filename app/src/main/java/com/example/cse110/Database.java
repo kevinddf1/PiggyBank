@@ -26,6 +26,9 @@ public class Database {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+
+
+
     // static method to create single instance of Database class
     public static Database Database() {
         // To ensure only one instance is created
@@ -130,7 +133,7 @@ public class Database {
                     expenses.add(expense);
                 }
                 // create category
-                thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year);
+                thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year).setTotalExpenses();
             }
         }
         return thisMonthsData;

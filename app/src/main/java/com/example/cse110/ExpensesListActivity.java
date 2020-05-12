@@ -28,12 +28,15 @@ public class ExpensesListActivity extends AppCompatActivity {
     private static final int MAX_BUDGET =  7;
     private EditText expenseName, expenseCost;
     private EditText categoryBudget;
+    private TextView totalExpensesDisplay;
     //List Structure
     private ExpenseListAdapter expenseAdapter;
 
     private MonthlyData monthlyData;
     private Settings settings;
     private Category category;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,10 @@ public class ExpensesListActivity extends AppCompatActivity {
 
         categoryBudget = findViewById((R.id.budget_display));
         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
+        totalExpensesDisplay = (TextView) findViewById(R.id.total_expenses);
 
+        //Account for initial lack of decimal values
+        totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100)));
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
         expenseCost = findViewById(R.id.expense_cost);
@@ -82,6 +88,11 @@ public class ExpensesListActivity extends AppCompatActivity {
                         try {
                             // Create new item and update adapter
                             category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
+
+                            //Update totalBudget
+                            monthlyData.setTotalBudget();
+
+
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
@@ -111,6 +122,10 @@ public class ExpensesListActivity extends AppCompatActivity {
 
                         // Create new item and update adapter
                         category.createExpense(expenseName.getText().toString(), Double.parseDouble(expenseCost.getText().toString()), today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+                       // Update total expenses for this category
+                        double currentTotalExpense = category.getTotalExpenses()/100.00;
+                        totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense )));
+
                         expenseName.getText().clear();
                         expenseCost.getText().clear();
                         expenseAdapter.notifyDataSetChanged();
@@ -177,5 +192,55 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent( event );
+    }
+
+    /**
+     * Allow formatting for expenses display
+     * @param valueToFormat
+     * @return
+     */
+
+    private String formatMoneyString(String valueToFormat){
+        // Add formatting for whole numbers
+        if(valueToFormat.indexOf('.') == -1){
+            valueToFormat = valueToFormat.concat(".00");
+        }else{
+            //Ensure only valid input
+            int costLength = valueToFormat.length();
+            int decimalPlace = valueToFormat.indexOf(".");
+
+            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
+            if (costLength - decimalPlace == 1) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) +  "00";
+            }
+            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
+            // appends a 0 to the end
+            else if (costLength - decimalPlace == 2) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
+            }
+            // If the user inputs a number with >= 2 decimal places, only displays up to 2
+            else {
+                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
+            }
+        }
+
+        int hundredthComma = valueToFormat.length() - 6;
+        int thousandthComma = valueToFormat.length() - 9;
+        if(valueToFormat.length() <= 6){
+            return valueToFormat;
+        }else if(valueToFormat.length() <= 9){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
+
+    /**
+     * Update the display for expenseList
+     */
+    public void updateTotalExpenseDisplay(String toDisplay){
+
+
+        totalExpensesDisplay.setText( toDisplay);
+
     }
 }
