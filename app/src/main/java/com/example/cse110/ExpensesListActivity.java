@@ -131,7 +131,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                         expenseAdapter.notifyDataSetChanged();
                     } catch (Exception overflow) {
                         if (settings.getEnableNotifications()) {
-                            Toast.makeText(getBaseContext(), "The max expense value is $9,999,999", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -139,7 +139,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                 } else {
                     if (settings.getEnableNotifications()) {
                         // Insufficient number of filled fields results in an error warning.
-                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
+                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in expense name and cost.", Toast.LENGTH_SHORT);
                         missingInformationWarning.show();
                     }
                 }
