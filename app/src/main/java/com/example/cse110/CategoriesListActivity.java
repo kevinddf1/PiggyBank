@@ -100,7 +100,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                 } else {
                     if (settings.getEnableNotifications()) {
                         // Insufficient number of filled fields results in an error warning.
-                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
+                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in category name and budget.", Toast.LENGTH_SHORT);
                         missingInformationWarning.show();
                     }
                 }

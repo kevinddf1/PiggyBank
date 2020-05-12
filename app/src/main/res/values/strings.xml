@@ -44,4 +44,7 @@
     <string name="about_us">About us</string>
     <string name="delete_account">Delete account</string>
     <string name="change_password">Change password</string>
+    <string name="categories_list">Categories List</string>
+    <string name="type_category_name">Type Category name</string>
+    <string name="type_category_name_updated">Type category name</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -27,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Database base = Database.Database(); // create a Database object
 
+    /**
+     * TextViews to display budget and total expenses
+     */
+    TextView totalBudgetDisplay, totalExpenseDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +41,20 @@ public class MainActivity extends AppCompatActivity {
         //Check if this a month should be re-instantiated
         Intent intent = getIntent();
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
-        //Bind button to go to expense list
 
+        //Instantiate monthlyData only if currently null
+       // if(thisMonthsData == null){
+         //   base.
+        //Bind button to go to expense list
         expenseListButton = findViewById(R.id.ExpensesButton);
+
+        //Bind our month's expenses and budget to proper display
+        //totalBudgetDisplay = findViewById(R.id.currentCash);
+        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
+        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
+
+
+
 
         historyButton = findViewById(R.id.HistoryButton);
         historyButton.setOnClickListener(new View.OnClickListener(){
@@ -189,6 +205,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Do nothing on back button press because we don't want the user to be able to go back to login page
+    }
+
+    /**
+     * Helper method to instantiate current month upon creation
+     */
+    private void instantiateCurrentMonth(){
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                startActivityForResult(i, 1);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
     }
 }
 
