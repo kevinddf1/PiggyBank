@@ -47,4 +47,10 @@
     <string name="categories_list">Categories List</string>
     <string name="type_category_name">Type Category name</string>
     <string name="type_category_name_updated">Type category name</string>
+    <!-- nav bar strings -->
+    <string name="title_home">Home</string>
+    <string name="title_lists">Lists</string>
+    <string name="title_graphs">Graphs</string>
+    <string name="title_history">History</string>
+    <string name="title_settings">Settings</string>
 </resources>

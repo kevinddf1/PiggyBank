@@ -12,7 +12,9 @@ tools:context=".ExpensesListActivity">
     android:id="@+id/history_bar"
     layout="@layout/history_bar"
     app:layout_constraintBottom_toTopOf="@+id/top_banner" />
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ListView
     android:id="@+id/Categories"
     android:layout_width="match_parent"
@@ -24,5 +26,18 @@ tools:context=".ExpensesListActivity">
     android:focusable="true"
     android:longClickable="true"
     android:smoothScrollbar="true" />
-
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:itemIconTint="#26C6DA"
+            app:itemTextColor="#26C6DA"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/bottom_nav_menu" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
