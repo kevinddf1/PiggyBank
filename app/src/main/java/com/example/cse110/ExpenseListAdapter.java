@@ -60,7 +60,6 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
                     category.deleteExpense(item.getId());
 
 
-
                     //Allow the updating of the expense list activity
                     double calculatedRemainder = (double) category.getTotalExpenses() / 100.00;
                     String totalExpenseString = Double.valueOf(calculatedRemainder).toString();

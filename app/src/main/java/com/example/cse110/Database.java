@@ -99,7 +99,7 @@ public class Database {
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
                 if (!ds.exists()) { // check if there are any category in user's account
                     break; // if NOT, break the loop
-                }
+            }
                 // get the data of current category
                 String cate_name = ds.child("Name").getValue().toString();
                 System.out.println(cate_name);
@@ -123,13 +123,13 @@ public class Database {
                     String Day = ds2.child("Day").getValue().toString();
                     String Name = ds2.child("Name").getValue().toString();
                     String ID = ds2.child("ID").getValue().toString();
-                    int iCost = Integer.parseInt(Cost);
+                    double dCost = Double.parseDouble(Cost)/100;
                     int iYear = Integer.parseInt(Year);
                     int iMonth = Integer.parseInt(Month);
                     int iDay = Integer.parseInt(Day);
                     int iID = Integer.parseInt(ID);
                     // create expense
-                    Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
+                    Expense expense = new Expense(iID, Name, dCost, iYear, iMonth, iDay, cate_name);
                     expenses.add(expense);
                 }
                 // create category

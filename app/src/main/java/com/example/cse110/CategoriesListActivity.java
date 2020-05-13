@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -90,6 +91,12 @@ public class CategoriesListActivity extends AppCompatActivity {
                                 Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
                             }
                         }
+                        else {
+                            if (settings.getEnableNotifications()) {
+                                // Displays a Toast message that lets the user know the category was successfully created
+                                Toast.makeText(getBaseContext(), "Category successfully added.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                         //Clear inputs
                         categoryName.getText().clear();
                         categoryBudget.getText().clear();
@@ -127,5 +134,9 @@ public class CategoriesListActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         super.onBackPressed();
+    }
+
+    public void confirmDeletion(TextView nameOfCategory) {
+        Toast.makeText(getBaseContext(),  nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
     }
 }

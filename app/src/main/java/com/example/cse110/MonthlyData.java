@@ -161,7 +161,6 @@ public class MonthlyData implements Parcelable {
     }
 
     public void deleteCategory(String name) {
-
         //Update total budget
         this.totalBudget -= categories.get(name).getBudget();
         categories.remove(name);
