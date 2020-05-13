@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +53,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                Toast.makeText(getBaseContext(), "Account created.", Toast.LENGTH_LONG).show();
+
                                 // Go back to login screen with a user message
                                 Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
                                 intent.putExtra(USER_MESSAGE_FIELD, "Account successfully created.");
