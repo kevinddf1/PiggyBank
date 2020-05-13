@@ -22,6 +22,7 @@ import java.util.Calendar;
 public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
+    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
 
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
@@ -155,7 +156,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_lists:
                             return true;
-/*
+
                         case R.id.navigation_history:
                             Intent i = new Intent(getBaseContext(), HistoryActivity.class);
                             setResult(RESULT_OK, i);
@@ -171,7 +172,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                             startActivityForResult(i, 1);
                             overridePendingTransition(0, 0);
                             return true;
-*/
+
 
                     }
                     return false;
