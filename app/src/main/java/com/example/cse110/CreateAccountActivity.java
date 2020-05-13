@@ -46,6 +46,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 final TextView userMessage = findViewById(R.id.userMessage);
 
+                if (enteredUsername.length() == 0 || enteredPassword.length() == 0 || enteredConfirmPassword.length() == 0) {
+                    Toast.makeText(getBaseContext(), "One or more fields are empty.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (enteredPassword.equals(enteredConfirmPassword)) {
                     // TODO: check if the email already exists as a user
 
