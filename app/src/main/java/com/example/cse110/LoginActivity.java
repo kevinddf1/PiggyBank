@@ -38,6 +38,11 @@ public class LoginActivity extends AppCompatActivity {
                 EditText passwordField = findViewById(R.id.password);
                 String enteredPassword = passwordField.getText().toString();
 
+                if (enteredUsername.length() == 0 || enteredPassword.length() == 0) {
+                    Toast.makeText(getBaseContext(), "One or more fields are empty.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 mAuth.signInWithEmailAndPassword(enteredUsername, enteredPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
