@@ -197,7 +197,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
-                settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
+                Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
+                if (settings != null) {
+                    this.settings = settings;
+                }
             }
         }
     }
