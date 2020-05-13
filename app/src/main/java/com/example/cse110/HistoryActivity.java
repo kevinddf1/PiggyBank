@@ -207,9 +207,12 @@ public class HistoryActivity extends AppCompatActivity {
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
                             setResult(RESULT_OK, inten);
-                            //inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-                            inten.putExtra(HISTORY_DATA_INTENT, current_month);
-                            inten.putExtra(MONTHLY_DATA_INTENT, current_month);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
+                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+                            //inten.putExtra(HISTORY_DATA_INTENT, current_month);
+                            //inten.putExtra(MONTHLY_DATA_INTENT, current_month);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;

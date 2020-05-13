@@ -24,6 +24,10 @@ import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
+    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
+    public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private MonthlyData monthlyData;
 
     private Settings settings;
 
@@ -94,6 +98,9 @@ public class SettingsActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             setResult(RESULT_OK, intent);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
                             intent.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
@@ -101,6 +108,9 @@ public class SettingsActivity extends AppCompatActivity {
                         case R.id.navigation_lists:
                             Intent inte = new Intent(getBaseContext(), CategoriesListActivity.class);
                             setResult(RESULT_OK, inte);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
                             inte.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(inte, 1);
                             overridePendingTransition(0, 0);
@@ -109,6 +119,9 @@ public class SettingsActivity extends AppCompatActivity {
                         case R.id.navigation_history:
                             Intent i = new Intent(getBaseContext(), HistoryActivity.class);
                             setResult(RESULT_OK, i);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
                             //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
                             // TODO: grab this from the database
                             i.putExtra(SETTINGS_INTENT, settings);
@@ -117,10 +130,15 @@ public class SettingsActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_graphs:
                             Intent inten = new Intent(getBaseContext(), PieChartActivity.class);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
                             inten.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
 
+                            return true;
+                        case R.id.navigation_settings:
                             return true;
                     }
                     return false;
