@@ -15,6 +15,7 @@ public class Category implements Parcelable {
     private ArrayList<Expense> expenses;
     private int nextExpenseId;
     private Database base = Database.Database(); // create a Database object
+    private long totalExpenses = 0;
 
     /**
      * Constructor for an empty Category.
@@ -57,6 +58,7 @@ public class Category implements Parcelable {
         nextExpenseId = in.readInt();
         month = in.readInt();
         year = in.readInt();
+        totalExpenses = in.readLong();
 
         //this.base = new Database();
     }
@@ -77,7 +79,10 @@ public class Category implements Parcelable {
         Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
         // TODO: insert while keeping sorted order
         expenses.add(expense);
-        this.base.insertExpense(cost, name, this.name, year, month, day, nextExpenseId); // update category to database
+        this.base.insertExpense(expense.getCost(), name, this.name, year, month, day, nextExpenseId); // update category to database
+
+        //Update total expenses so far
+        this.totalExpenses = totalExpenses + expense.getCost();
         return expense;
     }
 
@@ -86,6 +91,8 @@ public class Category implements Parcelable {
         // TODO: optimized search
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {
+                this.totalExpenses = totalExpenses - expenses.get(i).getCost();
+                base.delete_exp(name, id, year, month); // delete expense from database
                 expenses.remove(i);
 
 //                for (int k = i; k < expenses.size(); k++) {
@@ -131,6 +138,8 @@ public class Category implements Parcelable {
 
     public void setBudget(int budget) {
         this.budget = budget;
+
+        base.insertCategoryBudget(budget, this.getName(), year, month);
     }
 
     @Override
@@ -146,5 +155,19 @@ public class Category implements Parcelable {
         parcel.writeInt(nextExpenseId);
         parcel.writeInt(month);
         parcel.writeInt(year);
+        parcel.writeLong(totalExpenses);
+    }
+
+    //Getter for total expenses
+    public long getTotalExpenses(){
+        return this.totalExpenses;
+    }
+
+    //Loop through all expenses to get total value
+    public void setTotalExpenses(){
+        for(Expense expense : this.expenses){
+            this.totalExpenses += expense.getCost();
+        }
+
     }
 }

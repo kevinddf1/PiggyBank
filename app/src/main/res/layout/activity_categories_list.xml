@@ -28,7 +28,7 @@
             android:fontFamily="@font/semibold"
             android:paddingLeft="10dp"
             android:gravity="center_vertical"
-            android:text="@string/expensesList"/>
+            android:text="@string/categories_list"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -47,7 +47,7 @@
             android:autofillHints=""
             android:ems="5"
             android:gravity="top|left"
-            android:hint="@string/type_in_the_list_to_create"
+            android:hint="@string/type_category_name_updated"
             android:inputType="textPersonName"
             android:divider="@color/lightGrey"/>
 

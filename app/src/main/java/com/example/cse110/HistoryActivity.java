@@ -35,7 +35,6 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     //Display the month and year
-
     /**
      * The text display for the current month and year
      * @see #onCreate(Bundle)

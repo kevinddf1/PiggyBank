@@ -20,6 +20,9 @@ public class CategoriesListActivity extends AppCompatActivity {
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
 
+    // create a Database object
+    private Database base = Database.Database();
+
     EditText categoryName, categoryBudget;
     Button btnAdd;
     CategoriesListAdapter myAdapter;
@@ -83,6 +86,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                         // Create new item and update adapter
                         boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
+                        base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
 
                         // Verify that category was made
                         if (!creationSuccessful) {
@@ -100,7 +104,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                 } else {
                     if (settings.getEnableNotifications()) {
                         // Insufficient number of filled fields results in an error warning.
-                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
+                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in category name and budget.", Toast.LENGTH_SHORT);
                         missingInformationWarning.show();
                     }
                 }

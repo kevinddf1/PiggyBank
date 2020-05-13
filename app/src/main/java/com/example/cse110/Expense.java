@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.Calendar;
 
 /**
@@ -19,6 +18,17 @@ public class Expense implements Parcelable {
     private String parentCategoryName;
     private String costString;
 
+    /**
+     * Constructor for the Expense object
+     * @param id - unique identification for the Expense object
+     * @param name - name of the expense
+     * @param cost - cost of the expense
+     * @param year - year the expense was logged
+     * @param month - month the expense was logged
+     * @param day - day the expense was logged
+     * @param parentCategoryName - the category that the expense belongs to
+     * @return An expense object
+     */
     public Expense(int id, String name, double cost, int year, int month, int day, String parentCategoryName) {
         this.id = id;
         this.name = name;
@@ -28,7 +38,6 @@ public class Expense implements Parcelable {
             throw new NullPointerException("Name and cost must not be null. Month must " +
                     "be greater than or equal to 0.");
         }
-
         // Add formatting for whole numbers
         if(costString.indexOf('.') == -1){
             costString = costString.concat(".00");
@@ -57,13 +66,13 @@ public class Expense implements Parcelable {
         this.year = year;
         this.day = day;
         this.parentCategoryName = parentCategoryName;
-
-//        this.base = new Database();
-//        base.insertExpenseName(name);
-//        base.insertExpenseCost(cost);
     }
 
-
+    /**
+     * Constructor for an Expense object that reads in serialized Expense data
+     * and converts it into a usable object
+     * @param in - parcel data to convert
+     */
     protected Expense(Parcel in) {
         name = in.readString();
         cost = in.readInt();
@@ -73,7 +82,6 @@ public class Expense implements Parcelable {
         id = in.readInt();
         parentCategoryName = in.readString();
         costString = in.readString();
-
     }
 
     public static final Creator<Expense> CREATOR = new Creator<Expense>() {
@@ -101,6 +109,11 @@ public class Expense implements Parcelable {
     public String getName() {
         return name;
     }
+
+    /**
+     * As cents.
+     * @return
+     */
     public int getCost() {
         return cost;
     }
