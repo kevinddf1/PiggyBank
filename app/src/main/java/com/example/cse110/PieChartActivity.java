@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.anychart.AnyChart;
@@ -21,6 +22,7 @@ import com.anychart.charts.Pie;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -44,10 +46,13 @@ public class PieChartActivity extends AppCompatActivity {
      * @see #onCreate(Bundle)
      */
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";git
 
     private MonthlyData current_month;
 
     private ArrayList<Category> categoryArrayList;
+
 
 
 
@@ -115,5 +120,50 @@ public class PieChartActivity extends AppCompatActivity {
         anyChartView.setChart(pie);
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            setResult(RESULT_OK, intent);
+                            intent.putExtra(MONTHLY_DATA_INTENT, current_month);
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_lists:
+                            Intent in = new Intent(getBaseContext(), CategoriesListActivity.class);
+                            in.putExtra(HISTORY_DATA_INTENT, current_month);
+                            in.putExtra(MONTHLY_DATA_INTENT, current_month);
+                            startActivityForResult(in, 1);
+                            overridePendingTransition(0, 0);
+
+                            return true;
+
+                        case R.id.navigation_history:
+                            Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+                            setResult(RESULT_OK, i);
+                            //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                            // TODO: grab this from the database
+
+                            if (current_month == null) {
+                                Calendar today = Calendar.getInstance();
+                                current_month = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+                            }
+
+                            i.putExtra(HISTORY_DATA_INTENT, current_month);
+                            startActivityForResult(i, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+
+                        case R.id.navigation_graphs:
+                            return true;
+
+                    }
+                    return false;
+                }
+            };
 
 }
