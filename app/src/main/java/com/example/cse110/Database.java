@@ -88,7 +88,7 @@ public class Database {
         String str_ID = Integer.toString(nextExpenseId);
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID);
         ref.child("Name").setValue(name);
-        ref.child("Cost").setValue(cost);
+        ref.child("Cost").setValue(cost/100);
         ref.child("Date").setValue(month + "/" + day + "/" + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
@@ -128,48 +128,15 @@ public class Database {
                 if (!ds.exists()) { // check if there are any category in user's account
                     break; // if NOT, break the loop
                 }
-                // get the data of current category
-                String cate_name = ds.child("Name").getValue().toString();
-                //System.out.println(cate_name);
-                String c_budget = ds.child("Budget").getValue().toString();
-                int cate_budget = Integer.parseInt(c_budget);
-                String c_year = ds.child("Year").getValue().toString();
-                int cate_year = Integer.parseInt(c_year);
-                String c_month = ds.child("Month").getValue().toString();
-                int cate_month = Integer.parseInt(c_month);
-
-                ArrayList<Expense> expenses = new ArrayList<Expense>();
-                // this loop retrieve all the expenses in current category from database
-                for (DataSnapshot ds2 : ds.child("Expense").getChildren()) {
-                    if (!ds2.exists()) { // check if there are any expenses in user's account
-                        break; // if NOT, break the loop
-                    }
-                    // get the data of current expense
-                    String Cost = ds2.child("Cost").getValue().toString();
-                    String Year = ds2.child("Year").getValue().toString();
-                    String Month = ds2.child("Month").getValue().toString();
-                    String Day = ds2.child("Day").getValue().toString();
-                    String Name = ds2.child("Name").getValue().toString();
-                    String ID = ds2.child("ID").getValue().toString();
-                    int iCost = Integer.parseInt(Cost);
-                    int iYear = Integer.parseInt(Year);
-                    int iMonth = Integer.parseInt(Month);
-                    int iDay = Integer.parseInt(Day);
-                    int iID = Integer.parseInt(ID);
-                    // create expense
-                    Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
-                    expenses.add(expense);
-                }
-                // create category
-                thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year).setTotalExpenses();
+                thisMonthsData = this.RetrieveCateData(ds, thisMonthsData);
             }
         }
         return thisMonthsData;
     }
 
-    public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, int year, int month) {
-        if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
-            thisMonthsData = new MonthlyData(month, year);
+    public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData pastMonthsData, int year, int month) {
+        if (pastMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
+            pastMonthsData = new MonthlyData(month, year);
 
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
@@ -187,46 +154,50 @@ public class Database {
                         if (!ds3.exists()) { // check if there are any category in user's account
                             break; // if NOT, break the loop
                         }
-
-                        // get the data of current category
-                        String cate_name = ds3.child("Name").getValue().toString();
-                        //System.out.println(cate_name);
-                        String c_budget = ds3.child("Budget").getValue().toString();
-                        int cate_budget = Integer.parseInt(c_budget);
-                        String c_year = ds3.child("Year").getValue().toString();
-                        int cate_year = Integer.parseInt(c_year);
-                        String c_month = ds3.child("Month").getValue().toString();
-                        int cate_month = Integer.parseInt(c_month);
-
-                        ArrayList<Expense> expenses = new ArrayList<Expense>();
-                        // this loop retrieve all the expenses in current category from database
-                        for (DataSnapshot ds2 : ds3.child("Expense").getChildren()) {
-                            if (!ds2.exists()) { // check if there are any expenses in user's account
-                                break; // if NOT, break the loop
-                            }
-                            // get the data of current expense
-                            String Cost = ds2.child("Cost").getValue().toString();
-                            String Year = ds2.child("Year").getValue().toString();
-                            String Month = ds2.child("Month").getValue().toString();
-                            String Day = ds2.child("Day").getValue().toString();
-                            String Name = ds2.child("Name").getValue().toString();
-                            String ID = ds2.child("ID").getValue().toString();
-                            int iCost = Integer.parseInt(Cost);
-                            int iYear = Integer.parseInt(Year);
-                            int iMonth = Integer.parseInt(Month);
-                            int iDay = Integer.parseInt(Day);
-                            int iID = Integer.parseInt(ID);
-                            // create expense
-                            Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
-                            expenses.add(expense);
-                        }
-                        // create category
-                        thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year);
+                        pastMonthsData = this.RetrieveCateData(ds3, pastMonthsData);
                     }
                 }
             }
         }
-        return thisMonthsData;
+        return pastMonthsData;
+    }
+
+    private MonthlyData RetrieveCateData(DataSnapshot ds, MonthlyData md) {
+        // get the data of current category
+        String cate_name = ds.child("Name").getValue().toString();
+        //System.out.println(cate_name);
+        String c_budget = ds.child("Budget").getValue().toString();
+        int cate_budget = Integer.parseInt(c_budget);
+        String c_year = ds.child("Year").getValue().toString();
+        int cate_year = Integer.parseInt(c_year);
+        String c_month = ds.child("Month").getValue().toString();
+        int cate_month = Integer.parseInt(c_month);
+
+        ArrayList<Expense> expenses = new ArrayList<Expense>();
+        // this loop retrieve all the expenses in current category from database
+        for (DataSnapshot ds2 : ds.child("Expense").getChildren()) {
+            if (!ds2.exists()) { // check if there are any expenses in user's account
+                break; // if NOT, break the loop
+            }
+            // get the data of current expense
+            String Cost = ds2.child("Cost").getValue().toString();
+            String Year = ds2.child("Year").getValue().toString();
+            String Month = ds2.child("Month").getValue().toString();
+            String Day = ds2.child("Day").getValue().toString();
+            String Name = ds2.child("Name").getValue().toString();
+            String ID = ds2.child("ID").getValue().toString();
+            int iCost = Integer.parseInt(Cost);
+            int iYear = Integer.parseInt(Year);
+            int iMonth = Integer.parseInt(Month);
+            int iDay = Integer.parseInt(Day);
+            int iID = Integer.parseInt(ID);
+            // create expense
+            Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
+            expenses.add(expense);
+        }
+        // create category
+        md.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year).setTotalExpenses();
+        return md;
     }
 
 
