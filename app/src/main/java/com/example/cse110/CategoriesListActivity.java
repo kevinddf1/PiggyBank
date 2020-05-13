@@ -184,6 +184,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+                            inten.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;
