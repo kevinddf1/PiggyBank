@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class CreateAccount extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity {
     public static final String USER_MESSAGE_FIELD = "com.example.test.USER_MESSAGE_FIELD";
 
     private FirebaseAuth mAuth;
@@ -53,7 +53,7 @@ public class CreateAccount extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Go back to login screen with a user message
-                                Intent intent = new Intent(CreateAccount.this, LoginActivity.class);
+                                Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
                                 intent.putExtra(USER_MESSAGE_FIELD, "Account successfully created.");
                                 startActivity(intent);
                             } else {

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/overall"
     android:layout_width="match_parent"
@@ -8,30 +10,52 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <RelativeLayout
+        android:id="@+id/headerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/darkGrey"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:scaleType="fitXY"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentTop="false"
+            android:textColor="@color/white"
+            android:background="@drawable/mainheaderbackground"
+            android:fontFamily="@font/semibold"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/categories_list"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:background="#26C6DA"
+        android:background="@drawable/layoutshadow"
         android:orientation="horizontal">
-
 
         <EditText
             android:id="@+id/category_name"
             android:layout_width="235dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
+            android:fontFamily="@font/semibold"
             android:autofillHints=""
-            android:ems="10"
+            android:ems="5"
             android:gravity="top|left"
-            android:hint="@string/type_in_the_list_to_create"
-            android:inputType="textPersonName" />
+            android:hint="@string/type_category_name_updated"
+            android:inputType="textPersonName"
+            android:divider="@color/lightGrey"/>
 
         <EditText
             android:id="@+id/category_budget"
-            android:layout_width="105dp"
+            android:layout_width="143dp"
             android:layout_height="match_parent"
+            android:fontFamily="@font/semibold"
             android:autofillHints=""
             android:ems="10"
             android:hint="Budget"
@@ -41,12 +65,13 @@
             android:id="@+id/AddToList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="0"
-            android:background="#00BCD4"
-            android:gravity="bottom|left"
+            android:background="#00000000"
+            android:gravity="center"
             android:text="@string/plus_sign"
-            android:textColor="#0C0C0C"
-            android:textSize="20sp" />
+            android:textColor="@color/darkGrey"
+            android:textSize="30sp" />
 
     </LinearLayout>
 
@@ -55,11 +80,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:background="#FFFFFF"
         android:cacheColorHint="#FFFFFF"
         android:clickable="true"
         android:focusable="true"
         android:longClickable="true"
-        android:smoothScrollbar="true" />
+        android:smoothScrollbar="true"
+        android:background="@color/lightGrey"
+        android:divider="@drawable/layoutshadow"
+        android:dividerHeight="4dp">
+
+    </ListView>
+
 
 </LinearLayout>

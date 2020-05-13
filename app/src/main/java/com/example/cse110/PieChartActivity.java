@@ -70,7 +70,7 @@ public class PieChartActivity extends AppCompatActivity {
             Category c = categoryArrayList.get(i);
             Log.d("what", c.getName());
             cateArrayList.add(c.getName());
-            Log.d("price", Integer.toString(getTotalExpense(c)));
+            Log.d("price", formatMoneyString(Double.toString(getTotalExpense(c)/100.00)));
             totalExpenseArrayList.add(getTotalExpense(c));
         }
 
@@ -105,6 +105,40 @@ public class PieChartActivity extends AppCompatActivity {
 
         pie.data(dataEntries);
         anyChartView.setChart(pie);
+    }
+
+    private String formatMoneyString(String valueToFormat){
+        // Add formatting for whole numbers
+        if(valueToFormat.indexOf('.') == -1){
+            valueToFormat = valueToFormat.concat(".00");
+        }else{
+            //Ensure only valid input
+            int costLength = valueToFormat.length();
+            int decimalPlace = valueToFormat.indexOf(".");
+
+            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
+            if (costLength - decimalPlace == 1) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) +  "00";
+            }
+            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
+            // appends a 0 to the end
+            else if (costLength - decimalPlace == 2) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
+            }
+            // If the user inputs a number with >= 2 decimal places, only displays up to 2
+            else {
+                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
+            }
+        }
+
+        int hundredthComma = valueToFormat.length() - 6;
+        int thousandthComma = valueToFormat.length() - 9;
+        if(valueToFormat.length() <= 6){
+            return valueToFormat;
+        }else if(valueToFormat.length() <= 9){
+            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
+        }
+        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
 

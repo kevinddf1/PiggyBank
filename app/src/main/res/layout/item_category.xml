@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:background="@color/white">
 
 
     <TextView
@@ -14,21 +14,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="start" />
+        android:gravity="start"
+        android:fontFamily="@font/semibold"
+        android:textSize="20sp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/darkGrey"/>
 
     <TextView
         android:id="@+id/category_budget"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="#00C853" />
+        android:textSize="16sp"
+        android:textColor="@color/green"
+        android:fontFamily="@font/semibold"/>
 
     <Button
         android:id="@+id/delete_category"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Delete" />
-
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_weight="0"
+        android:background="@color/lightGrey"
+        android:textSize="14sp"
+        android:text="Delete"
+        android:fontFamily="@font/semibold"
+        android:textColor="@color/darkGrey"
+        android:textAllCaps="false"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
 
 </LinearLayout>
