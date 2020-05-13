@@ -1,7 +1,8 @@
 package com.example.cse110;
+import com.example.cse110.Model.Expense;
+
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.*;
 
 public class ExpenseTest {
     @Test

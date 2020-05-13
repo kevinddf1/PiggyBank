@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.View;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.example.cse110.Controller.HistoryItem;
+import com.example.cse110.R;
 
 import java.util.ArrayList;
 

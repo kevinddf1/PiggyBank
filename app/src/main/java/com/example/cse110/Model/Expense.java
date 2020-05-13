@@ -1,10 +1,7 @@
-package com.example.cse110;
+package com.example.cse110.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.google.firebase.auth.FirebaseAuth;
-import java.util.Calendar;
 
 /**
  * An Expense should be instantiated only by Category.

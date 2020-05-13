@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,9 +15,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cse110.Model.Category;
+import com.example.cse110.Model.Expense;
+import com.example.cse110.Model.MonthlyData;
+import com.example.cse110.R;
+import com.example.cse110.Controller.Settings;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ExpensesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "ExpenseListActivity monthlyData";

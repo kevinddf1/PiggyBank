@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.Controller;
 
 /**
  * Wrapper class to display data in History page's list.

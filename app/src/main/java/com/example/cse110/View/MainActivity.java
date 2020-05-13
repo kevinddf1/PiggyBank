@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
+import com.example.cse110.Model.Database;
+import com.example.cse110.Model.MonthlyData;
+import com.example.cse110.R;
+import com.example.cse110.Controller.Settings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button expenseListButton, historyButton, pieChartButton, settingsButton;

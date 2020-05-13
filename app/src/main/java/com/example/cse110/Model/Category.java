@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

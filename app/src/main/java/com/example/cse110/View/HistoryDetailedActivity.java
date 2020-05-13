@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.cse110.Model.Category;
+import com.example.cse110.Model.Expense;
+import com.example.cse110.Controller.HistoryDetailedItem;
+import com.example.cse110.Model.MonthlyData;
+import com.example.cse110.R;
 
 import java.util.ArrayList;
 

@@ -10,18 +10,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".HistoryDetailedActivity"></activity>
-        <activity android:name=".HistoryActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ExpensesListActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".CreateAccountActivity" />
-        <activity android:name=".CategoriesListActivity" />
-        <activity android:name=".PieChartActivity" />
+        <activity android:name=".View.HistoryDetailedActivity"></activity>
+        <activity android:name=".View.HistoryActivity" />
+        <activity android:name=".View.SettingsActivity" />
+        <activity android:name=".View.ExpensesListActivity" />
+        <activity android:name=".View.MainActivity" />
+        <activity android:name=".View.CreateAccountActivity" />
+        <activity android:name=".View.CategoriesListActivity" />
+        <activity android:name=".View.PieChartActivity" />
 
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".View.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
