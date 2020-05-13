@@ -44,8 +44,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                 EditText confirmPasswordField = findViewById(R.id.confirmPassword);
                 String enteredConfirmPassword = confirmPasswordField.getText().toString();
 
-                final TextView userMessage = findViewById(R.id.userMessage);
-
                 if (enteredUsername.length() == 0 || enteredPassword.length() == 0 || enteredConfirmPassword.length() == 0) {
                     Toast.makeText(getBaseContext(), "One or more fields are empty.", Toast.LENGTH_LONG).show();
                     return;
@@ -65,13 +63,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 intent.putExtra(USER_MESSAGE_FIELD, "Account successfully created.");
                                 startActivity(intent);
                             } else {
-                                userMessage.setText("Authentication failed. " + task.getException().getLocalizedMessage());
+                                Toast.makeText(getBaseContext(), "Authentication failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 } else {
                     // Confirmed password doesn't match password
-                    userMessage.setText("Passwords do not match!");
+                    Toast.makeText(getBaseContext(), "Passwords do not match.", Toast.LENGTH_LONG).show();
                 }
             }
         });
