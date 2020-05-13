@@ -34,12 +34,15 @@ public class HistoryActivity extends AppCompatActivity {
      */
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String SETTINGS_INTENT = "SettingsActivity settings";
+
 
 
     private static String CATEGORY_NAME = "category_name";
     private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
 
-
+    private Settings settings;
     //Display the month and year
 
     /**
@@ -100,6 +103,7 @@ public class HistoryActivity extends AppCompatActivity {
         //Retrieve passed in MonthlyData object and extract date/categories
         Intent i = getIntent();
         current_month = i.getParcelableExtra(HISTORY_DATA_INTENT);
+        settings = i.getParcelableExtra(SETTINGS_INTENT);
 
         //Update our local variables to match
         assert current_month != null;
@@ -194,7 +198,21 @@ public class HistoryActivity extends AppCompatActivity {
 
                         case R.id.navigation_history:
                             return true;
-
+                        case R.id.navigation_graphs:
+                            Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
+                            inte.putExtra(PIE_CHART_DATA_INTENT, current_month);
+                            startActivityForResult(inte, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_settings:
+                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+                            setResult(RESULT_OK, inten);
+                            //inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+                            inten.putExtra(HISTORY_DATA_INTENT, current_month);
+                            inten.putExtra(MONTHLY_DATA_INTENT, current_month);
+                            startActivityForResult(inten, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
 
                     }
                     return false;

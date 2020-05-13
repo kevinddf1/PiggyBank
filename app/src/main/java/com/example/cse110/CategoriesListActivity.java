@@ -15,6 +15,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +26,7 @@ public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
@@ -172,6 +176,18 @@ public class CategoriesListActivity extends AppCompatActivity {
                             startActivityForResult(i, 1);
                             overridePendingTransition(0, 0);
                             return true;
+                            case R.id.navigation_graphs:
+                                    Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
+                                    inte.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
+                                    startActivityForResult(inte, 1);
+                                    overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_settings:
+                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+                            startActivityForResult(inten, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+
 
 
                     }

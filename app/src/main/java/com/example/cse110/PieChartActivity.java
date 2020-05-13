@@ -47,7 +47,7 @@ public class PieChartActivity extends AppCompatActivity {
      */
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";git
+    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
 
     private MonthlyData current_month;
 
@@ -160,7 +160,11 @@ public class PieChartActivity extends AppCompatActivity {
 
                         case R.id.navigation_graphs:
                             return true;
-
+                        case R.id.navigation_settings:
+                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+                            startActivityForResult(inten, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
                     }
                     return false;
                 }

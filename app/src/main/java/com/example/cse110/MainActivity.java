@@ -246,7 +246,34 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                             return true;
+                        case R.id.navigation_graphs:
+                            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                                    thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                                    startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            });
+                            return true;
+                        case R.id.navigation_settings:
+                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 
+                            // TODO: grab this from the database
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
+                            intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
 
                     }
                     return false;

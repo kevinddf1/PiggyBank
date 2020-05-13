@@ -3,6 +3,8 @@ package com.example.cse110;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -11,11 +13,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
@@ -26,7 +31,12 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_layout);
-
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(4);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
         Intent intent = getIntent();
         settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
@@ -75,7 +85,47 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
 
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            setResult(RESULT_OK, intent);
+                            intent.putExtra(SETTINGS_INTENT, settings);
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_lists:
+                            Intent inte = new Intent(getBaseContext(), CategoriesListActivity.class);
+                            setResult(RESULT_OK, inte);
+                            inte.putExtra(SETTINGS_INTENT, settings);
+                            startActivityForResult(inte, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+
+                        case R.id.navigation_history:
+                            Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+                            setResult(RESULT_OK, i);
+                            //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                            // TODO: grab this from the database
+                            i.putExtra(SETTINGS_INTENT, settings);
+                            startActivityForResult(i, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_graphs:
+                            Intent inten = new Intent(getBaseContext(), PieChartActivity.class);
+                            inten.putExtra(SETTINGS_INTENT, settings);
+                            startActivityForResult(inten, 1);
+                            overridePendingTransition(0, 0);
+
+                            return true;
+                    }
+                    return false;
+                }
+            };
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
