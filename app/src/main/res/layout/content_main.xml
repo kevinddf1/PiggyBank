@@ -195,7 +195,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/PieChartButton"
+                    android:id="@+id/GraphsButton"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

@@ -8,18 +8,21 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Controller.Settings;
 import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,13 +30,13 @@ import java.util.List;
 
 
 /**
- * A class representing the pie chart for PiggyBank.
+ * A class representing the graphs for PiggyBank.
  * When user presses: See Graph, this page will appear.
  * @author Fan Ding
  * @version April 28
  *
  */
-public class PieChartActivity extends AppCompatActivity {
+public class GraphsActivity extends AppCompatActivity {
 
     AnyChartView anyChartView;
     List<String> cateArrayList =new ArrayList<>();
@@ -45,7 +48,7 @@ public class PieChartActivity extends AppCompatActivity {
      * Key for pulling an object of monthlyData in the HistoryDetailedActivity
      * @see #onCreate(Bundle)
      */
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
@@ -67,8 +70,52 @@ public class PieChartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pie_chart);
-        anyChartView=findViewById(R.id.any_chart_view);
+        setContentView(R.layout.activity_graphs);
+
+        //TabLayout implemented here, which allow u to switch between different graphs, like pie Chart and line chart.
+        TabLayout tabLayout= findViewById(R.id.tabBar);
+        TabItem pieChartTab= findViewById(R.id.pieChartTab);
+        TabItem columnChartTab=findViewById(R.id.columnChartTab);
+        TabItem lineChartTab= findViewById(R.id.lineChartTab);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
+
+        PagerAdapter pagerAdapter=new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pagerAdapter);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //anyChartView=findViewById(R.id.any_chart_view);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setLabelVisibilityMode(1);
         Menu menu = navView.getMenu();
@@ -78,7 +125,7 @@ public class PieChartActivity extends AppCompatActivity {
 
         //Retrieve passed in MonthlyData object and extract date/categories
         Intent intent = getIntent();
-        current_month = intent.getParcelableExtra(PIE_CHART_DATA_INTENT);
+        current_month = intent.getParcelableExtra(Graphs_DATA_INTENT);
         settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
         categoryArrayList= current_month.getCategoriesAsArray();
@@ -87,14 +134,10 @@ public class PieChartActivity extends AppCompatActivity {
             Log.d("what", c.getName());
             cateArrayList.add(c.getName());
             Log.d("price", formatMoneyString(Double.toString(getTotalExpense(c)/100.00)));
-            totalExpenseArrayList.add(getTotalExpense(c));
+            totalExpenseArrayList.add(getTotalExpense(c)/100);
         }
 
-
-
-
-
-        setupPieChart();
+        //setupPieChart();
 
 
 

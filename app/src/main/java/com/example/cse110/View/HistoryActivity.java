@@ -40,7 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
      */
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "GraphsActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
 
 
@@ -208,7 +208,7 @@ public class HistoryActivity extends AppCompatActivity {
                         case R.id.navigation_history:
                             return true;
                         case R.id.navigation_graphs:
-                            Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
+                            Intent inte = new Intent(getBaseContext(), GraphsActivity.class);
                             inte.putExtra(PIE_CHART_DATA_INTENT, current_month);
                             startActivityForResult(inte, 1);
                             overridePendingTransition(0, 0);

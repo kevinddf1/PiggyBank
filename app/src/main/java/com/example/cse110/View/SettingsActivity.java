@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "GraphsActivity monthlyData";
     private MonthlyData monthlyData;
 
     private Settings settings;
@@ -132,7 +132,7 @@ public class SettingsActivity extends AppCompatActivity {
                             overridePendingTransition(0, 0);
                             return true;
                         case R.id.navigation_graphs:
-                            Intent inten = new Intent(getBaseContext(), PieChartActivity.class);
+                            Intent inten = new Intent(getBaseContext(), GraphsActivity.class);
                             if (settings == null) {
                                 settings = new Settings();
                             }

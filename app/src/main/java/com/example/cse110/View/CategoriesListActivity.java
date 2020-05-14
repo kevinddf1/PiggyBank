@@ -30,7 +30,7 @@ public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "GraphsActivity monthlyData";
 
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
@@ -194,7 +194,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                             overridePendingTransition(0, 0);
                             return true;
                             case R.id.navigation_graphs:
-                                    Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
+                                    Intent inte = new Intent(getBaseContext(), GraphsActivity.class);
                                     inte.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
                                     startActivityForResult(inte, 1);
                                     overridePendingTransition(0, 0);

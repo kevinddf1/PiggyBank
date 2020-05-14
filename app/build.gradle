@@ -42,6 +42,7 @@ android {
         androidTestImplementation 'androidx.test:rules:1.1.0'
         androidTestImplementation 'com.android.support.test:rules:1.0.2'
         androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
     }
 }
 
@@ -55,4 +56,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-core:17.4.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
 }
