@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.cse110.Model.Category;
-import com.example.cse110.Model.Expense;
+import com.example.cse110.Controller.Category;
+import com.example.cse110.Controller.Expense;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
@@ -61,7 +61,6 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
                 if (v.getTag() != null) {
                     // Remove item from MonthlyData and update adapter
                     category.deleteExpense(item.getId());
-
 
                     //Allow the updating of the expense list activity
                     double calculatedRemainder = (double) category.getTotalExpenses() / 100.00;

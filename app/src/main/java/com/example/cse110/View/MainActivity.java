@@ -3,16 +3,22 @@ package com.example.cse110.View;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cse110.Model.Database;
-import com.example.cse110.Model.MonthlyData;
+import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+import java.util.Calendar;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -24,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
     private MonthlyData thisMonthsData;
+    private MonthlyData pastMonthsData;
 
     private Settings settings;
 
@@ -43,11 +50,34 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
 
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+        //Bind button to go to expense list
+
         //Instantiate monthlyData only if currently null
        // if(thisMonthsData == null){
          //   base.
         //Bind button to go to expense list
         expenseListButton = findViewById(R.id.ExpensesButton);
+        expenseListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onExpensesCLick(v);
+
+            }
+        });
+
+        //Bind our month's expenses and budget to proper display
+        //totalBudgetDisplay = findViewById(R.id.currentCash);
+        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
+        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
+
+
+
 
         //Bind our month's expenses and budget to proper display
         //totalBudgetDisplay = findViewById(R.id.currentCash);
@@ -85,32 +115,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     *
-     *
-     * @param v
-     */
-    public void goToExpenseList(View v) {
-        setContentView(R.layout.content_main);
-        //Bind button to go to expense list
-        expenseListButton = findViewById(R.id.ExpensesButton);
-
-        expenseListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onExpensesCLick(v);
-
-            }
-        });
-    }
-
     private void onHistoryClick(View v){
-        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+        ValueEventListener Listener = new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }
@@ -118,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 // Failed to read value
             }
-        });
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
     }
 
     private void onPieChartClick(View v){
@@ -127,7 +146,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent i = new Intent(getBaseContext(), PieChartActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
                 i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }
@@ -154,16 +179,24 @@ public class MainActivity extends AppCompatActivity {
 
     // TODO: Month Year UPDATE FROM CATEGORY
     public void onExpensesCLick(View v) {
-                    /* Read from the database
-            / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-            / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-            */
-        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+        /* Read from the database
+        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+        / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+        */
+        ValueEventListener Listener = new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                base.insertMonthlydata(year, month);
+
+                //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
                 intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
                 if (settings == null) {
                     settings = new Settings();
@@ -175,7 +208,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 // Failed to read value
             }
-        });
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
     }
 
     /*
@@ -206,6 +240,117 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            return true;
+                        case R.id.navigation_lists:
+                                     /* Read from the database
+        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+        / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+        */
+                            ValueEventListener Listener = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+                                    base.insertMonthlydata(year, month);
+
+                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
+                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                                    if (settings == null) {
+                                        settings = new Settings();
+                                    }
+                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                                    startActivityForResult(intent, 1);
+                                    overridePendingTransition(0, 0);
+
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener);
+                    return true;
+
+                        case R.id.navigation_history:
+                            ValueEventListener Listener2 = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+
+                                    pastMonthsData = base.RetrieveDataPast(dataSnapshot, pastMonthsData, year, month);
+                                    //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+
+                                    i.putExtra(HISTORY_DATA_INTENT, pastMonthsData);
+                                    startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
+
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
+                            return true;
+                        case R.id.navigation_graphs:
+                            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
+                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                                    startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            });
+                            return true;
+                        case R.id.navigation_settings:
+                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+
+                            // TODO: grab this from the database
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
+                            intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
+
+                    }
+                    return false;
+                }
+            };
+
     @Override
     public void onBackPressed() {
         // Do nothing on back button press because we don't want the user to be able to go back to login page
@@ -220,7 +365,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData);
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }

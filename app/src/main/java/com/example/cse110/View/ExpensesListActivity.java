@@ -15,11 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cse110.Model.Category;
-import com.example.cse110.Model.Expense;
-import com.example.cse110.Model.MonthlyData;
+import com.example.cse110.Controller.Category;
+import com.example.cse110.Controller.Expense;
+import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.Database;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +41,9 @@ public class ExpensesListActivity extends AppCompatActivity {
     private MonthlyData monthlyData;
     private Settings settings;
     private Category category;
+
+    // create a Database object
+    private Database base = Database.Database();
 
 
 
@@ -97,6 +101,8 @@ public class ExpensesListActivity extends AppCompatActivity {
                             //Update totalBudget
                             monthlyData.setTotalBudget();
 
+                            base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
+
 
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
@@ -144,6 +150,12 @@ public class ExpensesListActivity extends AppCompatActivity {
                         else {
                             Toast.makeText(getBaseContext(), "Item added.", Toast.LENGTH_SHORT).show();
                         }
+
+                        base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
+                       // Update total expenses for this category
+                        totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense )));
+
+
                         expenseName.getText().clear();
                         expenseCost.getText().clear();
                         expenseAdapter.notifyDataSetChanged();
@@ -259,5 +271,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         totalExpensesDisplay.setText( toDisplay);
         // Displays a Toast message that confirms the expense was deleted
         Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
+
+        totalExpensesDisplay.setText( toDisplay);
     }
 }

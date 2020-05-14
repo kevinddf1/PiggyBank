@@ -1,4 +1,4 @@
-package com.example.cse110.Model;
+package com.example.cse110.Controller;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -129,6 +129,10 @@ public class Expense implements Parcelable {
     public String getCostAsString() {
         // TODO
         return costString;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setName(String name) {

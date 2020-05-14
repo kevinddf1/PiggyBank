@@ -1,7 +1,9 @@
-package com.example.cse110.Model;
+package com.example.cse110.Controller;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.cse110.Model.Database;
 
 import java.util.ArrayList;
 
@@ -42,11 +44,11 @@ public class Category implements Parcelable {
         this.expenses = expenses;
         this.month = month;
         this.year = year;
-
+        nextExpenseId = 0;
         for (Expense e : expenses) {
             nextExpenseId = Math.max(nextExpenseId, e.getId());
         }
-        nextExpenseId++;
+        //nextExpenseId++;
 
         //this.base = new Database();
     }
@@ -87,12 +89,23 @@ public class Category implements Parcelable {
     }
 
     public void deleteExpense(int id) {
+        base.delete_exp(name, id, year, month); // delete expense from database
         // TODO: optimized search
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {
                 this.totalExpenses = totalExpenses - expenses.get(i).getCost();
-                base.delete_exp(name, id); // delete expense from database
+
+                base.delete_exp(name, id, year, month); // delete expense from database
                 expenses.remove(i);
+
+//                for (int k = i; k < expenses.size(); k++) {
+//                    //expenses.get(k).setId(expenses.get(k).getId() - 1);
+//                    expenses.get(k).setId(k+1);
+//                    //base.insertExpenseId(expenses.get(k).getName(), name, k+1);
+//                }
+//
+//                nextExpenseId = expenses.size();
+
                 break;
             }
         }
@@ -129,7 +142,8 @@ public class Category implements Parcelable {
     public void setBudget(int budget) {
         this.budget = budget;
 
-        base.insertCategoryBudget(budget, this.getName());
+
+        base.insertCategoryBudget(budget, this.getName(), year, month);
     }
 
     @Override

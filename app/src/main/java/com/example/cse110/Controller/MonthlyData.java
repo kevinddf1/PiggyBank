@@ -1,7 +1,9 @@
-package com.example.cse110.Model;
+package com.example.cse110.Controller;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.cse110.Model.Database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +80,11 @@ public class MonthlyData implements Parcelable {
         // TODO: error handling?
         return categories.get(name);
     }
+
+    public int getIntMonth(){
+        return month;
+    }
+
     // Getters
     public String getMonth(){
             switch (month){
@@ -134,9 +141,9 @@ public class MonthlyData implements Parcelable {
             categories.put(name, category);
             categoriesArrayList.add(category);
             /****** update the new category info to database ******/
-            this.base.insertCategoryName(name);
-            this.base.insertCategoryBudget(budget, name);
-            this.base.insertCategoryDate(month, year, name);
+            this.base.insertCategoryName(name, year, month);
+            this.base.insertCategoryBudget(budget, name, year, month);
+            this.base.insertCategoryDate(year, month, name);
             /*************************************************/
             //Update total budget
             this.totalBudget += category.getBudget();
@@ -167,10 +174,13 @@ public class MonthlyData implements Parcelable {
                 break;
             }
         }
-        base.delete_cate(name); //delete category from database
+        base.delete_cate(name, year, month); //delete category from database
     }
 
+
+
     /**
+<<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
      * Calculates the total amount budgeted for this month, across all categories.
      * Very expensive function so limit use as much as possible.
      */

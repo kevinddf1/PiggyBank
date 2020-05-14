@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.Model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.Model;
 
 import android.content.Context;
 import android.view.LayoutInflater;
