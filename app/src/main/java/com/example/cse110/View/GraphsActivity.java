@@ -105,16 +105,6 @@ public class GraphsActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
         //anyChartView=findViewById(R.id.any_chart_view);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setLabelVisibilityMode(1);
@@ -138,9 +128,15 @@ public class GraphsActivity extends AppCompatActivity {
         }
 
         //setupPieChart();
+        //instead setup pie chart we need to put this 2 arraylist to pieChartFragment
+    }
 
+    public List<String> getCateArrayList(){
+        return cateArrayList;
+    }
 
-
+    public List<Integer> getTotalExpenseArrayList(){
+        return totalExpenseArrayList;
     }
 
     private int getTotalExpense(Category c) {

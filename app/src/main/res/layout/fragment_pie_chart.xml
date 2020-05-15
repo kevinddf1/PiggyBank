@@ -6,17 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".View.pieChartFragment">
 
-    <TextView
-        android:id="@+id/PieChartText"
-        android:layout_width="295dp"
-        android:layout_height="86dp"
-        android:gravity="center"
-        android:text="PieChart Display"
-        android:textSize="36sp"
+
+    <com.anychart.AnyChartView
+        android:id="@+id/pie_chart_view"
+        android:layout_width="400dp"
+        android:layout_height="512dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.554" />
+        app:layout_constraintVertical_bias="0.497"
+        tools:ignore="MissingConstraints">
+
+    </com.anychart.AnyChartView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
