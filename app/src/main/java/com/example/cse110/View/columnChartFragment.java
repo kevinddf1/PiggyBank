@@ -26,7 +26,7 @@ public class columnChartFragment extends Fragment {
 
     AnyChartView anyChartView;
     List<String> cateArrayList =new ArrayList<>();
-    List<Integer> totalExpenseArrayList = new ArrayList<>();
+    List<Double> totalExpenseArrayList = new ArrayList<>();
 
     public columnChartFragment() {
         // Required empty public constructor
@@ -53,6 +53,10 @@ public class columnChartFragment extends Fragment {
     public void setupcolumnChart(){
 
         Cartesian cartesian = AnyChart.column();
+        cartesian.title("Expenses for Each Category of This Month");
+        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.xAxis(0).title("Category");
+        cartesian.yAxis(0).title("Expenses");
 
         List<DataEntry> dataEntries = new ArrayList<>();
         for (int i=0; i<cateArrayList.size(); i++){

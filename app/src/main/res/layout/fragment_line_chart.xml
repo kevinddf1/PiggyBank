@@ -6,15 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".View.lineChartFragment">
 
-    <TextView
-        android:id="@+id/lineChartText"
-        android:layout_width="276dp"
-        android:layout_height="126dp"
-        android:gravity="center"
-        android:text="LineChart display"
-        android:textSize="36sp"
+    <com.anychart.AnyChartView
+        android:id="@+id/line_chart_view"
+        android:layout_width="400dp"
+        android:layout_height="512dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.497"
+        tools:ignore="MissingConstraints">
+
+    </com.anychart.AnyChartView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
