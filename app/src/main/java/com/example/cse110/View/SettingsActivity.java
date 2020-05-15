@@ -1,5 +1,6 @@
 package com.example.cse110.View;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -71,26 +73,45 @@ public class SettingsActivity extends AppCompatActivity {
         final Button deleteAccountButton = findViewById(R.id.delete_account_button);
         deleteAccountButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){
-                base.delete_account(); //delete data in this account
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                            startActivity(intent);
-                        } else {
-                            if (settings.getEnableNotifications()) {
-                                Toast.makeText(getBaseContext(), "Account deletion failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                // Show confirmation prompt
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                builder.setCancelable(true);
+                builder.setMessage("Are you sure you want to delete your account? This action cannot be undone.");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                base.delete_account(); //delete data in this account
+                                FirebaseAuth auth = FirebaseAuth.getInstance();
+                                auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                                            startActivity(intent);
+                                        } else {
+                                            if (settings.getEnableNotifications()) {
+                                                Toast.makeText(getBaseContext(), "Account deletion failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    }
+                                });
+
+                                // Start login activity
+                                Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                                startActivity(i);
                             }
-                        }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
                 });
 
-                // Start login activity
-                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                startActivity(i);
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
