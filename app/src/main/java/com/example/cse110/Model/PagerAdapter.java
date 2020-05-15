@@ -1,8 +1,12 @@
-package com.example.cse110.View;
+package com.example.cse110.Model;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.example.cse110.View.columnChartFragment;
+import com.example.cse110.View.lineChartFragment;
+import com.example.cse110.View.pieChartFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 

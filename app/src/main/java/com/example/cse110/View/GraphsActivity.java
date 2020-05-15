@@ -19,6 +19,7 @@ import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.PagerAdapter;
 import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabItem;
