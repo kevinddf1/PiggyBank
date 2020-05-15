@@ -81,7 +81,9 @@ public class SettingsActivity extends AppCompatActivity {
                             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getBaseContext(), "Account deletion failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            if (settings.getEnableNotifications()) {
+                                Toast.makeText(getBaseContext(), "Account deletion failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 });

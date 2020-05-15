@@ -88,7 +88,9 @@ public class ExpensesListActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus && categoryBudget.getText().toString() != null) {
                     if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
-                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
+                        if (settings.getEnableNotifications()) {
+                            Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
+                        }
                     } else if (categoryBudget.getText().toString().isEmpty()) {
                         //In the case of of an empty string
                         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
@@ -107,13 +109,19 @@ public class ExpensesListActivity extends AppCompatActivity {
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
                             if (category.getBudget() < category.getTotalExpenses()/100.00) {
-                                Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+                                if (settings.getEnableNotifications()) {
+                                    Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+                                }
                             }
                             else {
-                                Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                                if (settings.getEnableNotifications()) {
+                                    Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                                }
                             }
                         } catch (Exception e) {
-                            Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
+                            if (settings.getEnableNotifications()) {
+                                Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 }else {
@@ -145,10 +153,14 @@ public class ExpensesListActivity extends AppCompatActivity {
 
                         // Displays a Toast message if the user goes over their budget when adding an expense
                         if (category.getBudget() < currentTotalExpense) {
-                            Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+                            if (settings.getEnableNotifications()) {
+                                Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+                            }
                         }
                         else {
-                            Toast.makeText(getBaseContext(), "Item added.", Toast.LENGTH_SHORT).show();
+                            if (settings.getEnableNotifications()) {
+                                Toast.makeText(getBaseContext(), "Item added.", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
@@ -269,8 +281,11 @@ public class ExpensesListActivity extends AppCompatActivity {
      */
     public void updateTotalExpenseDisplay(String toDisplay){
         totalExpensesDisplay.setText( toDisplay);
-        // Displays a Toast message that confirms the expense was deleted
-        Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
+
+        if (settings.getEnableNotifications()) {
+            // Displays a Toast message that confirms the expense was deleted
+            Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
+        }
 
         totalExpensesDisplay.setText( toDisplay);
     }

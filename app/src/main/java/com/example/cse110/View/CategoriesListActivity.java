@@ -160,7 +160,9 @@ public class CategoriesListActivity extends AppCompatActivity {
     }
 
     public void confirmDeletion(TextView nameOfCategory) {
-        Toast.makeText(getBaseContext(),  nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+        if (settings.getEnableNotifications()) {
+            Toast.makeText(getBaseContext(), nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+        }
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
