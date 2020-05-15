@@ -17,11 +17,11 @@
         <activity android:name=".View.CreateAccountActivity" />
         <activity android:name=".View.CategoriesListActivity" />
         <activity android:name=".View.GraphsActivity" />
-        <activity android:name=".View.LoginActivity" />
+        <activity android:name=".View.MainActivity" />
 
 
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
