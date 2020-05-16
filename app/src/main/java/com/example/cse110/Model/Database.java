@@ -273,7 +273,7 @@ public class Database {
 
     /**
      * This method retrieves all children in the database that are monthlyData.
-     * @return An ArrayList of Strings. Each one contains Month, Year, TotalBudget, TotalExpenses, dellimetered by '|'
+     * @return An ArrayList of Strings. Each one contains Month, Year, TotalBudget, TotalExpenses, dellimetered by '-'
      */
     public ArrayList<String> getPastMonthSummary(DataSnapshot dataSnapshot){
         ArrayList<String> pastMonths = new ArrayList<>();
@@ -297,13 +297,40 @@ public class Database {
             String str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
 
             //Add the info into one ArrayList entry w/ proper format
-            pastMonths.add(str_month + "|" + str_year + "|" + str_budget + "|" + str_expenses);
+            pastMonths.add(str_month + "-" + str_year + "-" + str_budget + "-" + str_expenses);
 
         }
 
         return pastMonths;
     }
 
+    public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, String s, String s1) {
+        if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
+            thisMonthsData = new MonthlyData(month, year);
+
+            // this loop retrieve all the categories from database
+            for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+                if (!ds.exists()) { // check if there are any monthly data in user's account
+                    break; // if NOT, break the loop
+                }
+
+                String str_year = ds.child("Year").getValue().toString();
+                int int_year = Integer.parseInt(str_year);
+                String str_month = ds.child("Month").getValue().toString();
+                int int_month = Integer.parseInt(str_month);
+
+                if(!(int_year == year && int_month == month)) {
+                    for (DataSnapshot ds3 : ds.child("< Categories >").getChildren()) {
+                        if (!ds3.exists()) { // check if there are any category in user's account
+                            break; // if NOT, break the loop
+                        }
+                        pastMonthsData = this.RetrieveCateData(ds3, pastMonthsData);
+                    }
+                }
+            }
+        }
+        return pastMonthsData;
+    }
 }
 
 

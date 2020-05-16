@@ -15,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
-import com.example.cse110.Controller.HistoryItem;
+import com.example.cse110.Controller.HistoryCategoryItem;
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.Model.HistoryItemAdapter;
+import com.example.cse110.Model.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 /**
  * A class representing the History window for PiggyBank.
- * When user presses: See History, this page will appear.
  * @author Peter Gonzalez
  * @version April 23
  *
@@ -42,6 +41,9 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
+
+    private MonthlyData thisMonthsData;
+
 
 
 
@@ -71,15 +73,15 @@ public class HistoryCategoryActivity extends AppCompatActivity {
 
     /**
      * The adapter to connect Category data to list display.
-     * @see HistoryItemAdapter
+     * @see HistoryCategoryAdapter
      */
-    private HistoryItemAdapter historyItemAdapter;
+    private HistoryCategoryAdapter historyCategoryAdapter;
 
     /**
      * The primary data structure to hold the information to display on History page.
-     * @see HistoryItem
+     * @see HistoryCategoryItem
      */
-    private ArrayList<HistoryItem> historyItemArrayList;
+    private ArrayList<HistoryCategoryItem> historyCategoryItemArrayList;
 
     //Instantiate the month's categories
 
@@ -122,9 +124,9 @@ public class HistoryCategoryActivity extends AppCompatActivity {
 
         //Set up our list
         fillInHistoryItemArrayList();
-        historyItemAdapter = new HistoryItemAdapter(this, historyItemArrayList);
+        historyCategoryAdapter = new HistoryCategoryAdapter(this, historyCategoryItemArrayList);
         pastCategories = (ListView) findViewById(R.id.Categories);
-        pastCategories.setAdapter(historyItemAdapter);
+        pastCategories.setAdapter(historyCategoryAdapter);
 
         //Set Up Clicking Handling
         pastCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,7 +140,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HistoryItem currentItem = historyItemAdapter.getItem(position);
+                HistoryCategoryItem currentItem = historyCategoryAdapter.getItem(position);
 
                 Intent i = new Intent(getBaseContext(), HistoryDetailedActivity.class);
                 i.putExtra(HISTORY_DETAILED_INTENT, current_month);
@@ -158,7 +160,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
      */
     private void fillInHistoryItemArrayList(){
         //Initiate HistoryItemArrayList
-        historyItemArrayList = new ArrayList<>();
+        historyCategoryItemArrayList = new ArrayList<>();
         //Iterate through categoryArrayList to create a HistoryItem (name, budget, total expenses)
         for(Category currentCategory : categoryArrayList){
             double totalExpenses = 0;
@@ -172,7 +174,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
 
             totalExpenses = totalExpenses/100;
             //Create new HistoryItem and Add to List
-            historyItemArrayList.add(new HistoryItem(currentCategory.getName(), currentCategory.getBudget(), totalExpenses));
+            historyCategoryItemArrayList.add(new HistoryCategoryItem(currentCategory.getName(), currentCategory.getBudget(), totalExpenses));
         }
     }
 
@@ -220,8 +222,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
                                 settings = new Settings();
                             }
                             inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-                            //inten.putExtra(HISTORY_DATA_INTENT, current_month);
-                            //inten.putExtra(MONTHLY_DATA_INTENT, current_month);
+
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;
