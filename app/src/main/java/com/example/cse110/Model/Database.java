@@ -271,6 +271,39 @@ public class Database {
         }
     }
 
+    /**
+     * This method retrieves all children in the database that are monthlyData.
+     * @return An ArrayList of Strings. Each one contains Month, Year, TotalBudget, TotalExpenses, dellimetered by '|'
+     */
+    public ArrayList<String> getPastMonthSummary(DataSnapshot dataSnapshot){
+        ArrayList<String> pastMonths = new ArrayList<>();
+
+        // this loop retrieve all the months from the database
+        for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+            if (!ds.exists()) { // check if there are any monthly data in user's account
+                break; // if NOT, break the loop
+            }
+
+            //Go through the entry's information to store in array
+            String str_month = ds.child("Month").getValue().toString();
+            int int_month = Integer.parseInt(str_month);
+            String monthName = getMonth(int_month); // MONTH
+
+            String str_year = ds.child("Year").getValue().toString();
+            int int_year = Integer.parseInt(str_year); // YEAR
+
+            String str_budget = ds.child("Total Budget").getValue().toString(); //TOTAL BUDGET
+
+            String str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
+
+            //Add the info into one ArrayList entry w/ proper format
+            pastMonths.add(str_month + "|" + str_year + "|" + str_budget + "|" + str_expenses);
+
+        }
+
+        return pastMonths;
+    }
+
 }
 
 
