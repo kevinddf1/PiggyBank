@@ -2,12 +2,14 @@ package com.example.cse110.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.EventListener;
 
 /**
  * This class represents the page to display a user month's across the existence of their account.
@@ -49,6 +52,7 @@ public class HistoryActivity extends AppCompatActivity{
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     private MonthlyData thisMonthsData;
     private Database base = Database.Database(); // create a Database object
+    private static final String TAG = "HistoryActivity";
 
 
 
@@ -92,6 +96,8 @@ public class HistoryActivity extends AppCompatActivity{
      */
     private ListView listOfMonths;
 
+    HistoryItem currentItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,39 +122,44 @@ public class HistoryActivity extends AppCompatActivity{
 
             /**
              * When a certain item is clicked in the list display, the user will be redirected to a detailed view of the chosen category.
-             * @param parent The AdapterView for the ListView.
-             * @param view The View for the HistoryItem.
+             *
+             * @param parent   The AdapterView for the ListView.
+             * @param view     The View for the HistoryItem.
              * @param position The position of the item in the list.
-             * @param id The particular id of the view.
+             * @param id       The particular id of the view.
              */
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final HistoryItem currentItem = historyItemAdapter.getItem(position);
-                ValueEventListener Listener = new ValueEventListener() {
-                    //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
+                currentItem = historyItemAdapter.getItem(position);
+                ValueEventListener postListener = new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Intent i = new Intent(getBaseContext(), HistoryCategoryActivity.class);
 
                         String[] separateMonthYear = currentItem.getMonthYear().split(" ");
-                        thisMonthsData = base.RetrieveDataPast(dataSnapshot, thisMonthsData, separateMonthYear[0] , separateMonthYear[1]);
+                        thisMonthsData = base.RetrieveDataPast(dataSnapshot, thisMonthsData, separateMonthYear[0], separateMonthYear[1]);
                         //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
-
                         i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
 
-                        startActivityForResult(i, 1);
+                        startActivity(i);
                     }
+
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Failed to read value
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Getting Post failed, log a message
+                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        Toast.makeText(HistoryActivity.this, "Failed to load post.",
+                                Toast.LENGTH_SHORT).show();
+                        // [END_EXCLUDE]
+
                     }
                 };
-                base.getMyRef().addListenerForSingleValueEvent(Listener);
-
+                base.getMyRef().addValueEventListener(postListener);
 
             }
-        });
 
+        });
     }
 
     private void fillInHistoryItemList(){

@@ -80,7 +80,7 @@ public class Database {
         String str_ID = Integer.toString(nextExpenseId);
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID);
         ref.child("Name").setValue(name);
-        ref.child("Cost").setValue(cost/100);
+        ref.child("Cost").setValue(cost * 100);
         ref.child("Date").setValue(month + "/" + day + "/" + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
@@ -315,7 +315,7 @@ public class Database {
     public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, String s, String s1) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
 
-
+            thisMonthsData = new MonthlyData(Integer.parseInt(s), Integer.parseInt(s1));
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
                 if (!ds.exists()) { // check if there are any monthly data in user's account
@@ -327,12 +327,12 @@ public class Database {
                 String str_month = ds.child("Month").getValue().toString();
                 int int_month = Integer.parseInt(str_month);
 
-                if(!(str_year == s1 && str_month == s)) {
+                if(str_year.equals(s1) && str_month.equals(s)) {
                     for (DataSnapshot ds3 : ds.child("< Categories >").getChildren()) {
                         if (!ds3.exists()) { // check if there are any category in user's account
                             break; // if NOT, break the loop
                         }
-                        thisMonthsData = new MonthlyData(int_month, int_year);
+
                         thisMonthsData = this.RetrieveCateData(ds3, thisMonthsData);
                     }
                 }
