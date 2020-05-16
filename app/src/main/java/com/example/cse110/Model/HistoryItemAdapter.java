@@ -56,8 +56,9 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         assert item != null;
 
         //Look up view for data population
-        name = convertView.findViewById(R.id.month_year_display);
-        name.setText(item.getMonthYear());
+        name = convertView.findViewById(R.id.month_year_separate_display);
+        String[] parseMonthYear = item.getMonthYear().split(" ");
+        name.setText(getMonth(Integer.parseInt(parseMonthYear[0])) + " " + parseMonthYear[1] );
         budget = convertView.findViewById(R.id.total_budget_display);
         budget.setText("Budget: $" + formatIntMoneyString(item.getTotalBudget()));
         totalExpenses = convertView.findViewById(R.id.total_expense_display);
@@ -99,6 +100,54 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
             return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
         }
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    }
+
+    /**
+     * Helper metho to find the correct month name to display
+     * @param month
+     * @return
+     */
+    private String getMonth(int month) {
+        switch (month) {
+            case 0:
+                return "January";
+
+            case 1:
+                return "February";
+
+            case 2:
+                return "March";
+
+            case 3:
+                return "April";
+
+            case 4:
+                return "May";
+
+            case 5:
+                return "June";
+
+            case 6:
+                return "July";
+
+            case 7:
+                return "August";
+
+            case 8:
+                return "September";
+
+            case 9:
+                return "October";
+
+            case 10:
+                return "November";
+
+            case 11:
+                return "December";
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
     }
 
 }

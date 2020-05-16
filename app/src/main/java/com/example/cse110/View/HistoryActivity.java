@@ -136,8 +136,6 @@ public class HistoryActivity extends AppCompatActivity{
 
                         i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
 
-                        //Add the past month's history (includes current)
-                        i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                         startActivityForResult(i, 1);
                     }
                     @Override

@@ -304,9 +304,17 @@ public class Database {
         return pastMonths;
     }
 
+    /**
+     * Another signature for the method that allows the user to input strings instead of integers for month & year
+     * @param dataSnapshot
+     * @param thisMonthsData
+     * @param s
+     * @param s1
+     * @return
+     */
     public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, String s, String s1) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
-            thisMonthsData = new MonthlyData(month, year);
+
 
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
@@ -319,18 +327,21 @@ public class Database {
                 String str_month = ds.child("Month").getValue().toString();
                 int int_month = Integer.parseInt(str_month);
 
-                if(!(int_year == year && int_month == month)) {
+                if(!(str_year == s1 && str_month == s)) {
                     for (DataSnapshot ds3 : ds.child("< Categories >").getChildren()) {
                         if (!ds3.exists()) { // check if there are any category in user's account
                             break; // if NOT, break the loop
                         }
-                        pastMonthsData = this.RetrieveCateData(ds3, pastMonthsData);
+                        thisMonthsData = new MonthlyData(int_month, int_year);
+                        thisMonthsData = this.RetrieveCateData(ds3, thisMonthsData);
                     }
                 }
             }
         }
-        return pastMonthsData;
+        return thisMonthsData;
     }
+
+
 }
 
 
