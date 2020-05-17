@@ -137,6 +137,7 @@ public class HistoryActivity extends AppCompatActivity{
                         Intent i = new Intent(getBaseContext(), HistoryCategoryActivity.class);
 
                         String[] separateMonthYear = currentItem.getMonthYear().split(" ");
+                        thisMonthsData = null;
                         thisMonthsData = base.RetrieveDataPast(dataSnapshot, thisMonthsData, separateMonthYear[0], separateMonthYear[1]);
                         //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
                         i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
