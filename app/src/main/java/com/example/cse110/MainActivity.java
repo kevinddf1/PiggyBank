@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton, pieChartButton;
+    LinearLayout expenseListButton, historyButton, pieChartButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
