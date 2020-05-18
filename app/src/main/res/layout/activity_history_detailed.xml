@@ -19,11 +19,14 @@
         android:id="@+id/expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="@color/lightGrey"
+        android:divider="@drawable/layoutshadow"
+        android:dividerHeight="4dp"
         android:cacheColorHint="#FFFFFF"
         android:clickable="true"
         android:focusable="true"
         android:longClickable="true"
-        android:smoothScrollbar="true" />
+        android:smoothScrollbar="true"
+        />
 
 </LinearLayout>
