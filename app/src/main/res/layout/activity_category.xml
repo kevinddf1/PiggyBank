@@ -50,10 +50,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:background="#00BCD4"
-            android:gravity="bottom|left"
+            android:gravity="center"
             android:text="@string/plus_sign"
             android:textColor="#0C0C0C"
-            android:textSize="20sp" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 

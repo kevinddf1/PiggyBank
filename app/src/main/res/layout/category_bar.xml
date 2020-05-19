@@ -4,17 +4,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+
+        <EditText
             android:id="@+id/category_name"
-            android:text="@string/categoryName"
-            android:fontFamily="@font/semibold"
-            android:textColor="@color/darkGrey"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="24sp"
-            android:textAllCaps="false"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/semibold"
             android:gravity="start"
-            />
+            android:inputType="textPersonName"
+            android:text="@string/categoryName"
+            android:textAllCaps="false"
+            android:textColor="@color/darkGrey"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/empty_space"
@@ -30,11 +31,11 @@
             <EditText
                 android:id="@+id/budget_display"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:background="@android:color/transparent"
                 android:cursorVisible="true"
                 android:fontFamily="@font/semibold"
-                android:gravity="bottom|end"
+                android:gravity="center_vertical|end"
                 android:inputType="number"
                 android:outlineProvider="none"
                 android:paddingEnd="10dp"
@@ -42,17 +43,17 @@
                 android:text="@string/budgetDisplay"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/green"
-                android:textSize="12sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/total_expenses"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom|end"
+                android:layout_height="30dp"
+                android:gravity="top|end"
                 android:paddingEnd="10dp"
-                android:text="expenses"
+                android:text="@string/expenses"
                 android:textColor="#D50000"
-                android:textSize="12sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>

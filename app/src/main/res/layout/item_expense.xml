@@ -20,7 +20,8 @@
                 android:layout_width="267dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/expense_cost"
@@ -30,7 +31,8 @@
                 android:gravity="end"
                 android:inputType="none"
                 android:text="cost"
-                android:textColor="#D50000" />
+                android:textColor="#D50000"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -58,13 +60,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0"
-                    android:background="#00FFFFFF"
-                    android:gravity="bottom|center"
+                    android:background="@color/lightGrey"
+                    android:gravity="center"
                     android:layoutDirection="inherit"
-                    android:text="@string/delete"
+                    android:text="@string/Delete"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="#FF0000"
-                    android:textSize="10sp" />
+                    android:textColor="@color/darkGrey"
+                    android:textSize="12sp" />
 
 
             </LinearLayout>
