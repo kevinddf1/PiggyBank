@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Button expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
+    public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
     private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
 
@@ -298,13 +299,12 @@ public class MainActivity extends AppCompatActivity {
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
 
-                                    pastMonthsData = base.RetrieveDataPast(dataSnapshot, pastMonthsData, year, month);
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
-                                    i.putExtra(HISTORY_DATA_INTENT, pastMonthsData);
+                                    i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
-
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
@@ -325,13 +325,10 @@ public class MainActivity extends AppCompatActivity {
                                     int year = today.get(Calendar.YEAR);
 
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-
                                     i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
-
                                 }
-
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
                                     // Failed to read value
@@ -339,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                             return true;
                         case R.id.navigation_settings:
+
                             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
 
                             // TODO: grab this from the database

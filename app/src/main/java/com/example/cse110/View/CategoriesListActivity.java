@@ -3,6 +3,7 @@ package com.example.cse110.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +23,9 @@ import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,11 +47,11 @@ public class CategoriesListActivity extends AppCompatActivity {
     CategoriesListAdapter myAdapter;
     ListView categories;
 
-
-
     private MonthlyData monthlyData;
+    private MonthlyData thisMonthsData;
     private Settings settings;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,7 @@ public class CategoriesListActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
         navView.setOnNavigationItemSelectedListener(navListener);
+
         // Bind element from XML file
         // Core elements of the activity
         categoryName = findViewById(R.id.category_name);
@@ -103,7 +108,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
                         }
                     } else {
-
                         // Create new item and update adapter
                         boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
                         base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
@@ -113,8 +117,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                             if (settings.getEnableNotifications()) {
                                 Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                        else {
+                        } else {
                             if (settings.getEnableNotifications()) {
                                 // Displays a Toast message that lets the user know the category was successfully created
                                 Toast.makeText(getBaseContext(), "Category successfully added.", Toast.LENGTH_SHORT).show();
@@ -125,7 +128,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                         categoryBudget.getText().clear();
                         myAdapter.notifyDataSetChanged();
                     }
-
 
                 } else {
                     if (settings.getEnableNotifications()) {
@@ -160,8 +162,11 @@ public class CategoriesListActivity extends AppCompatActivity {
     }
 
     public void confirmDeletion(TextView nameOfCategory) {
-        Toast.makeText(getBaseContext(),  nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(),  "Category \"" + nameOfCategory.getText().toString() + "\" was deleted.", Toast.LENGTH_SHORT).show();
     }
+
+
+    // BOTTOM NAVIGATION
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -179,33 +184,62 @@ public class CategoriesListActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.navigation_history:
-                            Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                            setResult(RESULT_OK, i);
-                            //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
-                            // TODO: grab this from the database
+                            ValueEventListener Listener2 = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), HistoryActivity.class);
 
-                            if (monthlyData == null) {
-                                Calendar today = Calendar.getInstance();
-                                monthlyData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-                            }
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
 
-                            i.putExtra(HISTORY_DATA_INTENT, monthlyData);
-                            startActivityForResult(i, 1);
-                            overridePendingTransition(0, 0);
-                            return true;
-                            case R.id.navigation_graphs:
-                                    Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
-                                    inte.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
-                                    startActivityForResult(inte, 1);
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                                    //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
+
+                                    i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                                    startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
+                            return true;
+
+                        case R.id.navigation_graphs:
+                            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
+                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                                    startActivityForResult(i, 1);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            });
                             return true;
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+
+                            // TODO: grab this from the database
                             if (settings == null) {
                                 settings = new Settings();
                             }
                             inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-                            inten.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
+
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;

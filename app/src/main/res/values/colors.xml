@@ -10,4 +10,6 @@
     <color name="gradientLight">#77CFCB</color>
     <color name="green">#26A81E</color>
     <color name="lightGrey">#E9E9E9</color>
+    <!--HIDE underline for EditText-->
+    <color name="Transparent">#00000000</color>
 </resources>
