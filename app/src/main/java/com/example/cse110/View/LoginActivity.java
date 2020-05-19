@@ -69,6 +69,14 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        final Button accountRecoveryButton = findViewById(R.id.accountRecoveryButton);
+        accountRecoveryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, AccountRecoveryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -75,6 +75,20 @@
             android:fontFamily="@font/regular"
             android:textSize="15dp"/>
 
+        <Button
+            android:id="@+id/accountRecoveryButton"
+            android:layout_width="249dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:fontFamily="@font/regular"
+            android:stateListAnimator="@null"
+            android:text="Forgot your password?"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
