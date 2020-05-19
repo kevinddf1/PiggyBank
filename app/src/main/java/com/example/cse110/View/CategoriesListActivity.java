@@ -3,6 +3,7 @@ package com.example.cse110.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,12 +47,11 @@ public class CategoriesListActivity extends AppCompatActivity {
     CategoriesListAdapter myAdapter;
     ListView categories;
 
-
-
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
     private Settings settings;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +62,7 @@ public class CategoriesListActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
         navView.setOnNavigationItemSelectedListener(navListener);
+
         // Bind element from XML file
         // Core elements of the activity
         categoryName = findViewById(R.id.category_name);
@@ -107,7 +108,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
                         }
                     } else {
-
                         // Create new item and update adapter
                         boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
                         base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
@@ -117,8 +117,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                             if (settings.getEnableNotifications()) {
                                 Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                        else {
+                        } else {
                             if (settings.getEnableNotifications()) {
                                 // Displays a Toast message that lets the user know the category was successfully created
                                 Toast.makeText(getBaseContext(), "Category successfully added.", Toast.LENGTH_SHORT).show();
@@ -129,7 +128,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                         categoryBudget.getText().clear();
                         myAdapter.notifyDataSetChanged();
                     }
-
 
                 } else {
                     if (settings.getEnableNotifications()) {
@@ -164,8 +162,11 @@ public class CategoriesListActivity extends AppCompatActivity {
     }
 
     public void confirmDeletion(TextView nameOfCategory) {
-        Toast.makeText(getBaseContext(),  nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(),  "Category \"" + nameOfCategory.getText().toString() + "\" was deleted.", Toast.LENGTH_SHORT).show();
     }
+
+
+    // BOTTOM NAVIGATION
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override

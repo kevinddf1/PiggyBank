@@ -19,9 +19,6 @@ public class Database {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
-
-
-
     // static method to create single instance of Database class
     public static Database Database() {
         // To ensure only one instance is created
@@ -102,14 +99,28 @@ public class Database {
         myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).removeValue();
     }
 
-    public void delete_exp(String parent_name, int id, int year, int month) {
+    public void delete_exp(String cate_name, int id, int year, int month) {
         String str_ID = Integer.toString(id);
-        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID).removeValue();
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + cate_name).child("Expense").child(str_ID).removeValue();
     }
 
     public void delete_account() {
         myRef.child("User").child(key).removeValue();
     }
+
+    //First remove the "old" category and then insert a "new" category with the updated NAME
+//    public void rename_cate(String oldName, int oldYear, int oldMonth, String newName) {
+//        DatabaseReference cur_categories_ref = myRef.child("User").child(key).child(this.getMonth(oldMonth) + oldYear).child("< Categories >");
+//        DatabaseReference old_cate_ref = cur_categories_ref.child("Category " + oldName);
+//        //Set up the "new" category tree
+//        cur_categories_ref.child("Category " + newName).child("Budget").setValue(old_cate_ref.child("Budget").);
+//        cur_categories_ref.child("Category " + newName).child("Expense").setValue(old_cate_ref.child("Expense"));
+//        cur_categories_ref.child("Category " + newName).child("Month").setValue(old_cate_ref.child("Month"));
+//        cur_categories_ref.child("Category " + newName).child("Year").setValue(old_cate_ref.child("Year"));
+//        cur_categories_ref.child("Category " + newName).child("Name").setValue(newName);
+//        //Delete the "old" category
+//        delete_cate(oldName, oldYear, oldMonth);
+//    }
 
     public MonthlyData RetrieveDataCurrent(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, int year, int month) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
