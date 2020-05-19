@@ -15,7 +15,8 @@
             android:text="@string/categoryName"
             android:textAllCaps="false"
             android:textColor="@color/darkGrey"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:backgroundTint="@color/Transparent"/>
 
         <TextView
             android:id="@+id/empty_space"
