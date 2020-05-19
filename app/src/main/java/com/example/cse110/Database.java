@@ -88,7 +88,7 @@ public class Database {
         String str_ID = Integer.toString(nextExpenseId);
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID);
         ref.child("Name").setValue(name);
-        ref.child("Cost").setValue(cost/100);
+        ref.child("Cost").setValue(cost);
         ref.child("Date").setValue(month + "/" + day + "/" + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
