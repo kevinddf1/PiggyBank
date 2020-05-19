@@ -74,6 +74,27 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
      * @return The new string to display
      */
     private String formatMoneyString(String valueToFormat){
+        if(valueToFormat.indexOf('.') == -1){
+            valueToFormat = valueToFormat.concat(".00");
+        }else {
+            //Ensure only valid input
+            int costLength = valueToFormat.length();
+            int decimalPlace = valueToFormat.indexOf(".");
+
+            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
+            if (costLength - decimalPlace == 1) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) + "00";
+            }
+            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
+            // appends a 0 to the end
+            else if (costLength - decimalPlace == 2) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
+            }
+            // If the user inputs a number with >= 2 decimal places, only displays up to 2
+            else {
+                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
+            }
+        }
         int hundredthComma = valueToFormat.length() - 6;
         int thousandthComma = valueToFormat.length() - 9;
         if(valueToFormat.length() <= 6){

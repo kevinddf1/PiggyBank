@@ -77,7 +77,7 @@ public class Database {
         String str_ID = Integer.toString(nextExpenseId);
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID);
         ref.child("Name").setValue(name);
-        ref.child("Cost").setValue(cost * 100);
+        ref.child("Cost").setValue(cost);
         ref.child("Date").setValue(month + "/" + day + "/" + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
@@ -154,7 +154,7 @@ public class Database {
                     String Day = ds2.child("Day").getValue().toString();
                     String Name = ds2.child("Name").getValue().toString();
                     String ID = ds2.child("ID").getValue().toString();
-                    double dCost = Double.parseDouble(Cost)/100;
+                    double dCost = Double.parseDouble(Cost)/100.00;
                     int iYear = Integer.parseInt(Year);
                     int iMonth = Integer.parseInt(Month);
                     int iDay = Integer.parseInt(Day);
@@ -224,13 +224,13 @@ public class Database {
             String Day = ds2.child("Day").getValue().toString();
             String Name = ds2.child("Name").getValue().toString();
             String ID = ds2.child("ID").getValue().toString();
-            int iCost = Integer.parseInt(Cost);
+            double dCost = Double.parseDouble(Cost)/100.00;
             int iYear = Integer.parseInt(Year);
             int iMonth = Integer.parseInt(Month);
             int iDay = Integer.parseInt(Day);
             int iID = Integer.parseInt(ID);
             // create expense
-            Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
+            Expense expense = new Expense(iID, Name, dCost, iYear, iMonth, iDay, cate_name);
             expenses.add(expense);
         }
         // create category
