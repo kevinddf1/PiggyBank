@@ -80,7 +80,7 @@ public class Database {
         String str_ID = Integer.toString(nextExpenseId);
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID);
         ref.child("Name").setValue(name);
-        ref.child("Cost").setValue(cost/100);
+        ref.child("Cost").setValue(cost * 100);
         ref.child("Date").setValue(month + "/" + day + "/" + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
@@ -270,6 +270,77 @@ public class Database {
                 throw new IllegalStateException("Unexpected value: " + month);
         }
     }
+
+    /**
+     * This method retrieves all children in the database that are monthlyData.
+     * @return An ArrayList of Strings. Each one contains Month, Year, TotalBudget, TotalExpenses, dellimetered by '-'
+     */
+    public ArrayList<String> getPastMonthSummary(DataSnapshot dataSnapshot){
+        ArrayList<String> pastMonths = new ArrayList<>();
+
+        // this loop retrieve all the months from the database
+        for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+            if (!ds.exists()) { // check if there are any monthly data in user's account
+                break; // if NOT, break the loop
+            }
+
+            //Go through the entry's information to store in array
+            String str_month = ds.child("Month").getValue().toString();
+            int int_month = Integer.parseInt(str_month);
+            String monthName = getMonth(int_month); // MONTH
+
+            String str_year = ds.child("Year").getValue().toString();
+            int int_year = Integer.parseInt(str_year); // YEAR
+
+            String str_budget = ds.child("Total Budget").getValue().toString(); //TOTAL BUDGET
+
+            String str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
+
+            //Add the info into one ArrayList entry w/ proper format
+            pastMonths.add(str_month + "-" + str_year + "-" + str_budget + "-" + str_expenses);
+
+        }
+
+        return pastMonths;
+    }
+
+    /**
+     * Another signature for the method that allows the user to input strings instead of integers for month & year
+     * @param dataSnapshot
+     * @param thisMonthsData
+     * @param s
+     * @param s1
+     * @return
+     */
+    public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, String s, String s1) {
+        if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
+
+            thisMonthsData = new MonthlyData(Integer.parseInt(s), Integer.parseInt(s1));
+            // this loop retrieve all the categories from database
+            for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+                if (!ds.exists()) { // check if there are any monthly data in user's account
+                    break; // if NOT, break the loop
+                }
+
+                String str_year = ds.child("Year").getValue().toString();
+                int int_year = Integer.parseInt(str_year);
+                String str_month = ds.child("Month").getValue().toString();
+                int int_month = Integer.parseInt(str_month);
+
+                if(str_year.equals(s1) && str_month.equals(s)) {
+                    for (DataSnapshot ds3 : ds.child("< Categories >").getChildren()) {
+                        if (!ds3.exists()) { // check if there are any category in user's account
+                            break; // if NOT, break the loop
+                        }
+
+                        thisMonthsData = this.RetrieveCateData(ds3, thisMonthsData);
+                    }
+                }
+            }
+        }
+        return thisMonthsData;
+    }
+
 
 }
 

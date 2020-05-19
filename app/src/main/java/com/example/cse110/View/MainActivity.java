@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
 
     private MonthlyData thisMonthsData;
     private MonthlyData pastMonthsData;
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
                 //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+
+                //Add the past month's history (includes current)
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
             }
             @Override
