@@ -1,7 +1,9 @@
-package com.example.cse110;
+package com.example.cse110.Controller;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.example.cse110.Model.Database;
 
 import java.util.ArrayList;
 
@@ -92,6 +94,7 @@ public class Category implements Parcelable {
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {
                 this.totalExpenses = totalExpenses - expenses.get(i).getCost();
+
                 base.delete_exp(name, id, year, month); // delete expense from database
                 expenses.remove(i);
 
@@ -138,6 +141,7 @@ public class Category implements Parcelable {
 
     public void setBudget(int budget) {
         this.budget = budget;
+
 
         base.insertCategoryBudget(budget, this.getName(), year, month);
     }

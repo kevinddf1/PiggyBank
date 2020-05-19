@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.Model;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.cse110.Controller.Category;
+import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.R;
+import com.example.cse110.View.CategoriesListActivity;
 
 import java.util.ArrayList;
 
@@ -17,12 +22,14 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
     private MonthlyData monthlyData;
 
     private ArrayList<Category> itemsList;
+    private Context context;
 
     // Constructor
     public CategoriesListAdapter(Context context, ArrayList<Category> items, MonthlyData monthlyData) {
         super(context, 0, items);
         this.itemsList = items;
         this.monthlyData = monthlyData;
+        this.context = context;
     }
 
 
@@ -39,7 +46,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         assert item != null;
 
         // Lookup view for data population
-        TextView categoryName = convertView.findViewById(R.id.category_name);
+        final TextView categoryName = convertView.findViewById(R.id.category_name);
         TextView categoryBudget = convertView.findViewById(R.id.category_budget);
         categoryName.setText(item.getName());
         categoryBudget.setText("Budget: " + "$" + formatIntMoneyString(item.getBudgetAsString()));
@@ -57,6 +64,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                     monthlyData.deleteCategory(item.getName());
                     itemsList.remove(item);
                     notifyDataSetChanged();
+                    ((CategoriesListActivity)context).confirmDeletion(categoryName);
                 }
             }
         });

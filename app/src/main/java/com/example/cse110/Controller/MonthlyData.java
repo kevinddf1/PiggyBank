@@ -1,12 +1,11 @@
-package com.example.cse110;
+package com.example.cse110.Controller;
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.Toast;
+
+import com.example.cse110.Model.Database;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -166,7 +165,6 @@ public class MonthlyData implements Parcelable {
     }
 
     public void deleteCategory(String name) {
-
         //Update total budget
         this.totalBudget -= categories.get(name).getBudget();
         categories.remove(name);
@@ -179,7 +177,10 @@ public class MonthlyData implements Parcelable {
         base.delete_cate(name, year, month); //delete category from database
     }
 
+
+
     /**
+<<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
      * Calculates the total amount budgeted for this month, across all categories.
      * Very expensive function so limit use as much as possible.
      */

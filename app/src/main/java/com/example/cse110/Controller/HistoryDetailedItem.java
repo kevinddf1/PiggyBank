@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.Controller;
 
 public class HistoryDetailedItem {
 

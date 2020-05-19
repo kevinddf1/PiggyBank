@@ -1,13 +1,7 @@
-package com.example.cse110;
+package com.example.cse110.Model;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.cse110.Controller.Expense;
+import com.example.cse110.Controller.MonthlyData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -15,7 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Database {
     private static final String TAG = "MyActivity";
@@ -42,7 +35,6 @@ public class Database {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         mAuth = FirebaseAuth.getInstance();
-
         FirebaseUser User = mAuth.getCurrentUser();
         key = User.getUid();
     }
@@ -127,12 +119,47 @@ public class Database {
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
                 if (!ds.exists()) { // check if there are any category in user's account
                     break; // if NOT, break the loop
-                }
-                thisMonthsData = this.RetrieveCateData(ds, thisMonthsData);
             }
-        }
+                // get the data of current category
+                String cate_name = ds.child("Name").getValue().toString();
+                System.out.println(cate_name);
+                String c_budget = ds.child("Budget").getValue().toString();
+                int cate_budget = Integer.parseInt(c_budget);
+                String c_year = ds.child("Year").getValue().toString();
+                int cate_year = Integer.parseInt(c_year);
+                String c_month = ds.child("Month").getValue().toString();
+                int cate_month = Integer.parseInt(c_month);
+
+                ArrayList<Expense> expenses = new ArrayList<Expense>();
+                // this loop retrieve all the expenses in current category from database
+                for (DataSnapshot ds2 : ds.child("Expense").getChildren()) {
+                    if (!ds2.exists()) { // check if there are any expenses in user's account
+                        break; // if NOT, break the loop
+                    }
+                    // get the data of current expense
+                    String Cost = ds2.child("Cost").getValue().toString();
+                    String Year = ds2.child("Year").getValue().toString();
+                    String Month = ds2.child("Month").getValue().toString();
+                    String Day = ds2.child("Day").getValue().toString();
+                    String Name = ds2.child("Name").getValue().toString();
+                    String ID = ds2.child("ID").getValue().toString();
+                    double dCost = Double.parseDouble(Cost)/100;
+                    int iYear = Integer.parseInt(Year);
+                    int iMonth = Integer.parseInt(Month);
+                    int iDay = Integer.parseInt(Day);
+                    int iID = Integer.parseInt(ID);
+                    // create expense
+                    Expense expense = new Expense(iID, Name, dCost, iYear, iMonth, iDay, cate_name);
+                    expenses.add(expense);
+                }
+                // create category
+                thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year).setTotalExpenses();
+                thisMonthsData = this.RetrieveCateData(ds, thisMonthsData);
+                }
+            }
         return thisMonthsData;
-    }
+        }
+
 
     public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData pastMonthsData, int year, int month) {
         if (pastMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
@@ -243,6 +270,77 @@ public class Database {
                 throw new IllegalStateException("Unexpected value: " + month);
         }
     }
+
+    /**
+     * This method retrieves all children in the database that are monthlyData.
+     * @return An ArrayList of Strings. Each one contains Month, Year, TotalBudget, TotalExpenses, dellimetered by '-'
+     */
+    public ArrayList<String> getPastMonthSummary(DataSnapshot dataSnapshot){
+        ArrayList<String> pastMonths = new ArrayList<>();
+
+        // this loop retrieve all the months from the database
+        for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+            if (!ds.exists()) { // check if there are any monthly data in user's account
+                break; // if NOT, break the loop
+            }
+
+            //Go through the entry's information to store in array
+            String str_month = ds.child("Month").getValue().toString();
+            int int_month = Integer.parseInt(str_month);
+            String monthName = getMonth(int_month); // MONTH
+
+            String str_year = ds.child("Year").getValue().toString();
+            int int_year = Integer.parseInt(str_year); // YEAR
+
+            String str_budget = ds.child("Total Budget").getValue().toString(); //TOTAL BUDGET
+
+            String str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
+
+            //Add the info into one ArrayList entry w/ proper format
+            pastMonths.add(str_month + "-" + str_year + "-" + str_budget + "-" + str_expenses);
+
+        }
+
+        return pastMonths;
+    }
+
+    /**
+     * Another signature for the method that allows the user to input strings instead of integers for month & year
+     * @param dataSnapshot
+     * @param thisMonthsData
+     * @param s
+     * @param s1
+     * @return
+     */
+    public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, String s, String s1) {
+        if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
+
+            thisMonthsData = new MonthlyData(Integer.parseInt(s), Integer.parseInt(s1));
+            // this loop retrieve all the categories from database
+            for (DataSnapshot ds : dataSnapshot.child("User").child(key).getChildren()) {
+                if (!ds.exists()) { // check if there are any monthly data in user's account
+                    break; // if NOT, break the loop
+                }
+
+                String str_year = ds.child("Year").getValue().toString();
+                int int_year = Integer.parseInt(str_year);
+                String str_month = ds.child("Month").getValue().toString();
+                int int_month = Integer.parseInt(str_month);
+
+                if(str_year.equals(s1) && str_month.equals(s)) {
+                    for (DataSnapshot ds3 : ds.child("< Categories >").getChildren()) {
+                        if (!ds3.exists()) { // check if there are any category in user's account
+                            break; // if NOT, break the loop
+                        }
+
+                        thisMonthsData = this.RetrieveCateData(ds3, thisMonthsData);
+                    }
+                }
+            }
+        }
+        return thisMonthsData;
+    }
+
 
 }
 

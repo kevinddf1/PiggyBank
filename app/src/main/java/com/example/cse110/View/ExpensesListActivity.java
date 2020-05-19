@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,9 +15,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cse110.Controller.Category;
+import com.example.cse110.Controller.Expense;
+import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.R;
+import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.Database;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ExpensesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "ExpenseListActivity monthlyData";
@@ -94,11 +100,18 @@ public class ExpensesListActivity extends AppCompatActivity {
 
                             //Update totalBudget
                             monthlyData.setTotalBudget();
+
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
 
 
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
-                            Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                            // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
+                            if (category.getBudget() < category.getTotalExpenses()/100.00) {
+                                Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                            }
                         } catch (Exception e) {
                             Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
                         }
@@ -126,10 +139,22 @@ public class ExpensesListActivity extends AppCompatActivity {
 
                         // Create new item and update adapter
                         category.createExpense(expenseName.getText().toString(), Double.parseDouble(expenseCost.getText().toString()), today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
-                        base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
                        // Update total expenses for this category
                         double currentTotalExpense = category.getTotalExpenses()/100.00;
+                        totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense)));
+
+                        // Displays a Toast message if the user goes over their budget when adding an expense
+                        if (category.getBudget() < currentTotalExpense) {
+                            Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getBaseContext(), "Item added.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
+                       // Update total expenses for this category
                         totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense )));
+
 
                         expenseName.getText().clear();
                         expenseCost.getText().clear();
@@ -243,9 +268,10 @@ public class ExpensesListActivity extends AppCompatActivity {
      * Update the display for expenseList
      */
     public void updateTotalExpenseDisplay(String toDisplay){
-
+        totalExpensesDisplay.setText( toDisplay);
+        // Displays a Toast message that confirms the expense was deleted
+        Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
 
         totalExpensesDisplay.setText( toDisplay);
-
     }
 }
