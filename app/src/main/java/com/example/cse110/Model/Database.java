@@ -111,6 +111,10 @@ public class Database {
         myRef.child("User").child(key).removeValue();
     }
 
+//    public void insert_notification(boolean enabled) {
+//        myRef.child("User").child(key).child("Notification").setValue(enabled);
+//    }
+
     public ArrayList<String> RetrieveT_Budget_Exp(DataSnapshot dataSnapshot, int year, int month) {
         DataSnapshot ds = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
         String T_Budget = ds.child("Total Budget").getValue().toString();

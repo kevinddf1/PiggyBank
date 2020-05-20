@@ -52,6 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         notificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 settings.setEnableNotifications(isChecked);
+                //base.insert_notification(settings.getEnableNotifications());
             }
         });
 
