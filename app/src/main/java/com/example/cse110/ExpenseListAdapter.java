@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
     final ArrayList<Expense> itemsList;
 
     private Category category;
+    Context context;
 
     // Constructor
     public ExpenseListAdapter(Context context, ArrayList<Expense> items, Category category) {
@@ -27,11 +29,14 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
         this.category = category;
         // Allow for class wide scope
         itemsList = items;
+        this.context = context;
+
+
     }
 
 
     @Override
-    public View getView(int position, View convertView,  ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         View listItemView = convertView;
         if(listItemView == null){
@@ -53,6 +58,15 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
                 if (v.getTag() != null) {
                     // Remove item from MonthlyData and update adapter
                     category.deleteExpense(item.getId());
+
+
+                    //Allow the updating of the expense list activity
+                    double calculatedRemainder = (double) category.getTotalExpenses() / 100.00;
+                    String totalExpenseString = Double.valueOf(calculatedRemainder).toString();
+
+                    ((ExpensesListActivity)context).updateTotalExpenseDisplay("$" + formatMoneyString(totalExpenseString));
+
+                    //Add fine tuning on expense Display
                     notifyDataSetChanged();
                 }
             }
@@ -63,6 +77,29 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
     }
 
     private String formatMoneyString(String valueToFormat){
+
+        // Add formatting for whole numbers
+        if(valueToFormat.indexOf('.') == -1){
+            valueToFormat = valueToFormat.concat(".00");
+        }else{
+            //Ensure only valid input
+            int costLength = valueToFormat.length();
+            int decimalPlace = valueToFormat.indexOf(".");
+
+            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
+            if (costLength - decimalPlace == 1) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) +  "00";
+            }
+            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
+            // appends a 0 to the end
+            else if (costLength - decimalPlace == 2) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
+            }
+            // If the user inputs a number with >= 2 decimal places, only displays up to 2
+            else {
+                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
+            }
+        }
         int hundredthComma = valueToFormat.length() - 6;
         int thousandthComma = valueToFormat.length() - 9;
         if(valueToFormat.length() <= 6){
@@ -73,5 +110,6 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
 
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
+
 
 }

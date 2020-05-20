@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.Calendar;
 
 /**
@@ -17,9 +16,19 @@ public class Expense implements Parcelable {
     private int id;
     // parentCategoryName should not be saved in the database
     private String parentCategoryName;
-
     private String costString;
 
+    /**
+     * Constructor for the Expense object
+     * @param id - unique identification for the Expense object
+     * @param name - name of the expense
+     * @param cost - cost of the expense
+     * @param year - year the expense was logged
+     * @param month - month the expense was logged
+     * @param day - day the expense was logged
+     * @param parentCategoryName - the category that the expense belongs to
+     * @return An expense object
+     */
     public Expense(int id, String name, double cost, int year, int month, int day, String parentCategoryName) {
         this.id = id;
         this.name = name;
@@ -29,7 +38,6 @@ public class Expense implements Parcelable {
             throw new NullPointerException("Name and cost must not be null. Month must " +
                     "be greater than or equal to 0.");
         }
-
         // Add formatting for whole numbers
         if(costString.indexOf('.') == -1){
             costString = costString.concat(".00");
@@ -60,6 +68,11 @@ public class Expense implements Parcelable {
         this.parentCategoryName = parentCategoryName;
     }
 
+    /**
+     * Constructor for an Expense object that reads in serialized Expense data
+     * and converts it into a usable object
+     * @param in - parcel data to convert
+     */
     protected Expense(Parcel in) {
         name = in.readString();
         cost = in.readInt();
@@ -69,7 +82,6 @@ public class Expense implements Parcelable {
         id = in.readInt();
         parentCategoryName = in.readString();
         costString = in.readString();
-
     }
 
     public static final Creator<Expense> CREATOR = new Creator<Expense>() {
@@ -84,19 +96,24 @@ public class Expense implements Parcelable {
         }
     };
 
-    /**
-     * Update the database to reflect changes in Expense's fields.
-     * This is called every time any field in Expense is modified.
-     */
-    public void updateToDatabase() {
-        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // TODO: uid uniquely identifies the user; use it to update the database; Expense.id uniquely identifies the Expense within the Category
-        // use uid, id, and parentCategoryName
-    }
+//    /**
+//     * Update the database to reflect changes in Expense's fields.
+//     * This is called every time any field in Expense is modified.
+//     */
+//    public void updateToDatabase() {
+//        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        // TODO: uid uniquely identifies the user; use it to update the database; Expense.id uniquely identifies the Expense within the Category
+//        // use uid, id, and parentCategoryName
+//    }
 
     public String getName() {
         return name;
     }
+
+    /**
+     * As cents.
+     * @return
+     */
     public int getCost() {
         return cost;
     }
@@ -119,17 +136,19 @@ public class Expense implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-        updateToDatabase();
+        //updateToDatabase();
+        //base.insertExpenseName(name);
     }
     public void setCost(int cost) {
         this.cost = cost;
-        updateToDatabase();
+        //updateToDatabase();
+        //base.insertExpenseCost(cost);
     }
     public void setDate(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
-        updateToDatabase();
+        //updateToDatabase();
     }
     public void setParentCategoryName(String parentCategoryName) {
         this.parentCategoryName = parentCategoryName;

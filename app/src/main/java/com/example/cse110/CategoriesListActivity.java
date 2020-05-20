@@ -9,12 +9,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
 
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
@@ -27,6 +29,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
 
     private MonthlyData monthlyData;
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
+        settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
         // Initialize List
         ArrayList<Category> arrayOfItems = monthlyData.getCategoriesAsArray();
@@ -57,6 +61,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                 Intent i = new Intent(CategoriesListActivity.this, ExpensesListActivity.class);
                 i.putExtra(ExpensesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                i.putExtra(ExpensesListActivity.SETTINGS_INTENT, settings);
                 i.putExtra(ExpensesListActivity.CATEGORY_NAME_INTENT, currentItem.getName());
                 startActivityForResult(i, 1);
             }
@@ -71,17 +76,26 @@ public class CategoriesListActivity extends AppCompatActivity {
                 if(!categoryBudget.getText().toString().isEmpty() && !categoryName.getText().toString().isEmpty() ) {
 
                     //Verify that max vale has not be reached.
-                    if(categoryBudget.getText().toString().length() > MAX_BUDGET){
-                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
-
-                    }else {
+                    if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
+                        if (settings.getEnableNotifications()) {
+                            Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
 
                         // Create new item and update adapter
                         boolean creationSuccessful = monthlyData.createCategory(categoryName.getText().toString(), Integer.parseInt(categoryBudget.getText().toString()));
 
                         // Verify that category was made
                         if (!creationSuccessful) {
-                            Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
+                            if (settings.getEnableNotifications()) {
+                                Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else {
+                            if (settings.getEnableNotifications()) {
+                                // Displays a Toast message that lets the user know the category was successfully created
+                                Toast.makeText(getBaseContext(), "Category successfully added.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         //Clear inputs
                         categoryName.getText().clear();
@@ -90,11 +104,12 @@ public class CategoriesListActivity extends AppCompatActivity {
                     }
 
 
-                }else{
-
-                    // Insufficient number of filled fields results in an error warning.
-                    Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Missing Information", Toast.LENGTH_SHORT);
-                    missingInformationWarning.show();
+                } else {
+                    if (settings.getEnableNotifications()) {
+                        // Insufficient number of filled fields results in an error warning.
+                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in category name and budget.", Toast.LENGTH_SHORT);
+                        missingInformationWarning.show();
+                    }
                 }
             }
         });
@@ -119,5 +134,9 @@ public class CategoriesListActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         super.onBackPressed();
+    }
+
+    public void confirmDeletion(TextView nameOfCategory) {
+        Toast.makeText(getBaseContext(),  nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
     }
 }

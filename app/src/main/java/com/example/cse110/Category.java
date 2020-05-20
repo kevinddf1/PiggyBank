@@ -3,8 +3,6 @@ package com.example.cse110;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 
 /**
@@ -16,6 +14,8 @@ public class Category implements Parcelable {
     private String name;
     private ArrayList<Expense> expenses;
     private int nextExpenseId;
+    private Database base = Database.Database(); // create a Database object
+    private long totalExpenses = 0;
 
     /**
      * Constructor for an empty Category.
@@ -27,6 +27,8 @@ public class Category implements Parcelable {
         budget = 0;
         name = "";
         expenses = new ArrayList<Expense>();
+
+        //this.base = new Database();
     }
 
     /**
@@ -45,6 +47,8 @@ public class Category implements Parcelable {
             nextExpenseId = Math.max(nextExpenseId, e.getId());
         }
         nextExpenseId++;
+
+        //this.base = new Database();
     }
 
     protected Category(Parcel in) {
@@ -54,6 +58,9 @@ public class Category implements Parcelable {
         nextExpenseId = in.readInt();
         month = in.readInt();
         year = in.readInt();
+        totalExpenses = in.readLong();
+
+        //this.base = new Database();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -68,20 +75,14 @@ public class Category implements Parcelable {
         }
     };
 
-    /**
-     * Update the database to reflect changes in Category's budget or name ONLY (not necessarily the expenses).
-     * This is called when any of the Category's properties is modified, and when an Expense is created or deleted.
-     */
-    public void updateToDatabase() {
-        // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // TODO: uid uniquely identifies the user; use it to update the database
-    }
-
     public Expense createExpense(String name, double cost, int year, int month, int day) {
         Expense expense = new Expense(nextExpenseId++, name, cost, year, month, day, this.name);
         // TODO: insert while keeping sorted order
         expenses.add(expense);
-        updateToDatabase();
+        this.base.insertExpense(expense.getCost(), name, this.name, year, month, day, nextExpenseId); // update category to database
+
+        //Update total expenses so far
+        this.totalExpenses = totalExpenses + expense.getCost();
         return expense;
     }
 
@@ -89,11 +90,12 @@ public class Category implements Parcelable {
         // TODO: optimized search
         for (int i = 0; i < expenses.size(); i++) {
             if (expenses.get(i).getId() == id) {
+                this.totalExpenses = totalExpenses - expenses.get(i).getCost();
+                base.delete_exp(name, id); // delete expense from database
                 expenses.remove(i);
                 break;
             }
         }
-        updateToDatabase();
     }
 
     /**
@@ -122,12 +124,12 @@ public class Category implements Parcelable {
         for (Expense e : expenses) {
             e.setParentCategoryName(name);
         }
-        updateToDatabase();
     }
 
     public void setBudget(int budget) {
         this.budget = budget;
-        updateToDatabase();
+
+        base.insertCategoryBudget(budget, this.getName());
     }
 
     @Override
@@ -143,5 +145,19 @@ public class Category implements Parcelable {
         parcel.writeInt(nextExpenseId);
         parcel.writeInt(month);
         parcel.writeInt(year);
+        parcel.writeLong(totalExpenses);
+    }
+
+    //Getter for total expenses
+    public long getTotalExpenses(){
+        return this.totalExpenses;
+    }
+
+    //Loop through all expenses to get total value
+    public void setTotalExpenses(){
+        for(Expense expense : this.expenses){
+            this.totalExpenses += expense.getCost();
+        }
+
     }
 }
