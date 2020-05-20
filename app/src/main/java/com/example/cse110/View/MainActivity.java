@@ -16,6 +16,8 @@ import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -72,20 +74,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Bind our month's expenses and budget to proper display
-        //totalBudgetDisplay = findViewById(R.id.currentCash);
-        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
-        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
 
+        if(thisMonthsData != null) {
+            totalBudgetDisplay = findViewById(R.id.currentCash);
+            totalBudgetDisplay.setText(Long.toString(thisMonthsData.getTotalBudget()));
 
+            totalExpenseDisplay = findViewById(R.id.totalExpenses);
+            totalExpenseDisplay.setText(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100));
+        } else {
+            // Get Bundle object that contain the array
+            Bundle b = this.getIntent().getExtras();
+            String[] list = b.getStringArray("Total Budget and Expense");
 
+            //Bind our month's expenses and budget to proper display
+            totalBudgetDisplay = findViewById(R.id.currentCash);
+            totalBudgetDisplay.setText(list[0]);
 
-        //Bind our month's expenses and budget to proper display
-        //totalBudgetDisplay = findViewById(R.id.currentCash);
-        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
-        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
-
-
+            totalExpenseDisplay = findViewById(R.id.totalExpenses);
+            totalExpenseDisplay.setText(list[1]);
+        }
 
 
         historyButton = findViewById(R.id.HistoryButton);
