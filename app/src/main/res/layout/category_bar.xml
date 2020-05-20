@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@drawable/mainheaderbackground">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <EditText
             android:id="@+id/category_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/semibold"
-            android:gravity="start"
-            android:inputType="textPersonName"
-            android:text="@string/categoryName"
-            android:textAllCaps="false"
-            android:textColor="@color/darkGrey"
+            android:textColor="@color/white"
             android:textSize="24sp"
-            android:backgroundTint="@color/Transparent"/>
+            android:textAllCaps="false"
+            android:gravity="start" />
 
         <TextView
             android:id="@+id/empty_space"
@@ -27,36 +26,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/budget_display"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@android:color/transparent"
-                android:cursorVisible="true"
-                android:fontFamily="@font/semibold"
-                android:gravity="center_vertical|end"
-                android:inputType="number"
-                android:outlineProvider="none"
-                android:paddingEnd="10dp"
-                android:singleLine="true"
-                android:text="@string/budgetDisplay"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/green"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/total_expenses"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="top|end"
-                android:paddingEnd="10dp"
-                android:text="@string/expenses"
-                android:textColor="#D50000"
-                android:textSize="18sp" />
-        </LinearLayout>
-
+            android:gravity="bottom|end"
+            android:paddingEnd="10dp"
+            android:text="@string/budgetDisplay"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </androidx.appcompat.widget.Toolbar>

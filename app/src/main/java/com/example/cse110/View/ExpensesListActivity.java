@@ -64,7 +64,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         categoryName = findViewById(R.id.category_name);
         categoryName.setText(category.getName());
         //Category BUDGET in the top bar
-        categoryBudget = findViewById((R.id.budget_display));
+        categoryBudget = findViewById((R.id.expense_name)); //Brent
         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
         //Category "TOTAL EXPENSES" in the top bar
         totalExpensesDisplay = (TextView) findViewById(R.id.total_expenses);
