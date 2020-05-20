@@ -1,96 +1,55 @@
 package com.example.cse110.Controller;
 
-/**
- * Wrapper class to display data in History page's list.
- * @author Peter Gonzalez
- * @version 4.23
- */
 public class HistoryItem {
-
-    //Declare our local variables, passed into constructor
+    /**
+     * The variable to hold the month and year to display, separated by 1 space character
+     */
+    private String monthYear;
 
     /**
-     * Hold's the name of the Category this item displays.
+     * The variable to hold the budget to display
      */
-    private String name;
+    private String totalBudget;
 
     /**
-     * Hold's the budget of the Category this item displays.
+     * The variable to hold the expenses to display
      */
-    private int budget;
+    private String totalExpenses;
 
     /**
-     * Hold's the total value of expenses in the Category this item displays.
+     * The only constructor.
+     * @param monthYear month year display
+     * @param totalBudget budget display
+     * @param totalExpenses expenses display
      */
-    private  double totalExpenses;
-
-    //Constructor
-
-    /**
-     * The only constructor for a HistoryItem. Hold's all information to display for one Category.
-     * @param name The name of the Category.
-     * @param budget The budget of the Category.
-     * @param totalExpenses The sum of the total value of expenses for one Category.
-     */
-    public HistoryItem(String name, int budget, double totalExpenses){
-        this.name = name;
-        this.budget = budget;
+    public HistoryItem(String monthYear, String totalBudget, String totalExpenses){
+        this.monthYear = monthYear;
+        this.totalBudget = totalBudget;
         this.totalExpenses = totalExpenses;
+
+}
+
+    /**
+     * Getter for month and year display
+     * @return
+     */
+    public String getMonthYear(){
+        return monthYear;
     }
 
-    //Getters
-
+    /**
+     * Getter for budget display
+     * @return
+     */
+    public String getTotalBudget(){
+        return totalBudget;
+    }
 
     /**
-     * Get the value of the total expenses.
-     * @return The value this item is holding for the Category's expenses.
+     * Getter for expenses display
      */
-    public double getTotalExpenses() {
+    public String getTotalExpenses(){
         return totalExpenses;
     }
 
-    public String getFormattedTotalExpenses(){
-        String costString = Double.toString(getTotalExpenses());
-
-        // Add formatting for whole numbers
-        if(costString.indexOf('.') == -1){
-            costString = costString.concat(".00");
-        }else{
-            //Ensure only valid input
-            int costLength = costString.length();
-            int decimalPlace = costString.indexOf(".");
-
-            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
-            if (costLength - decimalPlace == 1) {
-                costString = costString.substring(0, decimalPlace + 1) +  "00";
-            }
-            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
-            // appends a 0 to the end
-            else if (costLength - decimalPlace == 2) {
-                costString = costString.substring(0, decimalPlace + 1 + 1) + "0";
-            }
-            // If the user inputs a number with >= 2 decimal places, only displays up to 2
-            else {
-                costString = costString.substring(0, costString.indexOf(".") + 2 + 1);
-            }
-        }
-        return costString;
-
-    }
-
-    /**
-     * Get the value of the Category's budget.
-     * @return The value this item is holding for the Category's budget.
-     */
-    public int getBudget() {
-        return budget;
-    }
-
-    /**
-     * Get the name of the Category this item displays.
-     * @return The value this item is holding for the Category's budget.
-     */
-    public String getName(){
-        return name;
-    }
 }

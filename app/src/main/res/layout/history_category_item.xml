@@ -5,17 +5,17 @@
     >
 
     <TextView
-        android:id="@+id/month_year_separate_display"
+        android:id="@+id/category_name"
         android:layout_width="119dp"
         android:layout_height="48dp"
         android:layout_weight="0"
         android:paddingStart="10sp"
         android:paddingTop="5sp"
-        android:text="MonthYear"
+        android:text="@string/categoryName"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/total_budget_display"
+        android:id="@+id/budget"
         android:layout_width="119dp"
         android:layout_height="48dp"
         android:layout_weight="0"
@@ -24,7 +24,7 @@
         android:textColor="#00C853" />
 
     <TextView
-        android:id="@+id/total_expense_display"
+        android:id="@+id/Categories"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_weight="0"
