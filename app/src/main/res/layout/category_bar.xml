@@ -51,7 +51,7 @@
                 android:gravity="bottom|end"
                 android:paddingEnd="10dp"
                 android:text="expenses"
-                android:textColor="#D50000"
+                android:textColor="@color/red"
                 android:textSize="12sp" />
         </LinearLayout>
 
