@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/categoryBar"
-        layout="@layout/category_bar"
+        layout="@layout/expenselist_bar"
         app:layout_constraintBottom_toTopOf="@+id/Categories" />
 
     <LinearLayout

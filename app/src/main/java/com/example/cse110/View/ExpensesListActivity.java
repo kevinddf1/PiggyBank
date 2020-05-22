@@ -50,7 +50,7 @@ public class ExpensesListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+        setContentView(R.layout.activity_expenselist);
 
         Intent intent = getIntent();
         monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
@@ -64,11 +64,13 @@ public class ExpensesListActivity extends AppCompatActivity {
         categoryName = findViewById(R.id.category_name);
         categoryName.setText(category.getName());
         //Category BUDGET in the top bar
-        categoryBudget = findViewById((R.id.expense_name)); //Brent
+        categoryBudget = findViewById((R.id.budget_display)); //Brent
         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
         //Category "TOTAL EXPENSES" in the top bar
-        totalExpensesDisplay = (TextView) findViewById(R.id.total_expenses);
+
+        totalExpensesDisplay = findViewById(R.id.total_expenses);
         totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100))); //Account for initial lack of decimal values
+
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
         expenseCost = findViewById(R.id.expense_cost);
