@@ -18,8 +18,12 @@ import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Model.Database;
 import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +42,7 @@ public class PieChartActivity extends AppCompatActivity {
     AnyChartView anyChartView;
     List<String> cateArrayList =new ArrayList<>();
     List<Integer> totalExpenseArrayList = new ArrayList<>();
+    private MonthlyData thisMonthsData;
 
 
 
@@ -49,11 +54,12 @@ public class PieChartActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
+    private static final String LIST_OF_MONTHS = "List of Months";
 
 
     private MonthlyData current_month;
     private Settings settings;
-
+    private Database base = Database.Database(); // create a Database object
     private ArrayList<Category> categoryArrayList;
 
 
@@ -181,20 +187,30 @@ public class PieChartActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.navigation_history:
-                            Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                            setResult(RESULT_OK, i);
-                            //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
-                            // TODO: grab this from the database
+                            ValueEventListener Listener2 = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), HistoryActivity.class);
 
-                            if (current_month == null) {
-                                Calendar today = Calendar.getInstance();
-                                current_month = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-                            }
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
 
-                            i.putExtra(HISTORY_DATA_INTENT, current_month);
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                                    //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
-                            startActivityForResult(i, 1);
-                            overridePendingTransition(0, 0);
+                                    i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                                    i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
+                                    startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
                             return true;
 
                         case R.id.navigation_graphs:

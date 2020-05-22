@@ -35,7 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String LIST_OF_MONTHS = "List of Months";
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
-
     private Settings settings;
     private Database base = Database.Database(); // create a Database object
 
@@ -104,15 +103,34 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
+                            ValueEventListener Listener1 = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
 
-                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                            setResult(RESULT_OK, intent);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            intent.putExtra(MainActivity.SETTINGS_INTENT, settings);
-                            startActivityForResult(intent, 1);
-                            overridePendingTransition(0, 0);
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+                                    base.insertMonthlydata(year, month);
+
+                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
+                                    monthlyData = base.RetrieveDataCurrent(dataSnapshot, monthlyData, year, month);
+
+                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                                    if (settings == null) {
+                                        settings = new Settings();
+                                    }
+                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                                    startActivityForResult(intent, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener1);
                             return true;
                         case R.id.navigation_lists:
                             ValueEventListener Listener = new ValueEventListener() {
