@@ -51,8 +51,10 @@ public class HistoryActivity extends AppCompatActivity{
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     private MonthlyData thisMonthsData;
+    private MonthlyData monthlyData;
     private Database base = Database.Database(); // create a Database object
     private static final String TAG = "HistoryActivity";
+    private Settings settings;
 
 
 
@@ -104,7 +106,16 @@ public class HistoryActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
 
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(3);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+        Intent i = getIntent();
+        settings = i.getParcelableExtra(SETTINGS_INTENT);
+        monthlyData = i.getParcelableExtra(MONTHLY_DATA_INTENT);
         //Get data from String ArrayList
         Bundle bundle = getIntent().getExtras();
         allMonths = bundle.getStringArrayList(LIST_OF_MONTHS);
@@ -173,5 +184,57 @@ public class HistoryActivity extends AppCompatActivity{
 
         }
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            Intent i = new Intent(getBaseContext(), MainActivity.class);
+                            setResult(RESULT_OK, i);
+                            i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                            i.putExtra(MONTHLY_DATA_INTENT, monthlyData);
+                            startActivityForResult(i, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_lists:
+                            Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+/*
+                            // TODO: grab this from the database
+                            if (thisMonthsData == null) {
+                                Calendar today = Calendar.getInstance();
+                                thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
+                            }
+*/
+                            //intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                            intent.putExtra(HISTORY_DATA_INTENT,  monthlyData);
+                            intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
 
+                        case R.id.navigation_history:
+                            return true;
+                        case R.id.navigation_graphs:
+                            Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
+                            inte.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
+                            startActivityForResult(inte, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_settings:
+                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+                            setResult(RESULT_OK, inten);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
+                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+                            startActivityForResult(inten, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+
+                    }
+                    return false;
+                }
+            };
 }

@@ -101,13 +101,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_category);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-
-        //navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(3);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
+;
 
         //Retrieve passed in MonthlyData object and extract date/categories
 
@@ -178,57 +172,5 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.navigation_home:
-                            Intent i = new Intent(getBaseContext(), MainActivity.class);
-                            setResult(RESULT_OK, i);
-                            i.putExtra(HISTORY_DATA_INTENT, current_month);
-                            i.putExtra(MONTHLY_DATA_INTENT, current_month);
-                            startActivityForResult(i, 1);
-                            overridePendingTransition(0, 0);
-                            return true;
-                        case R.id.navigation_lists:
-                            Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-/*
-                            // TODO: grab this from the database
-                            if (thisMonthsData == null) {
-                                Calendar today = Calendar.getInstance();
-                                thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-                            }
-*/
-                            //intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                            intent.putExtra(HISTORY_DATA_INTENT, current_month);
-                            intent.putExtra(MONTHLY_DATA_INTENT, current_month);
-                            startActivityForResult(intent, 1);
-                            overridePendingTransition(0, 0);
-                            return true;
 
-                        case R.id.navigation_history:
-                            return true;
-                        case R.id.navigation_graphs:
-                            Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
-                            inte.putExtra(PIE_CHART_DATA_INTENT, current_month);
-                            startActivityForResult(inte, 1);
-                            overridePendingTransition(0, 0);
-                            return true;
-                        case R.id.navigation_settings:
-                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
-                            setResult(RESULT_OK, inten);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
-                            startActivityForResult(inten, 1);
-                            overridePendingTransition(0, 0);
-                            return true;
-
-                    }
-                    return false;
-                }
-            };
 }

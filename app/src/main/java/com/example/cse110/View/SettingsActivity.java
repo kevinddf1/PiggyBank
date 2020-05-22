@@ -32,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String LIST_OF_MONTHS = "List of Months";
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
 
@@ -159,6 +160,7 @@ public class SettingsActivity extends AppCompatActivity {
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                                    i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                                     i.putExtra(HistoryActivity.SETTINGS_INTENT, settings);
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);

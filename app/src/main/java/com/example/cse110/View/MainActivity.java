@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                         case R.id.navigation_history:
-                            ValueEventListener Listener2 = new ValueEventListener() {
+                            ValueEventListener Listener1 = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -310,6 +310,9 @@ public class MainActivity extends AppCompatActivity {
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+
+                                    //Add the past month's history (includes current)
+                                    i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }
@@ -318,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
                                     // Failed to read value
                                 }
                             };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
+                            base.getMyRef().addListenerForSingleValueEvent(Listener1);
                             return true;
                         case R.id.navigation_graphs:
                             base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {

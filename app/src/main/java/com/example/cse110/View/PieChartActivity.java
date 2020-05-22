@@ -50,6 +50,7 @@ public class PieChartActivity extends AppCompatActivity {
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
 
+
     private MonthlyData current_month;
     private Settings settings;
 
@@ -191,6 +192,7 @@ public class PieChartActivity extends AppCompatActivity {
                             }
 
                             i.putExtra(HISTORY_DATA_INTENT, current_month);
+
                             startActivityForResult(i, 1);
                             overridePendingTransition(0, 0);
                             return true;

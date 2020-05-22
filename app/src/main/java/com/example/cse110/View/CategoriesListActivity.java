@@ -34,6 +34,7 @@ public class CategoriesListActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String LIST_OF_MONTHS = "List of Months";
 
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
@@ -197,6 +198,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                                    i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }
@@ -223,6 +225,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                                     i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
