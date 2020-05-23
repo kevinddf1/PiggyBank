@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@drawable/mainheaderbackground">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/category_name"
+            android:text="@string/categoryName"
+            android:fontFamily="@font/semibold"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:backgroundTint="@color/Transparent"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textAllCaps="false"
+            android:gravity="start"
+            />
+
+
+        <ImageView
+            android:id="@+id/pencilCat"
+            android:layout_gravity="center_vertical"
+            android:layout_width="16sp"
+            android:layout_height="16sp"
+            android:layout_weight="0"
+            app:srcCompat="@drawable/pencil" />
+
+        <TextView
+            android:id="@+id/empty_space"
+            android:layout_width="150sp"
+            android:layout_height="match_parent"
+            android:layout_weight="0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom|end"
+                android:paddingEnd="16sp">
+
+                <EditText
+                    android:id="@+id/budget_display_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:cursorVisible="true"
+                    android:fontFamily="@font/semibold"
+                    android:gravity="bottom|end"
+                    android:inputType="number"
+                    android:outlineProvider="none"
+                    android:singleLine="true"
+                    android:text="@string/budgetDisplay"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/green"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/pencilBudg"
+                    android:layout_width="12sp"
+                    android:layout_height="12sp"
+                    android:layout_weight="0"
+                    app:srcCompat="@drawable/pencil"
+                    android:gravity="bottom|end"
+                    android:layout_marginTop="5sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/total_expenses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/semibold"
+                android:gravity="bottom|end"
+                android:paddingEnd="16sp"
+                android:text="Expenses"
+                android:textColor="@color/red"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>

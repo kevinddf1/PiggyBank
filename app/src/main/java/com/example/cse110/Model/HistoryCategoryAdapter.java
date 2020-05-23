@@ -1,4 +1,4 @@
-package com.example.cse110;
+package com.example.cse110.Model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.cse110.Controller.HistoryCategoryItem;
+import com.example.cse110.R;
+
 import java.util.ArrayList;
 
 /**
@@ -17,9 +20,9 @@ import java.util.ArrayList;
  * Uses the history_item.xml to determine the look of the information display as well as the data population of it.
  * @see ArrayAdapter
  */
-public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
+public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
     //Declare our arrayList
-    ArrayList<HistoryItem> items;
+    ArrayList<HistoryCategoryItem> items;
 
     //Declare our TextViews to edit
     private TextView name, budget, totalExpenses;
@@ -29,7 +32,7 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
      * @param context The context in which the list is created.
      * @param items The data structure that holds the HistoryItem objects.
      */
-    public HistoryItemAdapter(@NonNull Context context, ArrayList<HistoryItem> items) {
+    public HistoryCategoryAdapter(@NonNull Context context, ArrayList<HistoryCategoryItem> items) {
         super(context,0,  items);
         this.items = items;
     }
@@ -48,26 +51,31 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_category_item, parent, false);
         }
 
 
         // Get the data item for this position
-        final HistoryItem item = getItem(position);
+        final HistoryCategoryItem item = getItem(position);
         assert item != null;
 
         //Look up view for data population
         name = convertView.findViewById(R.id.category_name);
         name.setText(item.getName());
-        budget = convertView.findViewById(R.id.budget);
+        budget = convertView.findViewById(R.id.history_budget);
         budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
-        totalExpenses = convertView.findViewById(R.id.Categories);
+        totalExpenses = convertView.findViewById(R.id.history_expenses);
         totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
 
         return convertView;
 
     }
 
+    /**
+     * Helper method to format a display of money value, only integers
+     * @param valueToFormat The String to manipulate
+     * @return The new string to display
+     */
     private String formatMoneyString(String valueToFormat){
         int hundredthComma = valueToFormat.length() - 6;
         int thousandthComma = valueToFormat.length() - 9;
@@ -80,6 +88,11 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
+    /**
+     * Helper method to format a display of money value, including cents
+     * @param valueToFormat The string to manipulate
+     * @return The new string to display
+     */
     private String formatIntMoneyString(String valueToFormat){
         int hundredthComma = valueToFormat.length() - 3;
         int thousandthComma = valueToFormat.length() - 6;
@@ -92,4 +105,4 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
-    }
+}

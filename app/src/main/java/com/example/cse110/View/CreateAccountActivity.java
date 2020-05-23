@@ -1,13 +1,13 @@
-package com.example.cse110;
+package com.example.cse110.View;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cse110.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,7 +32,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ((EditText)findViewById(R.id.username)).setText(intent.getStringExtra(LoginActivity.USERNAME_FIELD));
 
-        final Button createAccountButton = findViewById(R.id.loginButton);
+        final Button createAccountButton = findViewById(R.id.signUpButton);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText usernameField = findViewById(R.id.username);

@@ -1,11 +1,11 @@
-package com.example.cse110;
+package com.example.cse110.Controller;
 
 /**
  * Wrapper class to display data in History page's list.
  * @author Peter Gonzalez
  * @version 4.23
  */
-public class HistoryItem {
+public class HistoryCategoryItem {
 
     //Declare our local variables, passed into constructor
 
@@ -32,7 +32,7 @@ public class HistoryItem {
      * @param budget The budget of the Category.
      * @param totalExpenses The sum of the total value of expenses for one Category.
      */
-    public HistoryItem(String name, int budget, double totalExpenses){
+    public HistoryCategoryItem(String name, int budget, double totalExpenses){
         this.name = name;
         this.budget = budget;
         this.totalExpenses = totalExpenses;

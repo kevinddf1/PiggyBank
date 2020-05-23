@@ -9,14 +9,14 @@
 
 
     <include
-        android:id="@+id/history_months_bar"
-        layout="@layout/history_bar_main"
+        android:id="@+id/history_bar"
+        layout="@layout/history_bar_month"
         app:layout_constraintBottom_toTopOf="@+id/top_banner" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
-            android:id="@+id/Months"
+            android:id="@+id/history_expenses"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0"

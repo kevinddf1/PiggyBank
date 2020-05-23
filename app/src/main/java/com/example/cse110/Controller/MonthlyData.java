@@ -1,12 +1,11 @@
-package com.example.cse110;
+package com.example.cse110.Controller;
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.Toast;
+
+import com.example.cse110.Model.Database;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +14,7 @@ public class MonthlyData implements Parcelable {
     // Month and year should never be modified outside the constructor
     private int month;
     private int year;
-    private  long totalBudget, totalExpensesAsCents = 0;
+    private long totalBudget, totalExpensesAsCents = 0;
     private Map<String, Category> categories;
     // This is not serialized but is repopulated from categories so that categories and categoriesArrayList refer to the same Category objects
     private ArrayList<Category> categoriesArrayList;
@@ -78,52 +77,73 @@ public class MonthlyData implements Parcelable {
     }
 
     public Category getCategory(String name) {
-        // TODO: error handling?
+        // Return NULL if category name NOT FOUND
         return categories.get(name);
     }
+
+    //Return month as int 1 - 12
+    public int getIntMonth(){
+        return month;
+    }
+
     // Getters
     public String getMonth(){
-            switch (month){
-                case 0 :
-                    return "January";
+        switch (month){
+            case 0 :
+                return "January";
 
-                case 1 :
-                    return "February";
+            case 1 :
+                return "February";
 
-                case 2:
-                    return "March";
+            case 2:
+                return "March";
 
-                case 3:
-                    return "April";
+            case 3:
+                return "April";
 
-                case 4:
-                    return "May";
+            case 4:
+                return "May";
 
-                case 5:
-                    return "June";
+            case 5:
+                return "June";
 
-                case 6:
-                    return "July";
+            case 6:
+                return "July";
 
-                case 7:
-                    return "August";
+            case 7:
+                return "August";
 
-                case 8:
-                    return "September";
+            case 8:
+                return "September";
 
-                case 9:
-                    return "October";
+            case 9:
+                return "October";
 
-                case 10:
-                    return "November";
+            case 10:
+                return "November";
 
-                case 11:
-                    return "December";
+            case 11:
+                return "December";
 
-                default:
-                    throw new IllegalStateException("Unexpected value: " + month);
-            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
     };
+
+    // Check if a "new" name already exists in the current monthly category list
+    public boolean checkNameExists(String name) {
+        return categories.containsKey(name);
+    }
+
+    // Rename a category (remove then old pair and insert a new one with a new key "name")
+    public boolean renameCategory(String oldName, String newName) {
+        if(checkNameExists(oldName)) {
+            categories.put(newName, categories.remove(oldName));
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /*
     /Return true if category was successfully made, false otherwise
@@ -137,9 +157,9 @@ public class MonthlyData implements Parcelable {
             categories.put(name, category);
             categoriesArrayList.add(category);
             /****** update the new category info to database ******/
-            this.base.insertCategoryName(name);
-            this.base.insertCategoryBudget(budget, name);
-            this.base.insertCategoryDate(month, year, name);
+            this.base.insertCategoryName(name, year, month);
+            this.base.insertCategoryBudget(budget, name, year, month);
+            this.base.insertCategoryDate(year, month, name);
             /*************************************************/
             //Update total budget
             this.totalBudget += category.getBudget();
@@ -170,10 +190,14 @@ public class MonthlyData implements Parcelable {
                 break;
             }
         }
-        base.delete_cate(name); //delete category from database
+        //delete category from database
+        base.delete_cate(name, year, month);
     }
 
+
+
     /**
+<<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
      * Calculates the total amount budgeted for this month, across all categories.
      * Very expensive function so limit use as much as possible.
      */
@@ -184,8 +208,6 @@ public class MonthlyData implements Parcelable {
         for(Category category : categoriesArrayList) {
             this.totalBudget += category.getBudget();
         }
-
-
     }
 
     /**
@@ -194,11 +216,9 @@ public class MonthlyData implements Parcelable {
      */
     public void setTotalExpensesAsCents(){
         this.totalExpensesAsCents = 0;
-
         //Loop through all categories a
         for (Category category: categoriesArrayList){
-                this.totalExpensesAsCents += category.getTotalExpenses();
-
+            this.totalExpensesAsCents += category.getTotalExpenses();
         }
     }
 

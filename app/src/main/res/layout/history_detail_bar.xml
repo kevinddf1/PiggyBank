@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/lightGrey">
+    android:layout_height="55dp"
+    android:background="@drawable/mainheaderbackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,18 +17,18 @@
             <TextView
                 android:id="@+id/category_name"
                 android:fontFamily="@font/semibold"
-                android:textColor="@color/darkGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:textColor="@color/white"
                 android:text="@string/categoryName"
                 android:textAllCaps="false"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/date_display"
                 android:fontFamily="@font/semibold"
-                android:textColor="@color/darkGrey"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
@@ -42,7 +42,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/budget_display"
+                android:id="@+id/budget_display_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="bottom|end"
@@ -50,7 +50,7 @@
                 android:text="@string/budgetDisplay"
                 android:fontFamily="@font/semibold"
                 android:textColor="@color/green"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/total_expenses"
@@ -61,7 +61,7 @@
                 android:text="Expenses"
                 android:fontFamily="@font/semibold"
                 android:textColor="@color/red"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>
