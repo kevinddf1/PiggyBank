@@ -17,13 +17,16 @@ import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.HistoryCategoryItem;
 import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Model.Database;
 import com.example.cse110.Model.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-
+import java.util.Calendar;
 
 
 /**
@@ -43,7 +46,8 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
 
     private MonthlyData thisMonthsData;
-
+    private MonthlyData monthlyData;
+    private Database base = Database.Database(); // create a Database object
 
 
 
@@ -101,13 +105,19 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_category);
-;
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(3);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
 
         //Retrieve passed in MonthlyData object and extract date/categories
 
         Intent i = getIntent();
         current_month = i.getParcelableExtra(HISTORY_DATA_INTENT);
-
+        settings = i.getParcelableExtra(SETTINGS_INTENT);
+        monthlyData = i.getParcelableExtra(MONTHLY_DATA_INTENT);
         settings = i.getParcelableExtra(SETTINGS_INTENT);
 
         //Update our local variables to match
@@ -172,5 +182,110 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         }
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            ValueEventListener Listener1 = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
 
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+                                    base.insertMonthlydata(year, month);
+
+                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
+                                    monthlyData = base.RetrieveDataCurrent(dataSnapshot, monthlyData, year, month);
+
+                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                                    if (settings == null) {
+                                        settings = new Settings();
+                                    }
+                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                                    startActivityForResult(intent, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener1);
+                            return true;
+
+                        case R.id.navigation_lists:
+                            ValueEventListener Listener = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+                                    base.insertMonthlydata(year, month);
+
+                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
+                                    monthlyData = base.RetrieveDataCurrent(dataSnapshot, monthlyData, year, month);
+
+                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                                    if (settings == null) {
+                                        settings = new Settings();
+                                    }
+                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                                    startActivityForResult(intent, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener);
+                            return true;
+                        case R.id.navigation_history:
+                            return true;
+                        case R.id.navigation_graphs:
+                            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
+                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                                    startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            });
+                        case R.id.navigation_settings:
+                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
+                            setResult(RESULT_OK, inten);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
+                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+                            startActivityForResult(inten, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+
+                    }
+                    return false;
+                }
+            };
 }
