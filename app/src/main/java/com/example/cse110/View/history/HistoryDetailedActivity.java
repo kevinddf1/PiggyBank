@@ -144,13 +144,23 @@ public class HistoryDetailedActivity extends AppCompatActivity {
     private void fillInHistoryDetailedItemArrayList() {
 
         for (Expense currentExpense : myExpenseList) {
-            historyDetailedItems.add(new HistoryDetailedItem(currentExpense.getName(), currentExpense.getCostAsString()));
+            String dividedExpenseString = Double.toString(currentExpense.getCost()/10000.00); //Divided by 10000 to adjust to perhaps Database manipulation
+            historyDetailedItems.add(new HistoryDetailedItem(currentExpense.getName(), dividedExpenseString));
         }
     }
 
+    /**
+     * Handle formatting for numbers containing decimals
+     *
+     * @param valueToFormat The comma free string to format
+     * @return A newly formatted string w/ commas in the correct place
+     */
     private String formatMoneyString(String valueToFormat) {
+        //Set up local constant for where commas should be
         int thousandsComma = valueToFormat.length() - DISTANCE_FOR_THOUSANDS_COMMA;
         int millionsComma = valueToFormat.length() - DISTANCE_FOR_MILLIONS_COMMA;
+
+        //Return unchanged if necessary or add commas in designated indices
         if (valueToFormat.length() <= SIZE_LESS_THAN_THOUSANDS) {
             return valueToFormat;
         } else if (valueToFormat.length() <= SIZE_LESS_THAN_MILLIONS) {
@@ -159,10 +169,18 @@ public class HistoryDetailedActivity extends AppCompatActivity {
         return valueToFormat.substring(BEGIN_INDEX, millionsComma) + "," + valueToFormat.substring(millionsComma, thousandsComma) + "," + valueToFormat.substring(thousandsComma);
     }
 
+    /**
+     * Handle formatting for numbers w/o decimals
+     *
+     * @param valueToFormat The comma free string to format
+     * @return A newly formatted string w/ commas in the correct place
+     */
     private String formatIntMoneyString(String valueToFormat) {
+        //Set up local constant for where commas should be
         int thousandsComma = valueToFormat.length() - DISTANCE_FOR_THOUSANDS_COMMA_NO_DECIMALS;
         int millionsComma = valueToFormat.length() - DISTANCE_FOR_MILLIONS_COMMA_NO_DECIMALS;
 
+        //Return unchanged if necessary or add commas in designated indices
         if (valueToFormat.length() <= SIZE_LESS_THAN_THOUSANDS_NO_DECIMALS) {
             return valueToFormat;
         } else if (valueToFormat.length() <= SIZE_LESS_THAN_MILLIONS_NO_DECIMALS) {

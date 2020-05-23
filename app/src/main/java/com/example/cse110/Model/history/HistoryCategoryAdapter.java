@@ -59,16 +59,33 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
         final HistoryCategoryItem item = getItem(position);
         assert item != null;
 
-        //Look up view for data population
-        name = convertView.findViewById(R.id.category_name);
-        name.setText(item.getName());
-        budget = convertView.findViewById(R.id.budget);
-        budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
-        totalExpenses = convertView.findViewById(R.id.Categories);
-        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
+        //Render all displays
+        renderStaticInfo(convertView, item);
 
         return convertView;
 
+    }
+
+    /**
+     * Displays all attributes for a category
+     * @param convertView
+     * @param item
+     */
+    private void renderStaticInfo(View convertView, HistoryCategoryItem item) {
+        //Look up view for data population
+        //Render name
+        name = convertView.findViewById(R.id.category_name);
+        name.setText(item.getName());
+
+        //Render budget
+        budget = convertView.findViewById(R.id.budget);
+        String budgetRender ="Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget()));
+        budget.setText(budgetRender);
+
+        //Render total expenses
+        totalExpenses = convertView.findViewById(R.id.Categories);
+        String expenseRender = "Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses());
+        totalExpenses.setText(expenseRender);
     }
 
     /**
