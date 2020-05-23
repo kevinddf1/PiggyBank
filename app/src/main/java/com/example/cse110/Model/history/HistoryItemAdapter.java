@@ -1,4 +1,4 @@
-package com.example.cse110.Model;
+package com.example.cse110.Model.history;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,34 +8,29 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
-import com.example.cse110.Controller.HistoryCategoryItem;
+import com.example.cse110.Controller.history.HistoryItem;
 import com.example.cse110.R;
+
 
 import java.util.ArrayList;
 
-/**
- * The adapter to connect the HistoryItems to the list display of the History page displays.
- * Uses the history_item.xml to determine the look of the information display as well as the data population of it.
- * @see ArrayAdapter
- */
-public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
-    //Declare our arrayList
-    ArrayList<HistoryCategoryItem> items;
-
-    //Declare our TextViews to edit
-    private TextView name, budget, totalExpenses;
+public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
 
     /**
-     * The only constructor for the adapter, connects the adapter to HistoryItem ArrayList.
-     * @param context The context in which the list is created.
-     * @param items The data structure that holds the HistoryItem objects.
+     * Primary data structure to hold the months to display
      */
-    public HistoryCategoryAdapter(@NonNull Context context, ArrayList<HistoryCategoryItem> items) {
-        super(context,0,  items);
+    private ArrayList<HistoryItem> items;
+
+    //Declare our TextViews to edit
+    private TextView name;
+    private TextView budget;
+    private TextView totalExpenses;
+
+    public HistoryItemAdapter(Context context, ArrayList<HistoryItem> items){
+        super(context, 0 , items);
         this.items = items;
     }
+
 
 
     /**
@@ -48,24 +43,24 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
     @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        // Check if an existing view is being reused, otherwise inflate the view
+// Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_category_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.history_item, parent, false);
         }
 
 
         // Get the data item for this position
-        final HistoryCategoryItem item = getItem(position);
+        final HistoryItem item = getItem(position);
         assert item != null;
 
         //Look up view for data population
-        name = convertView.findViewById(R.id.category_name);
-        name.setText(item.getName());
-        budget = convertView.findViewById(R.id.budget);
-        budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
-        totalExpenses = convertView.findViewById(R.id.Categories);
-        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
+        name = convertView.findViewById(R.id.month_year_separate_display);
+        String[] parseMonthYear = item.getMonthYear().split(" ");
+        name.setText(getMonth(Integer.parseInt(parseMonthYear[0])) + " " + parseMonthYear[1] );
+        budget = convertView.findViewById(R.id.total_budget_display);
+        budget.setText("Budget: $" + formatIntMoneyString(item.getTotalBudget()));
+        totalExpenses = convertView.findViewById(R.id.total_expense_display);
+        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(Double.toString(Double.parseDouble(item.getTotalExpenses())/100.00)));
 
         return convertView;
 
@@ -105,4 +100,53 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
+    /**
+     * Helper metho to find the correct month name to display
+     * @param month
+     * @return
+     */
+    private String getMonth(int month) {
+        switch (month) {
+            case 0:
+                return "January";
+
+            case 1:
+                return "February";
+
+            case 2:
+                return "March";
+
+            case 3:
+                return "April";
+
+            case 4:
+                return "May";
+
+            case 5:
+                return "June";
+
+            case 6:
+                return "July";
+
+            case 7:
+                return "August";
+
+            case 8:
+                return "September";
+
+            case 9:
+                return "October";
+
+            case 10:
+                return "November";
+
+            case 11:
+                return "December";
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
+    }
+
 }
+

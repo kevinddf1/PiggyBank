@@ -14,6 +14,7 @@ import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 

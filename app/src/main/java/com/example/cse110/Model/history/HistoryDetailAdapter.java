@@ -1,4 +1,4 @@
-package com.example.cse110.Model;
+package com.example.cse110.Model.history;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.cse110.Controller.HistoryDetailedItem;
+import com.example.cse110.Controller.history.HistoryDetailedItem;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
