@@ -1,4 +1,4 @@
-package com.example.cse110.Model;
+package com.example.cse110.Model.history;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.cse110.Controller.HistoryCategoryItem;
+import com.example.cse110.Controller.history.HistoryCategoryItem;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
@@ -59,16 +59,33 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
         final HistoryCategoryItem item = getItem(position);
         assert item != null;
 
-        //Look up view for data population
-        name = convertView.findViewById(R.id.category_name);
-        name.setText(item.getName());
-        budget = convertView.findViewById(R.id.history_budget);
-        budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
-        totalExpenses = convertView.findViewById(R.id.history_expenses);
-        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
+        //Render all displays
+        renderStaticInfo(convertView, item);
 
         return convertView;
 
+    }
+
+    /**
+     * Displays all attributes for a category
+     * @param convertView
+     * @param item
+     */
+    private void renderStaticInfo(View convertView, HistoryCategoryItem item) {
+        //Look up view for data population
+        //Render name
+        name = convertView.findViewById(R.id.category_name);
+        name.setText(item.getName());
+
+        //Render budget
+        budget = convertView.findViewById(R.id.history_budget);
+        String budgetRender ="Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget()));
+        budget.setText(budgetRender);
+
+        //Render total expenses
+        totalExpenses = convertView.findViewById(R.id.history_expenses);
+        String expenseRender = "Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses());
+        totalExpenses.setText(expenseRender);
     }
 
     /**

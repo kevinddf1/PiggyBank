@@ -14,6 +14,7 @@ import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -172,7 +173,6 @@ public class SettingsActivity extends AppCompatActivity {
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
-                                    i.putExtra(HistoryActivity.SETTINGS_INTENT, settings);
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }

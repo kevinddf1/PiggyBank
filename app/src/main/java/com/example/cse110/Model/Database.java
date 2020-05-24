@@ -108,19 +108,16 @@ public class Database {
         myRef.child("User").child(key).removeValue();
     }
 
-    //First remove the "old" category and then insert a "new" category with the updated NAME
-//    public void rename_cate(String oldName, int oldYear, int oldMonth, String newName) {
-//        DatabaseReference cur_categories_ref = myRef.child("User").child(key).child(this.getMonth(oldMonth) + oldYear).child("< Categories >");
-//        DatabaseReference old_cate_ref = cur_categories_ref.child("Category " + oldName);
-//        //Set up the "new" category tree
-//        cur_categories_ref.child("Category " + newName).child("Budget").setValue(old_cate_ref.child("Budget").);
-//        cur_categories_ref.child("Category " + newName).child("Expense").setValue(old_cate_ref.child("Expense"));
-//        cur_categories_ref.child("Category " + newName).child("Month").setValue(old_cate_ref.child("Month"));
-//        cur_categories_ref.child("Category " + newName).child("Year").setValue(old_cate_ref.child("Year"));
-//        cur_categories_ref.child("Category " + newName).child("Name").setValue(newName);
-//        //Delete the "old" category
-//        delete_cate(oldName, oldYear, oldMonth);
-//    }
+    public ArrayList<String> RetrieveT_Budget_Exp(DataSnapshot dataSnapshot, int year, int month) {
+        DataSnapshot ds = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
+        String T_Budget = ds.child("Total Budget").getValue().toString();
+        String T_Expense = ds.child("Total Expense").getValue().toString();
+        ArrayList<String> list = new ArrayList<String>(2);
+        list.add(T_Budget);
+        list.add(T_Expense);
+
+        return list;
+    }
 
     public MonthlyData RetrieveDataCurrent(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, int year, int month) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
@@ -133,7 +130,6 @@ public class Database {
             }
                 // get the data of current category
                 String cate_name = ds.child("Name").getValue().toString();
-                System.out.println(cate_name);
                 String c_budget = ds.child("Budget").getValue().toString();
                 int cate_budget = Integer.parseInt(c_budget);
                 String c_year = ds.child("Year").getValue().toString();
