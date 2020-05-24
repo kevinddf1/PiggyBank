@@ -1,6 +1,5 @@
 package com.example.cse110.View;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
      */
     TextView totalBudgetDisplay, totalExpenseDisplay;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
