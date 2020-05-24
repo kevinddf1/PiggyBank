@@ -14,7 +14,8 @@
         android:layout_height="201dp"
         app:srcCompat="@drawable/mainheaderbackground"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/welcome"

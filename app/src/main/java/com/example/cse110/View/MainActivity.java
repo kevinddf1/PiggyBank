@@ -1,5 +1,6 @@
 package com.example.cse110.View;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,7 +20,7 @@ import com.example.cse110.Controller.Settings;
 
 import java.util.Calendar;
 
-import com.example.cse110.View.history.HistoryActivity;
+import com.example.cse110.View.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
      */
     TextView totalBudgetDisplay, totalExpenseDisplay;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
