@@ -10,14 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,7 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton, pieChartButton, settingsButton;
+    LinearLayout expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
@@ -63,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         //Bind button to go to expense list
 
         //Instantiate monthlyData only if currently null
-       // if(thisMonthsData == null){
-         //   base.
+        // if(thisMonthsData == null){
+        //   base.
         //Bind button to go to expense list
         expenseListButton = findViewById(R.id.ExpensesButton);
         expenseListButton.setOnClickListener(new View.OnClickListener() {
@@ -75,25 +74,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Bind our month's expenses and budget to proper display
+        //totalBudgetDisplay = findViewById(R.id.currentCash);
+        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
+        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
 
-        if(thisMonthsData != null) {
-            totalBudgetDisplay = findViewById(R.id.currentCash);
-            totalBudgetDisplay.setText(Long.toString(thisMonthsData.getTotalBudget()));
 
-            totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            totalExpenseDisplay.setText(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100));
-        } else {
-            // Get Bundle object that contain the array
-            Bundle b = this.getIntent().getExtras();
-            String[] list = b.getStringArray("Total Budget and Expense");
 
-            //Bind our month's expenses and budget to proper display
-            totalBudgetDisplay = findViewById(R.id.currentCash);
-            totalBudgetDisplay.setText(list[0]);
 
-            totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            totalExpenseDisplay.setText(list[1]);
-        }
+        //Bind our month's expenses and budget to proper display
+        //totalBudgetDisplay = findViewById(R.id.currentCash);
+        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
+        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
+
+
 
 
         historyButton = findViewById(R.id.HistoryButton);
@@ -293,10 +287,10 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             };
                             base.getMyRef().addListenerForSingleValueEvent(Listener);
-                    return true;
+                            return true;
 
                         case R.id.navigation_history:
-                            ValueEventListener Listener1 = new ValueEventListener() {
+                            ValueEventListener Listener2 = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -310,9 +304,6 @@ public class MainActivity extends AppCompatActivity {
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
-
-                                    //Add the past month's history (includes current)
-                                    i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }
@@ -321,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                                     // Failed to read value
                                 }
                             };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener1);
+                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
                             return true;
                         case R.id.navigation_graphs:
                             base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
