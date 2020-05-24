@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // if(thisMonthsData == null){
         //   base.
         //Bind button to go to expense list
+        /*
         expenseListButton = findViewById(R.id.ExpensesButton);
         expenseListButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+*/
 
         if(thisMonthsData != null) {
             totalBudgetDisplay = findViewById(R.id.currentCash);

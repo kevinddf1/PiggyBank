@@ -6,22 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".View.MainActivity">
+    tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/topBar"
         android:layout_width="422dp"
         android:layout_height="201dp"
-        app:srcCompat="@drawable/mainheaderbackground"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/mainheaderbackground" />
 
     <TextView
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginBottom="82dp"
         android:fontFamily="@font/semibold"
         android:shadowColor="#4D000000"
         android:shadowDx="0"
@@ -31,17 +34,18 @@
         android:text="@string/welcome"
         android:textColor="@color/white"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/topBar"
-        app:layout_constraintEnd_toStartOf="@+id/underline"
-        app:layout_constraintHorizontal_bias="0.366"
-        app:layout_constraintStart_toEndOf="@+id/currentCash"
+        app:layout_constraintBottom_toTopOf="@+id/underline"
+        app:layout_constraintEnd_toEndOf="@+id/currentCash"
         app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.512" />
+        app:layout_constraintVertical_bias="0.18" />
 
     <TextView
         android:id="@+id/currentCash"
         android:layout_width="172dp"
-        android:layout_height="32dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginEnd="71dp"
+        android:layout_marginBottom="51dp"
         android:fontFamily="@font/semibold"
         android:shadowColor="#4D000000"
         android:shadowDx="0"
@@ -50,18 +54,16 @@
         android:text="@string/currentCash"
         android:textColor="@color/white"
         android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/totalExpenses"
-        app:layout_constraintEnd_toStartOf="@+id/totalExpenses"
-        app:layout_constraintHorizontal_bias="0.668"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintEnd_toEndOf="@+id/welcome"
+        app:layout_constraintStart_toStartOf="@+id/tableLayout"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <TextView
         android:id="@+id/totalExpenses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="11dp"
         android:fontFamily="@font/semibold"
         android:shadowColor="#4D000000"
         android:shadowDx="0"
@@ -71,42 +73,42 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-        app:layout_constraintEnd_toStartOf="@+id/topBar"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
+        app:layout_constraintStart_toStartOf="@+id/currentCash"
         app:layout_constraintTop_toBottomOf="@+id/currentCash" />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/topBar"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="27dp"
+        app:layout_constraintBottom_toTopOf="@+id/currentCash"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/home"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
     <ImageView
         android:id="@+id/underline"
-        android:layout_width="291dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
         app:layout_constraintBottom_toTopOf="@+id/currentCash"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="@+id/currentCash"
         app:srcCompat="@drawable/line" />
 
     <ImageView
         android:id="@+id/homeIcon"
-        android:layout_width="22dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/welcome"
         app:layout_constraintEnd_toStartOf="@+id/home"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/home" />
@@ -115,23 +117,21 @@
         android:id="@+id/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="64dp"
         android:fontFamily="@font/semibold"
         android:text="@string/home"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/homeIcon"
-        app:layout_constraintEnd_toStartOf="@+id/topBar"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/logo"
         app:layout_constraintStart_toEndOf="@+id/homeIcon"
-        app:layout_constraintTop_toTopOf="@+id/homeIcon" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="411dp"
-        android:layout_height="530dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar">
 
@@ -140,41 +140,36 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/ExpensesButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/ExpensesText"
+                <Button
+                    android:id="@+id/ExpensesButton"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:fontFamily="@font/semibold"
                     android:gravity="center_horizontal|center_vertical"
                     android:onClick="onExpensesCLick"
                     android:text="Manage My Expenses"
-                    android:textAlignment="gravity"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black" />
+                    android:textAlignment="gravity" />
 
                 <ImageView
                     android:id="@+id/ExpensesImage"
                     android:layout_width="202dp"
-                    android:layout_height="170dp"
-                    app:srcCompat="@drawable/money" />
+                    android:layout_height="150dp"
+                    app:srcCompat="@drawable/money"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/HistoryButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/HistoryText"
+                <Button
+                    android:id="@+id/HistoryButton"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -195,14 +190,12 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/PieChartButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/GraphsText"
+                    android:id="@+id/PieChartButton"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -211,21 +204,19 @@
                     android:text="@string/graphs" />
 
                 <ImageView
-                    android:id="@+id/GraphsImage"
+                    android:id="@+id/PieChartImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/stock" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/SettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/SettingsText"
+                <Button
+                    android:id="@+id/SettingsButton"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -251,8 +242,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemIconTint="#26C6DA"
-        app:itemTextColor="#26C6DA"
+        app:itemIconTint="#5B5A5A"
+        app:itemTextColor="#5B5A5A"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
