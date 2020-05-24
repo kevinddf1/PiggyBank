@@ -32,7 +32,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ((EditText)findViewById(R.id.username)).setText(intent.getStringExtra(LoginActivity.USERNAME_FIELD));
 
-        final Button createAccountButton = findViewById(R.id.loginButton);
+        final Button createAccountButton = findViewById(R.id.signUpButton);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText usernameField = findViewById(R.id.username);

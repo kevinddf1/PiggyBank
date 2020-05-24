@@ -56,7 +56,7 @@ public class HistoryDetailAdapter extends ArrayAdapter<HistoryDetailedItem> {
 
         // Set the cost of the expense
         TextView expenseCost = convertView.findViewById(R.id.expense_cost);
-        expenseCost.setText("$ " + formatMoneyString(currentItem.getCost()));
+        expenseCost.setText("$" + formatMoneyString(currentItem.getCost()));
         return convertView;
 
 

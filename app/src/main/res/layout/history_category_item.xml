@@ -2,36 +2,40 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
-    >
+    android:backgroundTint="@color/white">
 
     <TextView
-        android:id="@+id/month_year_separate_display"
-        android:layout_width="119dp"
-        android:layout_height="48dp"
+        android:id="@+id/category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingStart="10sp"
         android:paddingTop="5sp"
         android:text="@string/categoryName"
+        android:fontFamily="@font/semibold"
+        android:textColor="@color/darkGrey"/>
+
+    <TextView
+        android:id="@+id/history_budget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:paddingLeft="100sp"
+        android:paddingTop="5sp"
+        android:textSize="12sp"
+        android:text="@string/budgetDisplay"
+        android:textColor="@color/green"
         android:fontFamily="@font/semibold" />
 
     <TextView
-        android:id="@+id/total_budget_display"
-        android:layout_width="119dp"
-        android:layout_height="48dp"
-        android:layout_weight="0"
-        android:paddingTop="5sp"
-        android:text="@string/budgetDisplay"
-        android:textColor="@color/green"
-        android:fontFamily="@font/semibold"/>
-
-    <TextView
-        android:id="@+id/total_expense_display"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:id="@+id/history_expenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:gravity="end"
         android:paddingTop="5sp"
-        android:paddingEnd="10sp"
+        android:paddingLeft="120sp"
+        android:textSize="12sp"
         android:text="@string/expenses"
         android:textColor="@color/red"
         android:fontFamily="@font/semibold"/>

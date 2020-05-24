@@ -95,7 +95,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
         month_year.setText(current_month.getMonth() + " " + current_month.getYear() );
         category_name = (TextView) findViewById(R.id.category_name);
         category_name.setText(currentCategory.getName());
-        budget = (TextView) findViewById(R.id.budget_display);
+        budget = (TextView) findViewById(R.id.budget_display_history);
 
         // The details for the budget and total expenditures.
         budget.setText("Budget: $" + formatIntMoneyString(currentCategory.getBudgetAsString()));
@@ -109,7 +109,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
 
         //The adapter to fill in all the necessary list.
         historyDetailAdapter = new HistoryDetailAdapter(this,historyDetailedItems);
-        expenseDetails = (ListView) findViewById(R.id.expenses);
+        expenseDetails = (ListView) findViewById(R.id.history_expenses);
         expenseDetails.setAdapter(historyDetailAdapter);
 
 

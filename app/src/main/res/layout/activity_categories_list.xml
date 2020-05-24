@@ -16,19 +16,22 @@
         android:layout_height="wrap_content"
         android:background="@color/darkGrey"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:scaleType="fitXY"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="false"
             android:layout_alignParentTop="false"
-            android:textColor="@color/white"
+            android:layout_alignParentRight="false"
+            android:layout_marginLeft="-1dp"
             android:background="@drawable/mainheaderbackground"
             android:fontFamily="@font/semibold"
-            android:paddingLeft="10dp"
             android:gravity="center_vertical"
-            android:text="@string/categories_list"/>
+            android:paddingLeft="10dp"
+            android:scaleType="fitXY"
+            android:text="@string/categories_list"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -80,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <ListView
-        android:id="@+id/Categories"
+        android:id="@+id/history_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"

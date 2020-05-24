@@ -39,8 +39,6 @@ public class PieChartActivity extends AppCompatActivity {
     List<String> cateArrayList =new ArrayList<>();
     List<Integer> totalExpenseArrayList = new ArrayList<>();
 
-
-
     /**
      * Key for pulling an object of monthlyData in the HistoryDetailedActivity
      * @see #onCreate(Bundle)
@@ -55,15 +53,11 @@ public class PieChartActivity extends AppCompatActivity {
 
     private ArrayList<Category> categoryArrayList;
 
-
-
-
     /**
      * The only constructor for instantiating the pie chart page
      * @see AppCompatActivity
      * @param savedInstanceState
      */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,16 +84,15 @@ public class PieChartActivity extends AppCompatActivity {
             totalExpenseArrayList.add(getTotalExpense(c));
         }
 
-
-
-
-
         setupPieChart();
-
-
-
     }
 
+    /**
+     * Gets the total expenses from each expense in the category
+     *
+     * @param c the category we want the total expense
+     * @return
+     */
     private int getTotalExpense(Category c) {
         int ret=0;
         ArrayList<Expense> expenseArray= c.getExpenses();
@@ -110,7 +103,9 @@ public class PieChartActivity extends AppCompatActivity {
         return ret;
     }
 
-
+    /**
+     * Sets up the PieChart by filling in the values for each data entry
+     */
     public void setupPieChart(){
 
         Pie pie= AnyChart.pie();
@@ -123,6 +118,12 @@ public class PieChartActivity extends AppCompatActivity {
         anyChartView.setChart(pie);
     }
 
+    /**
+     * Properly formats the money strings based on the values we get from the database
+     *
+     * @param valueToFormat the value we want to format to a money string
+     * @return
+     */
     private String formatMoneyString(String valueToFormat){
         // Add formatting for whole numbers
         if(valueToFormat.indexOf('.') == -1){
@@ -157,18 +158,21 @@ public class PieChartActivity extends AppCompatActivity {
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
+    /**
+     * The bottom nav UI bar
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             setResult(RESULT_OK, intent);
                             intent.putExtra(MONTHLY_DATA_INTENT, current_month);
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
+
                             return true;
                         case R.id.navigation_lists:
                             Intent in = new Intent(getBaseContext(), CategoriesListActivity.class);
@@ -178,7 +182,6 @@ public class PieChartActivity extends AppCompatActivity {
                             overridePendingTransition(0, 0);
 
                             return true;
-
                         case R.id.navigation_history:
                             Intent i = new Intent(getBaseContext(), HistoryActivity.class);
                             setResult(RESULT_OK, i);
@@ -193,18 +196,21 @@ public class PieChartActivity extends AppCompatActivity {
                             i.putExtra(HISTORY_DATA_INTENT, current_month);
                             startActivityForResult(i, 1);
                             overridePendingTransition(0, 0);
-                            return true;
 
+                            return true;
                         case R.id.navigation_graphs:
+
                             return true;
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
                             if (settings == null) {
                                 settings = new Settings();
                             }
+
                             inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
+
                             return true;
                     }
                     return false;

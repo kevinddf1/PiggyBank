@@ -28,6 +28,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
+/**
+ *
+ */
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
@@ -38,6 +41,11 @@ public class SettingsActivity extends AppCompatActivity {
     private Settings settings;
     private Database base = Database.Database(); // create a Database object
 
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +105,11 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     *
+     *
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -200,6 +213,11 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             };
+
+    /**
+     *
+     *
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

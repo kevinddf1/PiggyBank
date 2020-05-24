@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cse110.Model.Database;
@@ -24,11 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton, pieChartButton, settingsButton;
+    LinearLayout expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
 
     private MonthlyData thisMonthsData;
     private MonthlyData pastMonthsData;
@@ -131,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
                 //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+
+                //Add the past month's history (includes current)
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
             }
             @Override

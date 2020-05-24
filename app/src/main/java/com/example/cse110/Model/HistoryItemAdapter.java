@@ -8,34 +8,30 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
+import com.example.cse110.Controller.HistoryCategoryItem;
 import com.example.cse110.Controller.HistoryItem;
 import com.example.cse110.R;
 
+
 import java.util.ArrayList;
 
-/**
- * The adapter to connect the HistoryItems to the list display of the History page displays.
- * Uses the history_item.xml to determine the look of the information display as well as the data population of it.
- * @see ArrayAdapter
- */
 public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
-    //Declare our arrayList
+
+    /**
+     * Primary data structure to hold the months to display
+     */
     ArrayList<HistoryItem> items;
 
     //Declare our TextViews to edit
-    private TextView name, budget, totalExpenses;
+    private TextView name;
+    private TextView budget;
+    private TextView totalExpenses;
 
-    /**
-     * The only constructor for the adapter, connects the adapter to HistoryItem ArrayList.
-     * @param context The context in which the list is created.
-     * @param items The data structure that holds the HistoryItem objects.
-     */
-    public HistoryItemAdapter(@NonNull Context context, ArrayList<HistoryItem> items) {
-        super(context,0,  items);
+    public HistoryItemAdapter(Context context, ArrayList<HistoryItem> items){
+        super(context, 0 , items);
         this.items = items;
     }
+
 
 
     /**
@@ -60,18 +56,45 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         assert item != null;
 
         //Look up view for data population
-        name = convertView.findViewById(R.id.category_name);
-        name.setText(item.getName());
-        budget = convertView.findViewById(R.id.budget);
-        budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
-        totalExpenses = convertView.findViewById(R.id.Categories);
-        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
+        name = convertView.findViewById(R.id.month_year_separate_display);
+        String[] parseMonthYear = item.getMonthYear().split(" ");
+        name.setText(getMonth(Integer.parseInt(parseMonthYear[0])) + " " + parseMonthYear[1] );
+        budget = convertView.findViewById(R.id.total_budget_display);
+        budget.setText("Budget: $" + formatIntMoneyString(item.getTotalBudget()));
+        totalExpenses = convertView.findViewById(R.id.total_expense_display);
+        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(Double.toString(Double.parseDouble(item.getTotalExpenses())/100.00)));
 
         return convertView;
 
     }
 
+    /**
+     * Helper method to format a display of money value, only integers
+     * @param valueToFormat The String to manipulate
+     * @return The new string to display
+     */
     private String formatMoneyString(String valueToFormat){
+        if(valueToFormat.indexOf('.') == -1){
+            valueToFormat = valueToFormat.concat(".00");
+        }else {
+            //Ensure only valid input
+            int costLength = valueToFormat.length();
+            int decimalPlace = valueToFormat.indexOf(".");
+
+            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
+            if (costLength - decimalPlace == 1) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) + "00";
+            }
+            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
+            // appends a 0 to the end
+            else if (costLength - decimalPlace == 2) {
+                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
+            }
+            // If the user inputs a number with >= 2 decimal places, only displays up to 2
+            else {
+                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
+            }
+        }
         int hundredthComma = valueToFormat.length() - 6;
         int thousandthComma = valueToFormat.length() - 9;
         if(valueToFormat.length() <= 6){
@@ -83,6 +106,11 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
+    /**
+     * Helper method to format a display of money value, including cents
+     * @param valueToFormat The string to manipulate
+     * @return The new string to display
+     */
     private String formatIntMoneyString(String valueToFormat){
         int hundredthComma = valueToFormat.length() - 3;
         int thousandthComma = valueToFormat.length() - 6;
@@ -95,4 +123,53 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
         return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
     }
 
+    /**
+     * Helper metho to find the correct month name to display
+     * @param month
+     * @return
+     */
+    private String getMonth(int month) {
+        switch (month) {
+            case 0:
+                return "January";
+
+            case 1:
+                return "February";
+
+            case 2:
+                return "March";
+
+            case 3:
+                return "April";
+
+            case 4:
+                return "May";
+
+            case 5:
+                return "June";
+
+            case 6:
+                return "July";
+
+            case 7:
+                return "August";
+
+            case 8:
+                return "September";
+
+            case 9:
+                return "October";
+
+            case 10:
+                return "November";
+
+            case 11:
+                return "December";
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
     }
+
+}
+
