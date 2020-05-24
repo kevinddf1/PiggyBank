@@ -19,6 +19,7 @@
             android:textSize="24sp"
             android:textAllCaps="false"
             android:gravity="start"
+            android:singleLine="true"
             />
 
 
@@ -61,7 +62,8 @@
                     android:text="@string/budgetDisplay"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/green"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+/>
 
                 <ImageView
                     android:id="@+id/pencilBudg"
