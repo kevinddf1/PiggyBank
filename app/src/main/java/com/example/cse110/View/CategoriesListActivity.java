@@ -78,7 +78,7 @@ public class CategoriesListActivity extends AppCompatActivity {
         ArrayList<Category> arrayOfItems = monthlyData.getCategoriesAsArray();
         // Checklist Structure
         myAdapter = new CategoriesListAdapter(this, arrayOfItems, monthlyData);
-        categories = (ListView) findViewById(R.id.history_expenses);
+        categories = (ListView) findViewById(R.id.activity_categories_list_history_expenses);
         categories.setAdapter(myAdapter);
 
         categories.setOnItemClickListener(new AdapterView.OnItemClickListener(){

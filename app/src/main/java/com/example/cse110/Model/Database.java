@@ -110,12 +110,17 @@ public class Database {
 
     public ArrayList<String> RetrieveT_Budget_Exp(DataSnapshot dataSnapshot, int year, int month) {
         DataSnapshot ds = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
-        String T_Budget = ds.child("Total Budget").getValue().toString();
-        String T_Expense = ds.child("Total Expense").getValue().toString();
         ArrayList<String> list = new ArrayList<String>(2);
-        list.add(T_Budget);
-        list.add(T_Expense);
-
+        if (ds.child("Total Budget").getValue() == null || ds.child("Total Expense").getValue() == null) {
+            list.add("0");
+            list.add("0");
+        }
+        else {
+            String T_Budget = ds.child("Total Budget").getValue().toString();
+            String T_Expense = ds.child("Total Expense").getValue().toString();
+            list.add(T_Budget);
+            list.add(T_Expense);
+        }
         return list;
     }
 
