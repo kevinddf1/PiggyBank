@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cse110.Model.Database;
@@ -19,14 +20,14 @@ import com.example.cse110.Controller.Settings;
 
 import java.util.Calendar;
 
-import com.example.cse110.View.HistoryActivity;
+import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    Button expenseListButton, historyButton, pieChartButton, settingsButton;
+    LinearLayout expenseListButton, historyButton, pieChartButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
@@ -54,19 +55,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(0);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
+        //navBar handling
+        setUpNavBar();
+
         //Bind button to go to expense list
 
         //Instantiate monthlyData only if currently null
-        // if(thisMonthsData == null){
-        //   base.
+       // if(thisMonthsData == null){
+         //   base.
         //Bind button to go to expense list
-        /*
         expenseListButton = findViewById(R.id.ExpensesButton);
         expenseListButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,14 +72,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-*/
+
 
         if(thisMonthsData != null) {
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            totalBudgetDisplay.setText(Long.toString(thisMonthsData.getTotalBudget()));
+            String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
+            totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            totalExpenseDisplay.setText(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100));
+            String expenseRendering = "Total Expenses: " + Long.toString(thisMonthsData.getTotalExpensesAsCents()/100);
+
+            totalExpenseDisplay.setText(expenseRendering);
         } else {
             // Get Bundle object that contain the array
             Bundle b = this.getIntent().getExtras();
@@ -90,10 +90,12 @@ public class MainActivity extends AppCompatActivity {
 
             //Bind our month's expenses and budget to proper display
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            totalBudgetDisplay.setText(list[0]);
+            String budgetRendering = "Total Budget: " + list[0];
+            totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            totalExpenseDisplay.setText(list[1]);
+            String expensesRendering = "Total Expenses: " + Double.toString(Long.parseLong(list[1])/100.00);
+            totalExpenseDisplay.setText(expensesRendering);
         }
 
 
@@ -123,6 +125,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    /**
+     * Erdong's navbar
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // make all icons' names visible
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
     }
 
     private void onHistoryClick(View v){
@@ -245,6 +261,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
+
+                totalBudgetDisplay = findViewById(R.id.currentCash);
+                String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
+                totalBudgetDisplay.setText(budgetRendering);
+
+                totalExpenseDisplay = findViewById(R.id.totalExpenses);
+                String expenseRendering = "Total Expenses: " + Long.toString(thisMonthsData.getTotalExpensesAsCents()/100);
+
+                totalExpenseDisplay.setText(expenseRendering);
                 Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
                 if (settings != null) {
                     this.settings = settings;
@@ -253,6 +278,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * method which controls the nav bar
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -260,17 +288,17 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
                             return true;
+
                         case R.id.navigation_lists:
-                                     /* Read from the database
-        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-        / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-        */
+                            /* Read from the database
+                               Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+                               This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+                            */
                             ValueEventListener Listener = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
@@ -294,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             };
                             base.getMyRef().addListenerForSingleValueEvent(Listener);
-                            return true;
+                    return true;
 
                         case R.id.navigation_history:
                             ValueEventListener Listener1 = new ValueEventListener() {
@@ -324,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                             };
                             base.getMyRef().addListenerForSingleValueEvent(Listener1);
                             return true;
+
                         case R.id.navigation_graphs:
                             base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
@@ -347,10 +376,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                             return true;
                         case R.id.navigation_settings:
-
                             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-                            // TODO: grab this from the database
                             if (settings == null) {
                                 settings = new Settings();
                             }
@@ -358,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
 
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
-
+                            return true;
                     }
                     return false;
                 }
@@ -392,5 +418,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
 

@@ -24,6 +24,7 @@ import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.Database;
+import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +44,7 @@ public class ExpensesListActivity extends AppCompatActivity {
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
     private EditText expenseName, expenseCost;
-    private EditText categoryBudget;
+    private EditText categoryBudget, categoryName;     //Minxuan
     private TextView totalExpensesDisplay;
     //List Structure
     private ExpenseListAdapter expenseAdapter;
@@ -61,32 +62,29 @@ public class ExpensesListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
+        setContentView(R.layout.activity_expenselist);
+        //navBar handling
+        setUpNavBar();
+
         Intent intent = getIntent();
         monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
-        String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
+        final String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
         category = monthlyData.getCategory(categoryNameFromParent);
         settings = intent.getParcelableExtra(SETTINGS_INTENT);
-
         //Toolbar categoryToolBar = findViewById(R.id.categoryBar);
         //setActionBar(categoryToolBar);
 
-        //textViews in the top bar
-        TextView categoryName = findViewById(R.id.category_name);
-        categoryName.setText(categoryNameFromParent);
-
-        categoryBudget = findViewById((R.id.budget_display));
+        //Category NAME in the top bar
+        categoryName = findViewById(R.id.category_name);
+        categoryName.setText(category.getName());
+        //Category BUDGET in the top bar
+        categoryBudget = findViewById((R.id.budget_display_history)); //Brent
         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
-        totalExpensesDisplay = (TextView) findViewById(R.id.total_expenses);
+        //Category "TOTAL EXPENSES" in the top bar
 
-        //Account for initial lack of decimal values
-        totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100)));
+        totalExpensesDisplay = findViewById(R.id.total_expenses);
+        totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100))); //Account for initial lack of decimal values
+
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
         expenseCost = findViewById(R.id.expense_cost);
@@ -95,10 +93,10 @@ public class ExpensesListActivity extends AppCompatActivity {
         // Initialize List
         final ArrayList<Expense> arrayOfItems = category.getExpenses();
         expenseAdapter = new ExpenseListAdapter(this, arrayOfItems, category);
-        ListView expensesList = findViewById(R.id.Categories);
+        ListView expensesList = findViewById(R.id.history_expenses);
         expensesList.setAdapter(expenseAdapter);
 
-        //Detect User Changes
+        //Detect User Changes for category BUDGET
         categoryBudget.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -114,11 +112,10 @@ public class ExpensesListActivity extends AppCompatActivity {
                             // Create new item and update adapter
                             category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
 
-                            //Update totalBudget
+                            //Update monthly totalBudget
                             monthlyData.setTotalBudget();
-
+                            //Update new budget info to database
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
-
 
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
@@ -126,7 +123,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                                 Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
                             }
                             else {
-                                Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(), "Category budget successfully updated!", Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
                             Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
@@ -134,6 +131,48 @@ public class ExpensesListActivity extends AppCompatActivity {
                     }
                 }else {
                    categoryBudget.getText().clear();
+                }
+            }
+        });
+
+        //Detect User Changes for category NAME
+        categoryName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && categoryName.getText().toString() != null) {
+                    if(categoryName.getText().toString().isEmpty()) {
+                        categoryName.setText(category.getName());
+                    } else {
+                        // Check if the "new" NAME already exists
+                        if (monthlyData.checkNameExists(categoryName.getText().toString())) {
+                            categoryName.setText(category.getName());
+                            Toast.makeText(getBaseContext(), "Category name already exists!", Toast.LENGTH_LONG).show();
+                        } else {
+                            category.setName(categoryName.getText().toString());
+                            //Update current category name in the monthly category list
+                            monthlyData.renameCategory(categoryNameFromParent, category.getName());
+                            /* Reflect the NAME change in database */
+                            String name = category.getName(); // NEW NAME
+                            int year, month;
+                            year = monthlyData.getYear();
+                            month = monthlyData.getIntMonth();
+                            //insert "new" category
+                            base.insertCategoryName(name, year, month);
+                            base.insertCategoryBudget(category.getBudget(), name, year, month);
+                            base.insertCategoryDate(year, month, name);
+                            //insert expenses from the "old" category
+                            for(Expense ex: category.getExpenses()) {
+                                base.insertExpense(ex.getCost(), ex.getName(), name, year, month, ex.getDay(), ex.getId());
+                            }
+                            // Delete the "old" category
+                            base.delete_cate(categoryNameFromParent, year, month);
+                            //App display the new name
+                            categoryName.setText(category.getName());
+                            Toast.makeText(getBaseContext(), "Category successfully renamed!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }else {
+                    categoryName.getText().clear();
                 }
             }
         });
@@ -171,7 +210,6 @@ public class ExpensesListActivity extends AppCompatActivity {
                        // Update total expenses for this category
                         totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense )));
 
-
                         expenseName.getText().clear();
                         expenseCost.getText().clear();
                         expenseAdapter.notifyDataSetChanged();
@@ -180,7 +218,6 @@ public class ExpensesListActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
                         }
                     }
-
 
                 } else {
                     if (settings.getEnableNotifications()) {
@@ -192,6 +229,20 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Erdong's navbar
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -201,6 +252,7 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -291,46 +343,25 @@ public class ExpensesListActivity extends AppCompatActivity {
         totalExpensesDisplay.setText( toDisplay);
     }
 
+    // BOTTOM NAVIGATION
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            ValueEventListener Listener1 = new ValueEventListener() {
-                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-
-                                    Calendar today = Calendar.getInstance();
-                                    int month = today.get(Calendar.MONTH);
-                                    int year = today.get(Calendar.YEAR);
-                                    base.insertMonthlydata(year, month);
-
-                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
-                                    monthlyData = base.RetrieveDataCurrent(dataSnapshot, monthlyData, year, month);
-
-                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
-                                    if (settings == null) {
-                                        settings = new Settings();
-                                    }
-                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
-                                    startActivityForResult(intent, 1);
-                                    overridePendingTransition(0, 0);
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Failed to read value
-                                }
-                            };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener1);
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            setResult(RESULT_OK, intent);
+                            intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
                             return true;
+
                         case R.id.navigation_lists:
                             return true;
 
                         case R.id.navigation_history:
-                            ValueEventListener Listener2 = new ValueEventListener() {
+                            ValueEventListener Listener = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -353,7 +384,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                                     // Failed to read value
                                 }
                             };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
+                            base.getMyRef().addListenerForSingleValueEvent(Listener);
                             return true;
 
                         case R.id.navigation_graphs:
@@ -379,6 +410,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                                 }
                             });
                             return true;
+
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
 
@@ -391,9 +423,6 @@ public class ExpensesListActivity extends AppCompatActivity {
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;
-
-
-
                     }
                     return false;
                 }

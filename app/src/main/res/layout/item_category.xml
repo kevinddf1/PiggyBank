@@ -31,15 +31,10 @@
 
     <Button
         android:id="@+id/delete_category"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_weight="0"
-        android:background="@color/lightGrey"
-        android:textSize="14sp"
-        android:text="Delete"
-        android:fontFamily="@font/semibold"
-        android:textColor="@color/darkGrey"
-        android:textAllCaps="false"
+        android:background="@drawable/delete"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"/>
 

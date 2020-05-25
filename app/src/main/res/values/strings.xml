@@ -12,7 +12,7 @@
     <string name="plus">plus</string>
     <string name="enter_cost">enter_cost</string>
     <string name="type_in_the_expense">type_in_the_expense</string>
-    <string name="delete">delete</string>
+    <string name="Delete">Delete</string>
     <string name="plus_sign">+</string>
     <string name="cost">Cost</string>
     <string name="expense">Type In The Expense</string>
@@ -44,7 +44,7 @@
     <string name="about_us">About us</string>
     <string name="delete_account">Delete account</string>
     <string name="change_password">Change password</string>
-    <string name="categories_list">Categories List</string>
+    <string name="categories_list">Your Categories</string>
     <string name="type_category_name">Type Category name</string>
     <string name="type_category_name_updated">Type category name</string>
     <!-- nav bar strings -->

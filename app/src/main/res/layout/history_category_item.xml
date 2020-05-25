@@ -1,38 +1,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="50dp"
     android:orientation="horizontal"
-    >
+    android:backgroundTint="@color/white">
 
     <TextView
         android:id="@+id/category_name"
-        android:layout_width="119dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingStart="10sp"
         android:paddingTop="5sp"
         android:text="@string/categoryName"
-        android:textStyle="bold" />
+        android:fontFamily="@font/semibold"
+        android:textColor="@color/darkGrey"/>
 
     <TextView
-        android:id="@+id/budget"
-        android:layout_width="119dp"
-        android:layout_height="48dp"
+        android:id="@+id/history_budget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
+        android:paddingLeft="100sp"
         android:paddingTop="5sp"
+        android:textSize="12sp"
         android:text="@string/budgetDisplay"
-        android:textColor="#00C853" />
+        android:textColor="@color/green"
+        android:fontFamily="@font/semibold" />
 
     <TextView
-        android:id="@+id/Categories"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:id="@+id/history_expenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:gravity="end"
         android:paddingTop="5sp"
-        android:paddingEnd="10sp"
+        android:paddingLeft="120sp"
+        android:textSize="12sp"
         android:text="@string/expenses"
-        android:textColor="#D50000" />
+        android:textColor="@color/red"
+        android:fontFamily="@font/semibold"/>
 
 
 
