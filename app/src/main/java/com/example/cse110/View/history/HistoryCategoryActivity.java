@@ -151,6 +151,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         //Attach adapter
         historyCategoryAdapter = new HistoryCategoryAdapter(this, historyCategoryItemArrayList);
         pastCategories = (ListView) findViewById(R.id.history_category_expenses);
+        pastCategories.setAdapter(historyCategoryAdapter);
     }
 
     /**
@@ -194,7 +195,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         historyCategoryItemArrayList = new ArrayList<>();
         //Iterate through categoryArrayList to create a HistoryItem (name, budget, total expenses)
         for (Category currentCategory : categoryArrayList) {
-            double totalExpenses = currentCategory.getTotalExpenses() / 10000.00; //Divided by 10000 because some data may have been changed when re-instantiating catory
+            double totalExpenses = currentCategory.getTotalExpenses() / 100.00; //Divided by 100 because some data may have been changed when re-instantiating catory
             //Create new HistoryItem and Add to List
             historyCategoryItemArrayList.add(new HistoryCategoryItem(currentCategory.getName(), currentCategory.getBudget(), totalExpenses));
         }

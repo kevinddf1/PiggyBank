@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setLabelVisibilityMode(1);
+       // navView.setLabelVisibilityMode(1);
         Menu menu = navView.getMenu();
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
@@ -79,10 +79,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(thisMonthsData != null) {
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            totalBudgetDisplay.setText(Long.toString(thisMonthsData.getTotalBudget()));
+            String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
+            totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            totalExpenseDisplay.setText(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100));
+            String expenseRendering = "Total Expenses: " + Long.toString(thisMonthsData.getTotalExpensesAsCents()/100);
+
+            totalExpenseDisplay.setText(expenseRendering);
         } else {
             // Get Bundle object that contain the array
             Bundle b = this.getIntent().getExtras();
@@ -90,10 +93,12 @@ public class MainActivity extends AppCompatActivity {
 
             //Bind our month's expenses and budget to proper display
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            totalBudgetDisplay.setText(list[0]);
+            String budgetRendering = "Total Budget: " + list[0];
+            totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            totalExpenseDisplay.setText(list[1]);
+            String expensesRendering = "Total Expenses: " + Double.toString(Long.parseLong(list[1])/100.00);
+            totalExpenseDisplay.setText(expensesRendering);
         }
 
 
@@ -245,6 +250,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
+
+                totalBudgetDisplay = findViewById(R.id.currentCash);
+                String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
+                totalBudgetDisplay.setText(budgetRendering);
+
+                totalExpenseDisplay = findViewById(R.id.totalExpenses);
+                String expenseRendering = "Total Expenses: " + Long.toString(thisMonthsData.getTotalExpensesAsCents()/100);
+
+                totalExpenseDisplay.setText(expenseRendering);
                 Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
                 if (settings != null) {
                     this.settings = settings;
@@ -389,5 +403,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
 

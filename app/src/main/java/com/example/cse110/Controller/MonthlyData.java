@@ -242,6 +242,13 @@ public class MonthlyData implements Parcelable {
         setTotalBudget();
         return totalBudget;
     }
+    public void setTotalBudgetDatabase(String budget){
+        this.totalBudget = Long.parseLong(budget);
 
+    }
+
+    public void setTotalExpensesDatabase(String expenses){
+        this.totalExpensesAsCents = Long.parseLong(expenses);
+    }
 
 }

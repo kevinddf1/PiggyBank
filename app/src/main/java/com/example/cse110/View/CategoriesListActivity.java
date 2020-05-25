@@ -66,7 +66,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
         // Bind element from XML file
         // Core elements of the activity
-        categoryName = findViewById(R.id.category_name);
+        categoryName = findViewById(R.id.category_name_category);
         categoryBudget = findViewById(R.id.category_budget);
         btnAdd = findViewById(R.id.AddToList);
 
@@ -157,8 +157,9 @@ public class CategoriesListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
         intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
+        setResult(RESULT_OK, intent);
+
         super.onBackPressed();
     }
 

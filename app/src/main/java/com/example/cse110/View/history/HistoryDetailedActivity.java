@@ -144,7 +144,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
     private void fillInHistoryDetailedItemArrayList() {
 
         for (Expense currentExpense : myExpenseList) {
-            String dividedExpenseString = Double.toString(currentExpense.getCost()/10000.00); //Divided by 10000 to adjust to perhaps Database manipulation
+            String dividedExpenseString = Double.toString(currentExpense.getCost()/100.00); //Divided by 100 to adjust to perhaps Database manipulation
             historyDetailedItems.add(new HistoryDetailedItem(currentExpense.getName(), dividedExpenseString));
         }
     }

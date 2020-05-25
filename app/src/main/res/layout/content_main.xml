@@ -13,7 +13,7 @@
         android:layout_width="422dp"
         android:layout_height="201dp"
         app:srcCompat="@drawable/mainheaderbackground"
-        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="-6dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/currentCash"
-        android:layout_width="172dp"
+        android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:fontFamily="@font/semibold"
         android:shadowColor="#4D000000"
