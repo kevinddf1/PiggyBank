@@ -55,12 +55,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-       // navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(0);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
+        //navBar handling
+        setUpNavBar();
+
         //Bind button to go to expense list
 
         //Instantiate monthlyData only if currently null
@@ -128,6 +125,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    /**
+     * Erdong's navbar
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // make all icons' names visible
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
     }
 
     private void onHistoryClick(View v){
@@ -267,6 +278,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * method which controls the nav bar
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -274,17 +288,17 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
                             return true;
+
                         case R.id.navigation_lists:
-                                     /* Read from the database
-        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-        / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-        */
+                            /* Read from the database
+                               Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+                               This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+                            */
                             ValueEventListener Listener = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
@@ -338,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                             };
                             base.getMyRef().addListenerForSingleValueEvent(Listener1);
                             return true;
+
                         case R.id.navigation_graphs:
                             base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
@@ -361,10 +376,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                             return true;
                         case R.id.navigation_settings:
-
                             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-                            // TODO: grab this from the database
                             if (settings == null) {
                                 settings = new Settings();
                             }
@@ -372,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
 
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
-
+                            return true;
                     }
                     return false;
                 }

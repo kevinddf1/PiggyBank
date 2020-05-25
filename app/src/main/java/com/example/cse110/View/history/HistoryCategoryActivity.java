@@ -111,9 +111,11 @@ public class HistoryCategoryActivity extends AppCompatActivity {
 
     /**
      * Erdong's navbar
+     * The user shall enter any page through clicking the icon in this nav bar
      */
     private void setUpNavBar() {
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
         Menu menu = navView.getMenu();
         MenuItem menuItem = menu.getItem(3);
         menuItem.setChecked(true);

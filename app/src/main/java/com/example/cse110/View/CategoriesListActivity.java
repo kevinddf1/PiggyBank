@@ -58,12 +58,10 @@ public class CategoriesListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories_list);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
+
+        //navBar handling
+        setUpNavBar();
+
 
         // Bind element from XML file
         // Core elements of the activity
@@ -142,6 +140,19 @@ public class CategoriesListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Erdong's navbar
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
+
    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -176,18 +187,18 @@ public class CategoriesListActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             setResult(RESULT_OK, intent);
                             intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
                             return true;
+
                         case R.id.navigation_lists:
                             return true;
 
                         case R.id.navigation_history:
-                            ValueEventListener Listener2 = new ValueEventListener() {
+                            ValueEventListener Listener = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -210,7 +221,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                                     // Failed to read value
                                 }
                             };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
+                            base.getMyRef().addListenerForSingleValueEvent(Listener);
                             return true;
 
                         case R.id.navigation_graphs:
@@ -236,6 +247,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                                 }
                             });
                             return true;
+
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
 
@@ -248,9 +260,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;
-
-
-
                     }
                     return false;
                 }

@@ -26,6 +26,18 @@
             android:focusable="true"
             android:longClickable="true"
             android:smoothScrollbar="true" />
-
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:itemIconTint="#5B5A5A"
+            app:itemTextColor="#5B5A5A"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/bottom_nav_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

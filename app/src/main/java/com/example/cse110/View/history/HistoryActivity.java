@@ -2,20 +2,30 @@ package com.example.cse110.View.history;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.history.HistoryItem;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Model.history.HistoryItemAdapter;
 import com.example.cse110.R;
+import com.example.cse110.View.CategoriesListActivity;
+import com.example.cse110.View.MainActivity;
+import com.example.cse110.View.PieChartActivity;
+import com.example.cse110.View.SettingsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * This class represents the page to display a user month's across the existence of their account.
@@ -40,6 +50,11 @@ public class HistoryActivity extends AppCompatActivity {
      */
     private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
 
+    //For nav bar
+    private static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private Settings settings; //DEPRECATED
+    private MonthlyData monthlyData;
     /**
      * Indices for pulling MONTH YEAR BUDGET EXPENSES from entries in allMonths
      */
@@ -91,6 +106,9 @@ public class HistoryActivity extends AppCompatActivity {
         //Match to rendering in activity_history.xml
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        //navBar handling
+        setUpNavBar();
 
         //Extract list of months from an incoming Intent
         instantiateListOfMonths();
@@ -199,5 +217,110 @@ public class HistoryActivity extends AppCompatActivity {
 
         });
     }
+    /**
+     * Erdong's navbar
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(3);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+        Intent intent = getIntent();
+        monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
+    }
+
+    //ERDONG'S NAVBAR
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            Intent i = new Intent(getBaseContext(), MainActivity.class);
+                            setResult(RESULT_OK, i);
+                            i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+                            i.putExtra(MONTHLY_DATA_INTENT, monthlyData);
+                            startActivityForResult(i, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                        case R.id.navigation_lists:
+                            /* Read from the database
+                               Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
+                               This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
+                            */
+                            ValueEventListener Listener = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+                                    base.insertMonthlydata(year, month);
+
+                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+
+                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                                    if (settings == null) {
+                                        settings = new Settings();
+                                    }
+                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
+                                    startActivityForResult(intent, 1);
+                                    overridePendingTransition(0, 0);
+
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener);
+                            return true;
+
+                        case R.id.navigation_history:
+                            return true;
+
+                        case R.id.navigation_graphs:
+                            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+
+                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                                    startActivityForResult(i, 1);
+                                    overridePendingTransition(0, 0);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            });
+                            return true;
+                        case R.id.navigation_settings:
+                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                            if (settings == null) {
+                                settings = new Settings();
+                            }
+                            intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
+
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(0, 0);
+                            return true;
+                    }
+
+
+                    return false;
+                }
+            };
 
 }
