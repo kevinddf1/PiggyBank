@@ -15,6 +15,7 @@ import com.example.cse110.Model.history.HistoryDetailAdapter;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
+import com.example.cse110.Model.FormattingTool;
 
 /**
  * A class representing the HistoryDetailed window, for PiggyBank.
@@ -24,17 +25,6 @@ import java.util.ArrayList;
  * @version 4.27
  */
 public class HistoryDetailedActivity extends AppCompatActivity {
-
-    //Constants to help display formatting
-    private static final int DISTANCE_FOR_THOUSANDS_COMMA = 6;
-    private static final int DISTANCE_FOR_MILLIONS_COMMA = 9;
-    private static final int SIZE_LESS_THAN_THOUSANDS = 6;
-    private static final int SIZE_LESS_THAN_MILLIONS = 9;
-    private static final int BEGIN_INDEX = 0;
-    private static final int DISTANCE_FOR_MILLIONS_COMMA_NO_DECIMALS = 6;
-    private static final int DISTANCE_FOR_THOUSANDS_COMMA_NO_DECIMALS = 3;
-    private static final int SIZE_LESS_THAN_THOUSANDS_NO_DECIMALS = 3;
-    private static final int SIZE_LESS_THAN_MILLIONS_NO_DECIMALS = 6;
 
     /**
      * The Category that was selected to display details of the Category.
@@ -63,6 +53,10 @@ public class HistoryDetailedActivity extends AppCompatActivity {
      */
     private ArrayList<Expense> myExpenseList;
 
+    /**
+     * Formatting tool to avoid redundancies.
+     */
+    private FormattingTool formattingTool = new FormattingTool();
 
     /**
      * The method for instantiating the HistoryDetailedIem page.
@@ -117,13 +111,13 @@ public class HistoryDetailedActivity extends AppCompatActivity {
         currentCategory = current_month.getCategory(i.getStringExtra(CATEGORY_NAME));
 
         // Render the budget
-        String budgetRendering = "Budget: $" + formatIntMoneyString(currentCategory.getBudgetAsString()); //Avoid concatenation in setText
+        String budgetRendering = "Budget: $" + formattingTool.formatIntMoneyString(currentCategory.getBudgetAsString()); //Avoid concatenation in setText
         TextView budget = findViewById(R.id.budget_display_history);
         budget.setText(budgetRendering);
 
         //Render the total expenses
         assert total != null;
-        String expensesRendering = "Total Expenses: $" + formatMoneyString(total); //Avoid concatenation in setText
+        String expensesRendering = "Total Expenses: $" + formattingTool.formatMoneyString(total); //Avoid concatenation in setText
         TextView totalExpenses = findViewById(R.id.total_expenses);
         totalExpenses.setText(expensesRendering);
 
@@ -149,43 +143,5 @@ public class HistoryDetailedActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Handle formatting for numbers containing decimals
-     *
-     * @param valueToFormat The comma free string to format
-     * @return A newly formatted string w/ commas in the correct place
-     */
-    private String formatMoneyString(String valueToFormat) {
-        //Set up local constant for where commas should be
-        int thousandsComma = valueToFormat.length() - DISTANCE_FOR_THOUSANDS_COMMA;
-        int millionsComma = valueToFormat.length() - DISTANCE_FOR_MILLIONS_COMMA;
 
-        //Return unchanged if necessary or add commas in designated indices
-        if (valueToFormat.length() <= SIZE_LESS_THAN_THOUSANDS) {
-            return valueToFormat;
-        } else if (valueToFormat.length() <= SIZE_LESS_THAN_MILLIONS) {
-            return valueToFormat.substring(BEGIN_INDEX, thousandsComma) + "," + valueToFormat.substring(thousandsComma);
-        }
-        return valueToFormat.substring(BEGIN_INDEX, millionsComma) + "," + valueToFormat.substring(millionsComma, thousandsComma) + "," + valueToFormat.substring(thousandsComma);
-    }
-
-    /**
-     * Handle formatting for numbers w/o decimals
-     *
-     * @param valueToFormat The comma free string to format
-     * @return A newly formatted string w/ commas in the correct place
-     */
-    private String formatIntMoneyString(String valueToFormat) {
-        //Set up local constant for where commas should be
-        int thousandsComma = valueToFormat.length() - DISTANCE_FOR_THOUSANDS_COMMA_NO_DECIMALS;
-        int millionsComma = valueToFormat.length() - DISTANCE_FOR_MILLIONS_COMMA_NO_DECIMALS;
-
-        //Return unchanged if necessary or add commas in designated indices
-        if (valueToFormat.length() <= SIZE_LESS_THAN_THOUSANDS_NO_DECIMALS) {
-            return valueToFormat;
-        } else if (valueToFormat.length() <= SIZE_LESS_THAN_MILLIONS_NO_DECIMALS) {
-            return valueToFormat.substring(BEGIN_INDEX, thousandsComma) + "," + valueToFormat.substring(thousandsComma);
-        }
-        return valueToFormat.substring(BEGIN_INDEX, millionsComma) + "," + valueToFormat.substring(millionsComma, thousandsComma) + "," + valueToFormat.substring(thousandsComma);
-    }
 }

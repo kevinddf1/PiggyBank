@@ -1,8 +1,5 @@
 package com.example.cse110.View;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,12 +13,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.Model.CategoriesListAdapter;
-import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.CategoriesListAdapter;
 import com.example.cse110.Model.Database;
+import com.example.cse110.R;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -31,77 +31,93 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * The app page to display the user's categories and add new ones.
+ *
+ * @author Peter Gonzalez and Thuycam Nguyen
+ * @version 5.24
+ */
 public class CategoriesListActivity extends AppCompatActivity {
+
+    /**
+     * Keys for pulling information into the page and for pushing information to new pages
+     */
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
-    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
+    private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
-    //Our max allowable int is 9,999,999 which is 7 place values
-    private static final int MAX_BUDGET =  7;
+    /**
+     * A constant (Our max allowable int is 9,999,999 which is 7 place values)
+     * that simplifies error handling.
+     */
+    private static final int MAX_BUDGET = 7;
 
-    // create a Database object
-    private Database base = Database.Database();
+    /**
+     * Retrieves our database singleton
+     */
+    private final Database base = Database.Database();
 
-    EditText categoryName, categoryBudget;
-    Button btnAdd;
-    CategoriesListAdapter myAdapter;
-    ListView categories;
+    /**
+     * The front-end components that are rendered and/or handle user interaction
+     */
+    private EditText categoryName;
+    private EditText categoryBudget;
+    private Button btnAdd;
+    private CategoriesListAdapter myAdapter;
+    private ListView categories;
 
+    /**
+     * Backend components that store the user's information
+     */
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
     private Settings settings;
 
+    /**
+     * Initializes on front-end renderings and handles user interaction
+     *
+     * @param savedInstanceState
+     */
     @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories_list);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
 
-        // Bind element from XML file
-        // Core elements of the activity
-        categoryName = findViewById(R.id.category_name_category);
-        categoryBudget = findViewById(R.id.category_budget);
-        btnAdd = findViewById(R.id.AddToList);
+        //Set up navBar components
+        navBarSetUp();
 
-        Intent intent = getIntent();
-        monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
-        settings = intent.getParcelableExtra(SETTINGS_INTENT);
+        //Pull necessary information from incoming intents
+        initializeWithAnIntent();
 
-        // Initialize List
-        ArrayList<Category> arrayOfItems = monthlyData.getCategoriesAsArray();
-        // Checklist Structure
-        myAdapter = new CategoriesListAdapter(this, arrayOfItems, monthlyData);
-        categories = (ListView) findViewById(R.id.activity_categories_list_history_expenses);
-        categories.setAdapter(myAdapter);
+        //Initialize user's inputs and button
+        initializeVariableComponents();
 
-        categories.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //Set up the ListView and attach a custom adapter
+        setUpList();
 
-                Category currentItem = myAdapter.getItem(position);
+        //Handle the user clicking on a specific category
+        handleListClicks();
 
-                Intent i = new Intent(CategoriesListActivity.this, ExpensesListActivity.class);
-                i.putExtra(ExpensesListActivity.MONTHLY_DATA_INTENT, monthlyData);
-                i.putExtra(ExpensesListActivity.SETTINGS_INTENT, settings);
-                i.putExtra(ExpensesListActivity.CATEGORY_NAME_INTENT, currentItem.getName());
-                startActivityForResult(i, 1);
-            }
-        });
+        //Handle user clicking the '+' button
+        handleAddClicks();
 
+    }
+
+    /**
+     * Handle error checking when a user presses '+'.
+     * If input is not valid, the user is notified.
+     * Otherwise, the user's account is updated to include new category.
+     */
+    private void handleAddClicks() {
         // Set Event Handler to add items to the list
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // Ensure that both fields are filled.
-                if(!categoryBudget.getText().toString().isEmpty() && !categoryName.getText().toString().isEmpty() ) {
+                if (!categoryBudget.getText().toString().isEmpty() && !categoryName.getText().toString().isEmpty()) {
 
                     //Verify that max vale has not be reached.
                     if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
@@ -127,6 +143,8 @@ public class CategoriesListActivity extends AppCompatActivity {
                         //Clear inputs
                         categoryName.getText().clear();
                         categoryBudget.getText().clear();
+
+                        //Update adapter and render
                         myAdapter.notifyDataSetChanged();
                     }
 
@@ -141,35 +159,124 @@ public class CategoriesListActivity extends AppCompatActivity {
         });
     }
 
-   @Override
+    /**
+     * Handle the user's clicks on a specific category.
+     * This takes the user to a new page where they can add expenses to their category.
+     */
+    private void handleListClicks() {
+
+        //Set up ListView listener
+        categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Identify the category that was clicked on
+                Category currentItem = myAdapter.getItem(position);
+
+                //Start new intent with current month, and the name of the category the user selected
+                Intent i = new Intent(CategoriesListActivity.this, ExpensesListActivity.class);
+                i.putExtra(ExpensesListActivity.MONTHLY_DATA_INTENT, monthlyData);
+                i.putExtra(ExpensesListActivity.SETTINGS_INTENT, settings);
+                assert currentItem != null;
+                i.putExtra(ExpensesListActivity.CATEGORY_NAME_INTENT, currentItem.getName());
+                startActivityForResult(i, 1);
+            }
+        });
+    }
+
+    /**
+     * Set up navBar
+     */
+    private void navBarSetUp() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
+
+    /**
+     * Initialize front-end components like add button and category inputs
+     */
+    private void initializeVariableComponents() {
+        // Bind element from XML file
+        categoryName = findViewById(R.id.category_name_category);
+        categoryBudget = findViewById(R.id.category_budget);
+        btnAdd = findViewById(R.id.AddToList);
+    }
+
+    /**
+     * Extracts the month that was passed in from MainActivity
+     */
+    private void initializeWithAnIntent() {
+        //Get current month of the user
+        Intent intent = getIntent();
+        monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
+        settings = intent.getParcelableExtra(SETTINGS_INTENT);
+    }
+
+    /**
+     * Sets up the ListView displaying the user's categories and attaches the adapter.
+     */
+    private void setUpList() {
+        // Initialize List
+        ArrayList<Category> arrayOfItems = monthlyData.getCategoriesAsArray();
+        // Checklist Structure
+        myAdapter = new CategoriesListAdapter(this, arrayOfItems, monthlyData);
+        categories = findViewById(R.id.activity_categories_list_history_expenses);
+        categories.setAdapter(myAdapter);
+    }
+
+    /**
+     * Handle backpress from ExpenseListActivity
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                monthlyData = data.getParcelableExtra(ExpensesListActivity.MONTHLY_DATA_INTENT);
 
+                //Instantiate the user's new monthly data (potential changes)
+                monthlyData = data.getParcelableExtra(ExpensesListActivity.MONTHLY_DATA_INTENT);
+                assert monthlyData != null; //error checking
+
+                //Update adapter with the most recent information and attach to front-end rendering
                 myAdapter = new CategoriesListAdapter(this, monthlyData.getCategoriesAsArray(), monthlyData);
                 categories.setAdapter(myAdapter);
             }
         }
     }
 
+    /**
+     * Handles backpress from this page to MainActivity, pass updated MonthlyData.
+     */
     @Override
     public void onBackPressed() {
+
+        //Attach most recent MonthlyData object and start new activity to MainActivity
         Intent intent = new Intent();
         intent.putExtra(MONTHLY_DATA_INTENT, monthlyData);
         setResult(RESULT_OK, intent);
-
         super.onBackPressed();
     }
 
+    /**
+     * Confirm a category being deleted.
+     *
+     * @param nameOfCategory The name of the category that was deleted
+     */
     public void confirmDeletion(TextView nameOfCategory) {
-        Toast.makeText(getBaseContext(),  "Category \"" + nameOfCategory.getText().toString() + "\" was deleted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Category \"" + nameOfCategory.getText().toString() + "\" was deleted.", Toast.LENGTH_SHORT).show();
     }
 
 
     // BOTTOM NAVIGATION
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -197,12 +304,12 @@ public class CategoriesListActivity extends AppCompatActivity {
                                     int year = today.get(Calendar.YEAR);
 
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-                                    //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }
+
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
                                     // Failed to read value
@@ -227,6 +334,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                                     i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
                                 }
+
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
                                     // Failed to read value
@@ -245,7 +353,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;
-
 
 
                     }
