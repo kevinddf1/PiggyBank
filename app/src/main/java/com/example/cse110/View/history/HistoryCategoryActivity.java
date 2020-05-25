@@ -12,11 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
-import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.history.HistoryCategoryItem;
 import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.history.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
@@ -28,47 +27,34 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 
-
-
 /**
  * A class representing the History window for PiggyBank.
+ *
  * @author Peter Gonzalez
  * @version April 23
- *
  */
 public class HistoryCategoryActivity extends AppCompatActivity {
     /**
-     * Key for pulling an object of monthlyData in the HistoryDetailedActivity
+     * Key for pulling an object of monthlyData across navbar
+     *
      * @see #onCreate(Bundle)
      */
-    public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-    public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
-    public static final String SETTINGS_INTENT = "SettingsActivity settings";
+    private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
+    private static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String SETTINGS_INTENT = "SettingsActivity settings";
+    private static final String CATEGORY_NAME = "category_name";
+    private static final String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
 
-    private MonthlyData thisMonthsData;
-
-
-
-
-    private static String CATEGORY_NAME = "category_name";
-    private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
-
-    private Settings settings;
+    private Settings settings; //DEPRECATED
     //Display the month and year
-    /**
-     * The text display for the current month and year
-     * @see #onCreate(Bundle)
-     */
-    private TextView month_year;
 
     /**
      * The monthlyData object to pull data from, including Categories and Expenses
+     *
      * @see #onCreate(Bundle)
      */
     private MonthlyData current_month;
-
-    //Instantiate the list's objects
 
     /**
      * The display of the list on the History page.
@@ -77,20 +63,21 @@ public class HistoryCategoryActivity extends AppCompatActivity {
 
     /**
      * The adapter to connect Category data to list display.
+     *
      * @see HistoryCategoryAdapter
      */
     private HistoryCategoryAdapter historyCategoryAdapter;
 
     /**
      * The primary data structure to hold the information to display on History page.
+     *
      * @see HistoryCategoryItem
      */
     private ArrayList<HistoryCategoryItem> historyCategoryItemArrayList;
 
-    //Instantiate the month's categories
-
     /**
      * Primary data structure to pull information from, gathered from monthlyData
+     *
      * @see MonthlyData
      */
     private ArrayList<Category> categoryArrayList;
@@ -98,40 +85,79 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     /**
      * The only constructor for instantiating the History page.
      * Will pull information to fill all our field variables.
+     *
      * @see AppCompatActivity
-     * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_category);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        //navView.setLabelVisibilityMode(1);
+        //navBar handling
+        setUpNavBar();
+
+        //Extract selected month from intent and render on screen
+        instantiateMonthAndRender();
+
+        //Set up ListView w/ HistoryCategoryItems and attach custom adapter
+        setUpListView();
+
+        //Handle user clicks
+        setUpClickHandling();
+
+
+    }
+
+
+    /**
+     * Erdong's navbar
+     */
+    private void setUpNavBar() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
         Menu menu = navView.getMenu();
         MenuItem menuItem = menu.getItem(3);
         menuItem.setChecked(true);
         navView.setOnNavigationItemSelectedListener(navListener);
+    }
 
-        //Retrieve passed in MonthlyData object and extract date/categories
-
+    /**
+     * Retrieve the current month from the intent and render on screen
+     */
+    private void instantiateMonthAndRender() {
+        //Retrieve passed in MonthlyData object and extract date
         Intent i = getIntent();
         current_month = i.getParcelableExtra(HISTORY_DATA_INTENT);
-
         settings = i.getParcelableExtra(SETTINGS_INTENT);
 
         //Update our local variables to match
         assert current_month != null;
+
+        //Rendering month and year display
+        TextView month_year = findViewById(R.id.month_year_display);
+        String monthYearRendering = current_month.getMonth() + " " + current_month.getYear(); //Should not concatenate in setTexts
+        month_year.setText(monthYearRendering);
+    }
+
+    /**
+     * Instantiate all categories in the ListView and attach adapter
+     */
+    private void setUpListView() {
+        //Pull all categories associated w/ the current month
         categoryArrayList = current_month.getCategoriesAsArray();
-        month_year = (TextView) findViewById(R.id.month_year_display);
-        month_year.setText(current_month.getMonth() + " " + current_month.getYear());
 
-        //Set up our list
-        fillInHistoryItemArrayList();
+        //Convert to HistoryCategoryItems
+        fillInHistoryCategoryItemList();
+
+        //Attach adapter
         historyCategoryAdapter = new HistoryCategoryAdapter(this, historyCategoryItemArrayList);
-        pastCategories = (ListView) findViewById(R.id.Categories);
+        pastCategories = (ListView) findViewById(R.id.history_category_expenses);
         pastCategories.setAdapter(historyCategoryAdapter);
+    }
 
+    /**
+     * Set up an onItemClick for ListViews
+     */
+    private void setUpClickHandling() {
         //Set Up Clicking Handling
         pastCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -144,45 +170,39 @@ public class HistoryCategoryActivity extends AppCompatActivity {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Determine the category selected
                 HistoryCategoryItem currentItem = historyCategoryAdapter.getItem(position);
 
+                //Start new intent to send into HistoryDetailedActivity
                 Intent i = new Intent(getBaseContext(), HistoryDetailedActivity.class);
-                i.putExtra(HISTORY_DETAILED_INTENT, current_month);
+
+                //Attach necessary info to the intent and start new activity
+                assert currentItem != null; // error handling
                 i.putExtra(CATEGORY_NAME, currentItem.getName());
                 i.putExtra("total_expenses", currentItem.getFormattedTotalExpenses());
+                i.putExtra(HISTORY_DETAILED_INTENT, current_month);
                 startActivityForResult(i, 1);
             }
         });
-
-
-
-
     }
+
 
     /**
      * Helper method to pull data from the list of Categories and populate historyItemArrayList.
      */
-    private void fillInHistoryItemArrayList(){
+    private void fillInHistoryCategoryItemList() {
         //Initiate HistoryItemArrayList
         historyCategoryItemArrayList = new ArrayList<>();
         //Iterate through categoryArrayList to create a HistoryItem (name, budget, total expenses)
-        for(Category currentCategory : categoryArrayList){
-            double totalExpenses = 0;
-
-            //Add up all the expenses for the category.
-            //CURRENT BUG
-            for(Expense currentExpense : currentCategory.getExpenses()){
-                totalExpenses = totalExpenses + (double)currentExpense.getCost();
-            }
-
-
-            totalExpenses = totalExpenses/100;
+        for (Category currentCategory : categoryArrayList) {
+            double totalExpenses = currentCategory.getTotalExpenses() / 100.00; //Divided by 100 because some data may have been changed when re-instantiating catory
             //Create new HistoryItem and Add to List
             historyCategoryItemArrayList.add(new HistoryCategoryItem(currentCategory.getName(), currentCategory.getBudget(), totalExpenses));
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    //ERDONG'S NAVBAR
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {

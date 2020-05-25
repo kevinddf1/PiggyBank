@@ -101,7 +101,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
     private void setUpListView() {
         //Attach the adapter to fill in all the necessary expenses
         HistoryDetailAdapter historyDetailAdapter = new HistoryDetailAdapter(this, historyDetailedItems);
-        ListView expenseDetails = findViewById(R.id.expenses);
+        ListView expenseDetails = findViewById(R.id.history_expenses);
         expenseDetails.setAdapter(historyDetailAdapter);
     }
 
@@ -118,7 +118,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
 
         // Render the budget
         String budgetRendering = "Budget: $" + formatIntMoneyString(currentCategory.getBudgetAsString()); //Avoid concatenation in setText
-        TextView budget = findViewById(R.id.budget_display);
+        TextView budget = findViewById(R.id.budget_display_history);
         budget.setText(budgetRendering);
 
         //Render the total expenses
@@ -144,7 +144,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
     private void fillInHistoryDetailedItemArrayList() {
 
         for (Expense currentExpense : myExpenseList) {
-            String dividedExpenseString = Double.toString(currentExpense.getCost()/10000.00); //Divided by 10000 to adjust to perhaps Database manipulation
+            String dividedExpenseString = Double.toString(currentExpense.getCost()/100.00); //Divided by 100 to adjust to perhaps Database manipulation
             historyDetailedItems.add(new HistoryDetailedItem(currentExpense.getName(), dividedExpenseString));
         }
     }

@@ -78,12 +78,12 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
         name.setText(item.getName());
 
         //Render budget
-        budget = convertView.findViewById(R.id.budget);
+        budget = convertView.findViewById(R.id.history_budget);
         String budgetRender ="Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget()));
         budget.setText(budgetRender);
 
         //Render total expenses
-        totalExpenses = convertView.findViewById(R.id.Categories);
+        totalExpenses = convertView.findViewById(R.id.history_expenses);
         String expenseRender = "Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses());
         totalExpenses.setText(expenseRender);
     }

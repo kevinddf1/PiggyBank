@@ -33,7 +33,7 @@ public class ExpensesListActivity extends AppCompatActivity {
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
     private EditText expenseName, expenseCost;
-    private EditText categoryBudget;
+    private EditText categoryBudget, categoryName;     //Minxuan
     private TextView totalExpensesDisplay;
     //List Structure
     private ExpenseListAdapter expenseAdapter;
@@ -50,27 +50,27 @@ public class ExpensesListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+        setContentView(R.layout.activity_expenselist);
 
         Intent intent = getIntent();
         monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
-        String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
+        final String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
         category = monthlyData.getCategory(categoryNameFromParent);
         settings = intent.getParcelableExtra(SETTINGS_INTENT);
-
         //Toolbar categoryToolBar = findViewById(R.id.categoryBar);
         //setActionBar(categoryToolBar);
 
-        //textViews in the top bar
-        TextView categoryName = findViewById(R.id.category_name);
-        categoryName.setText(categoryNameFromParent);
-
-        categoryBudget = findViewById((R.id.budget_display));
+        //Category NAME in the top bar
+        categoryName = findViewById(R.id.category_name);
+        categoryName.setText(category.getName());
+        //Category BUDGET in the top bar
+        categoryBudget = findViewById((R.id.budget_display_history)); //Brent
         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
-        totalExpensesDisplay = (TextView) findViewById(R.id.total_expenses);
+        //Category "TOTAL EXPENSES" in the top bar
 
-        //Account for initial lack of decimal values
-        totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100)));
+        totalExpensesDisplay = findViewById(R.id.total_expenses);
+        totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100))); //Account for initial lack of decimal values
+
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
         expenseCost = findViewById(R.id.expense_cost);
@@ -79,10 +79,10 @@ public class ExpensesListActivity extends AppCompatActivity {
         // Initialize List
         final ArrayList<Expense> arrayOfItems = category.getExpenses();
         expenseAdapter = new ExpenseListAdapter(this, arrayOfItems, category);
-        ListView expensesList = findViewById(R.id.Categories);
+        ListView expensesList = findViewById(R.id.history_expenses);
         expensesList.setAdapter(expenseAdapter);
 
-        //Detect User Changes
+        //Detect User Changes for category BUDGET
         categoryBudget.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -98,11 +98,10 @@ public class ExpensesListActivity extends AppCompatActivity {
                             // Create new item and update adapter
                             category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
 
-                            //Update totalBudget
+                            //Update monthly totalBudget
                             monthlyData.setTotalBudget();
-
+                            //Update new budget info to database
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
-
 
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
@@ -110,7 +109,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                                 Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
                             }
                             else {
-                                Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(), "Category budget successfully updated!", Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
                             Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
@@ -118,6 +117,48 @@ public class ExpensesListActivity extends AppCompatActivity {
                     }
                 }else {
                    categoryBudget.getText().clear();
+                }
+            }
+        });
+
+        //Detect User Changes for category NAME
+        categoryName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && categoryName.getText().toString() != null) {
+                    if(categoryName.getText().toString().isEmpty()) {
+                        categoryName.setText(category.getName());
+                    } else {
+                        // Check if the "new" NAME already exists
+                        if (monthlyData.checkNameExists(categoryName.getText().toString())) {
+                            categoryName.setText(category.getName());
+                            Toast.makeText(getBaseContext(), "Category name already exists!", Toast.LENGTH_LONG).show();
+                        } else {
+                            category.setName(categoryName.getText().toString());
+                            //Update current category name in the monthly category list
+                            monthlyData.renameCategory(categoryNameFromParent, category.getName());
+                            /* Reflect the NAME change in database */
+                            String name = category.getName(); // NEW NAME
+                            int year, month;
+                            year = monthlyData.getYear();
+                            month = monthlyData.getIntMonth();
+                            //insert "new" category
+                            base.insertCategoryName(name, year, month);
+                            base.insertCategoryBudget(category.getBudget(), name, year, month);
+                            base.insertCategoryDate(year, month, name);
+                            //insert expenses from the "old" category
+                            for(Expense ex: category.getExpenses()) {
+                                base.insertExpense(ex.getCost(), ex.getName(), name, year, month, ex.getDay(), ex.getId());
+                            }
+                            // Delete the "old" category
+                            base.delete_cate(categoryNameFromParent, year, month);
+                            //App display the new name
+                            categoryName.setText(category.getName());
+                            Toast.makeText(getBaseContext(), "Category successfully renamed!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }else {
+                    categoryName.getText().clear();
                 }
             }
         });
@@ -155,7 +196,6 @@ public class ExpensesListActivity extends AppCompatActivity {
                        // Update total expenses for this category
                         totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense )));
 
-
                         expenseName.getText().clear();
                         expenseCost.getText().clear();
                         expenseAdapter.notifyDataSetChanged();
@@ -164,7 +204,6 @@ public class ExpensesListActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
                         }
                     }
-
 
                 } else {
                     if (settings.getEnableNotifications()) {
@@ -176,6 +215,7 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -185,6 +225,7 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

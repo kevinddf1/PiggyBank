@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String USERNAME_FIELD = "com.example.test.USERNAME_FIELD";
 
     private FirebaseAuth mAuth;
-    private Database base = Database.Database(); // create a Database object
+    private Database base;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +55,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getBaseContext(), "Logged in.", Toast.LENGTH_LONG).show();
-
+                            base =  Database.Database(); // create a Database object
                             ValueEventListener Listener = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     // Intent i = new Intent(getBaseContext(), HistoryActivity.class);
+
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);

@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/history_months_bar"
-        layout="@layout/history_months_bar"
+        layout="@layout/history_bar_main"
         app:layout_constraintBottom_toTopOf="@+id/top_banner" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

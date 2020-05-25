@@ -34,6 +34,7 @@
             android:hint="@string/userName"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:textSize="14dp" />
 
         <EditText
@@ -46,6 +47,7 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:textSize="14dp" />
 
         <Button
