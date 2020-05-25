@@ -19,7 +19,6 @@ import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.CategoriesListAdapter;
 import com.example.cse110.R;
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -28,7 +27,6 @@ import java.util.Calendar;
 
 public class CategoriesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
 
@@ -46,7 +44,6 @@ public class CategoriesListActivity extends AppCompatActivity {
 
 
     private MonthlyData monthlyData;
-    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +63,6 @@ public class CategoriesListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
-        settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
         // Initialize List
         ArrayList<Category> arrayOfItems = monthlyData.getCategoriesAsArray();
@@ -83,7 +79,6 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                 Intent i = new Intent(CategoriesListActivity.this, ExpensesListActivity.class);
                 i.putExtra(ExpensesListActivity.MONTHLY_DATA_INTENT, monthlyData);
-                i.putExtra(ExpensesListActivity.SETTINGS_INTENT, settings);
                 i.putExtra(ExpensesListActivity.CATEGORY_NAME_INTENT, currentItem.getName());
                 startActivityForResult(i, 1);
             }
@@ -99,9 +94,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                     //Verify that max vale has not be reached.
                     if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
-                        if (settings.getEnableNotifications()) {
-                            Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
                     } else {
 
                         // Create new item and update adapter
@@ -110,15 +103,11 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                         // Verify that category was made
                         if (!creationSuccessful) {
-                            if (settings.getEnableNotifications()) {
-                                Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(getBaseContext(), "A budget with this name already exist", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            if (settings.getEnableNotifications()) {
-                                // Displays a Toast message that lets the user know the category was successfully created
-                                Toast.makeText(getBaseContext(), "Category successfully added.", Toast.LENGTH_SHORT).show();
-                            }
+                            // Displays a Toast message that lets the user know the category was successfully created
+                            Toast.makeText(getBaseContext(), "Category successfully added.", Toast.LENGTH_SHORT).show();
                         }
                         //Clear inputs
                         categoryName.getText().clear();
@@ -128,11 +117,9 @@ public class CategoriesListActivity extends AppCompatActivity {
 
 
                 } else {
-                    if (settings.getEnableNotifications()) {
-                        // Insufficient number of filled fields results in an error warning.
-                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in category name and budget.", Toast.LENGTH_SHORT);
-                        missingInformationWarning.show();
-                    }
+                    // Insufficient number of filled fields results in an error warning.
+                    Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in category name and budget.", Toast.LENGTH_SHORT);
+                    missingInformationWarning.show();
                 }
             }
         });
@@ -160,9 +147,7 @@ public class CategoriesListActivity extends AppCompatActivity {
     }
 
     public void confirmDeletion(TextView nameOfCategory) {
-        if (settings.getEnableNotifications()) {
-            Toast.makeText(getBaseContext(), nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(getBaseContext(), nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -203,10 +188,6 @@ public class CategoriesListActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
                             inten.putExtra(PIE_CHART_DATA_INTENT, monthlyData);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);

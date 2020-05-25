@@ -7,14 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
-import com.example.cse110.Controller.Settings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -26,13 +23,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
-    public static final String SETTINGS_INTENT = "SettingsActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
     private MonthlyData monthlyData;
 
-    private Settings settings;
     private Database base = Database.Database(); // create a Database object
 
     @Override
@@ -46,16 +41,6 @@ public class SettingsActivity extends AppCompatActivity {
         menuItem.setChecked(true);
         navView.setOnNavigationItemSelectedListener(navListener);
         Intent intent = getIntent();
-        settings = intent.getParcelableExtra(SETTINGS_INTENT);
-
-        final Switch notificationsSwitch = findViewById(R.id.notifications_switch);
-        // Initialize value
-        notificationsSwitch.setChecked(settings.getEnableNotifications());
-        notificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                settings.setEnableNotifications(isChecked);
-            }
-        });
 
         final Button signOutButton = findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(new View.OnClickListener(){
@@ -66,6 +51,16 @@ public class SettingsActivity extends AppCompatActivity {
 
                 // Start login activity
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
+        final Button changePasswordButton = findViewById(R.id.change_password_button);
+        changePasswordButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                // Start account recovery activity
+                Intent i = new Intent(getBaseContext(), AccountRecoveryActivity.class);
                 startActivity(i);
             }
         });
@@ -91,9 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                             startActivity(intent);
                                         } else {
-                                            if (settings.getEnableNotifications()) {
-                                                Toast.makeText(getBaseContext(), "Account deletion failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                                            }
+                                            Toast.makeText(getBaseContext(), "Account deletion failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -124,20 +117,12 @@ public class SettingsActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                             setResult(RESULT_OK, intent);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            intent.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
                             return true;
                         case R.id.navigation_lists:
                             Intent inte = new Intent(getBaseContext(), CategoriesListActivity.class);
                             setResult(RESULT_OK, inte);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inte.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(inte, 1);
                             overridePendingTransition(0, 0);
                             return true;
@@ -145,21 +130,12 @@ public class SettingsActivity extends AppCompatActivity {
                         case R.id.navigation_history:
                             Intent i = new Intent(getBaseContext(), HistoryActivity.class);
                             setResult(RESULT_OK, i);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
                             //i.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, monthlyData);
-                            // TODO: grab this from the database
-                            i.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(i, 1);
                             overridePendingTransition(0, 0);
                             return true;
                         case R.id.navigation_graphs:
                             Intent inten = new Intent(getBaseContext(), PieChartActivity.class);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SETTINGS_INTENT, settings);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
 
@@ -174,7 +150,6 @@ public class SettingsActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
-        intent.putExtra(SETTINGS_INTENT, settings);
         super.onBackPressed();
     }
 }

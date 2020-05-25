@@ -19,7 +19,6 @@ import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.Database;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ import java.util.Calendar;
 public class ExpensesListActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "ExpenseListActivity monthlyData";
     public static final String CATEGORY_NAME_INTENT = "ExpenseListActivity categoryName";
-    public static final String SETTINGS_INTENT = "ExpenseListActivity settings";
     private static  final int MAX_EXPENSE_VALUE = 9999999;
     //Our max allowable int is 9,999,999 which is 7 place values
     private static final int MAX_BUDGET =  7;
@@ -39,7 +37,6 @@ public class ExpensesListActivity extends AppCompatActivity {
     private ExpenseListAdapter expenseAdapter;
 
     private MonthlyData monthlyData;
-    private Settings settings;
     private Category category;
 
     // create a Database object
@@ -56,7 +53,6 @@ public class ExpensesListActivity extends AppCompatActivity {
         monthlyData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
         String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
         category = monthlyData.getCategory(categoryNameFromParent);
-        settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
         //Toolbar categoryToolBar = findViewById(R.id.categoryBar);
         //setActionBar(categoryToolBar);
@@ -88,9 +84,7 @@ public class ExpensesListActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus && categoryBudget.getText().toString() != null) {
                     if (categoryBudget.getText().toString().length() > MAX_BUDGET) {
-                        if (settings.getEnableNotifications()) {
-                            Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
                     } else if (categoryBudget.getText().toString().isEmpty()) {
                         //In the case of of an empty string
                         categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
@@ -109,19 +103,13 @@ public class ExpensesListActivity extends AppCompatActivity {
                             categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
                             // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
                             if (category.getBudget() < category.getTotalExpenses()/100.00) {
-                                if (settings.getEnableNotifications()) {
-                                    Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
-                                }
+                                Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
                             }
                             else {
-                                if (settings.getEnableNotifications()) {
-                                    Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
-                                }
+                                Toast.makeText(getBaseContext(), "Category budget has been successfully updated", Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
-                            if (settings.getEnableNotifications()) {
-                                Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
                         }
                     }
                 }else {
@@ -153,14 +141,10 @@ public class ExpensesListActivity extends AppCompatActivity {
 
                         // Displays a Toast message if the user goes over their budget when adding an expense
                         if (category.getBudget() < currentTotalExpense) {
-                            if (settings.getEnableNotifications()) {
-                                Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
                         }
                         else {
-                            if (settings.getEnableNotifications()) {
-                                Toast.makeText(getBaseContext(), "Item added.", Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(getBaseContext(), "Item added.", Toast.LENGTH_SHORT).show();
                         }
 
                         base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
@@ -172,18 +156,14 @@ public class ExpensesListActivity extends AppCompatActivity {
                         expenseCost.getText().clear();
                         expenseAdapter.notifyDataSetChanged();
                     } catch (Exception overflow) {
-                        if (settings.getEnableNotifications()) {
-                            Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
                     }
 
 
                 } else {
-                    if (settings.getEnableNotifications()) {
-                        // Insufficient number of filled fields results in an error warning.
-                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in expense name and cost.", Toast.LENGTH_SHORT);
-                        missingInformationWarning.show();
-                    }
+                    // Insufficient number of filled fields results in an error warning.
+                    Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in expense name and cost.", Toast.LENGTH_SHORT);
+                    missingInformationWarning.show();
                 }
             }
         });
@@ -282,10 +262,8 @@ public class ExpensesListActivity extends AppCompatActivity {
     public void updateTotalExpenseDisplay(String toDisplay){
         totalExpensesDisplay.setText( toDisplay);
 
-        if (settings.getEnableNotifications()) {
-            // Displays a Toast message that confirms the expense was deleted
-            Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
-        }
+        // Displays a Toast message that confirms the expense was deleted
+        Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
 
         totalExpensesDisplay.setText( toDisplay);
     }

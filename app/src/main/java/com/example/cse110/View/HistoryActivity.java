@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.HistoryItem;
@@ -48,7 +47,6 @@ public class HistoryActivity extends AppCompatActivity {
     private static String CATEGORY_NAME = "category_name";
     private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
 
-    private Settings settings;
     //Display the month and year
     /**
      * The text display for the current month and year
@@ -111,8 +109,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         current_month = i.getParcelableExtra(HISTORY_DATA_INTENT);
-
-        settings = i.getParcelableExtra(SETTINGS_INTENT);
 
         //Update our local variables to match
         assert current_month != null;
@@ -216,10 +212,6 @@ public class HistoryActivity extends AppCompatActivity {
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
                             setResult(RESULT_OK, inten);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
                             //inten.putExtra(HISTORY_DATA_INTENT, current_month);
                             //inten.putExtra(MONTHLY_DATA_INTENT, current_month);
                             startActivityForResult(inten, 1);

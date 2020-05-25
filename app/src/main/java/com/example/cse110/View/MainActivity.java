@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
-import com.example.cse110.Controller.Settings;
+
 import java.util.Calendar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MonthlyData thisMonthsData;
     private MonthlyData pastMonthsData;
-
-    private Settings settings;
 
     private Database base = Database.Database(); // create a Database object
 
@@ -167,13 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSettingsClick(View v) {
         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-        // TODO: grab this from the database
-        if (settings == null) {
-            settings = new Settings();
-        }
-        intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
         startActivityForResult(intent, 1);
     }
 
@@ -198,10 +189,6 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                 intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                if (settings == null) {
-                    settings = new Settings();
-                }
-                intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
                 startActivityForResult(intent, 1);
             }
             @Override
@@ -232,10 +219,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
-                Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
-                if (settings != null) {
-                    this.settings = settings;
-                }
             }
         }
     }
@@ -267,10 +250,6 @@ public class MainActivity extends AppCompatActivity {
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                                     intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                                    if (settings == null) {
-                                        settings = new Settings();
-                                    }
-                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
                                     startActivityForResult(intent, 1);
                                     overridePendingTransition(0, 0);
 
@@ -336,13 +315,6 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_settings:
                             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-                            // TODO: grab this from the database
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
                             startActivityForResult(intent, 1);
                             overridePendingTransition(0, 0);
 

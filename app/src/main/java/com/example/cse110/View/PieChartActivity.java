@@ -14,7 +14,6 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
@@ -51,7 +50,6 @@ public class PieChartActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
 
     private MonthlyData current_month;
-    private Settings settings;
 
     private ArrayList<Category> categoryArrayList;
 
@@ -79,7 +77,6 @@ public class PieChartActivity extends AppCompatActivity {
         //Retrieve passed in MonthlyData object and extract date/categories
         Intent intent = getIntent();
         current_month = intent.getParcelableExtra(PIE_CHART_DATA_INTENT);
-        settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
         categoryArrayList= current_month.getCategoriesAsArray();
         for (int i=0; i<categoryArrayList.size();i++){
@@ -199,10 +196,6 @@ public class PieChartActivity extends AppCompatActivity {
                             return true;
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;
