@@ -2,10 +2,6 @@ package com.example.cse110.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,39 +9,37 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.cse110.Model.Database;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+
 import com.example.cse110.Model.FormattingTool;
 import java.util.Calendar;
 
 import com.example.cse110.View.history.HistoryActivity;
+
+import com.example.cse110.Model.Database;
+import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
-    LinearLayout expenseListButton, historyButton, pieChartButton, settingsButton;
+
+    LinearLayout expenseListButton, historyButton, GraphsButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
     private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
 
-    private static final int DISTANCE_FROM_MILLIONS_COMMA = 9;
-    private static final int DISTANCE_FROM_THOUSANDS_COMMA = 6;
-    private static final int LENGTH_LESS_THAN_THOUSANDS = 6;
-    private static final int LENGTH_LESS_THAN_MILLIONS = 9;
-    private static final int BEGIN_INDEX = 0;
-    private static final int CORRECT_DECIMAL = 2;
-    private static final int TOO_SHORT_DECIMAL = 1;
-    private static final int MISSING_DECIMAL = -1;
-    private static final int DISTANCE_FROM_MILLIONS_COMMA_NO_DECIMAL = 6;
-    private static final int DISTANCE_FROM_THOUSANDS_COMMA_NO_DECIMAL = 3;
-    private static final int LENGTH_LESS_THAN_THOUSANDS_NO_DECIMAL = 3;
-    private static final int LENGTH_LESS_THAN_MILLIONS_NO_DECIMALS = 6;
+
+
 
 
     private MonthlyData thisMonthsData;
@@ -128,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pieChartButton = findViewById(R.id.PieChartButton);
-        pieChartButton.setOnClickListener(new View.OnClickListener(){
+        GraphsButton = findViewById(R.id.GraphsButton);
+        GraphsButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                onPieChartClick(v);
+                onGraphsClick(v);
             }
         });
 
@@ -176,12 +170,12 @@ public class MainActivity extends AppCompatActivity {
         base.getMyRef().addListenerForSingleValueEvent(Listener);
     }
 
-    private void onPieChartClick(View v){
+    private void onGraphsClick(View v){
         base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                Intent i = new Intent(getBaseContext(), GraphsActivity.class);
 
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
@@ -189,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
-                i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }
             @Override
@@ -358,14 +352,17 @@ public class MainActivity extends AppCompatActivity {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                                    Intent i = new Intent(getBaseContext(), GraphsActivity.class);
 
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
 
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+
+
+                                    i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }

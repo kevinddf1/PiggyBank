@@ -20,7 +20,7 @@ import com.example.cse110.Model.history.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
 import com.example.cse110.View.MainActivity;
-import com.example.cse110.View.PieChartActivity;
+import com.example.cse110.View.GraphsActivity;
 import com.example.cse110.View.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -39,14 +39,15 @@ public class HistoryCategoryActivity extends AppCompatActivity {
      *
      * @see #onCreate(Bundle)
      */
+
     private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     private static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String PIE_CHART_DATA_INTENT = "GraphsActivity monthlyData";
     private static final String SETTINGS_INTENT = "SettingsActivity settings";
-    private static final String CATEGORY_NAME = "category_name";
-    private static final String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
+    private static String CATEGORY_NAME = "category_name";
+    private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
+    private Settings settings;
 
-    private Settings settings; //DEPRECATED
     //Display the month and year
 
     /**
@@ -234,7 +235,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
                         case R.id.navigation_history:
                             return true;
                         case R.id.navigation_graphs:
-                            Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
+                            Intent inte = new Intent(getBaseContext(), GraphsActivity.class);
                             inte.putExtra(PIE_CHART_DATA_INTENT, current_month);
                             startActivityForResult(inte, 1);
                             overridePendingTransition(0, 0);

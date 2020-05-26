@@ -44,8 +44,9 @@ public class CategoriesListActivity extends AppCompatActivity {
      */
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
+
     private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-    private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
 
     /**
      * A constant (Our max allowable int is 9,999,999 which is 7 place values)
@@ -70,6 +71,7 @@ public class CategoriesListActivity extends AppCompatActivity {
     /**
      * Backend components that store the user's information
      */
+
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
     private Settings settings;
@@ -303,10 +305,12 @@ public class CategoriesListActivity extends AppCompatActivity {
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
 
+
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
+
                                     overridePendingTransition(0, 0);
                                 }
 
@@ -323,7 +327,7 @@ public class CategoriesListActivity extends AppCompatActivity {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                                    Intent i = new Intent(getBaseContext(), GraphsActivity.class);
 
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
@@ -331,7 +335,7 @@ public class CategoriesListActivity extends AppCompatActivity {
 
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
-                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                                    i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
                                     startActivityForResult(i, 1);
                                 }
 

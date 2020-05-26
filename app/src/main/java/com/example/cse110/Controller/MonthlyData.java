@@ -197,7 +197,7 @@ public class MonthlyData implements Parcelable {
 
 
     /**
-<<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
+     <<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
      * Calculates the total amount budgeted for this month, across all categories.
      * Very expensive function so limit use as much as possible.
      */

@@ -2,25 +2,24 @@ package com.example.cse110.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
-import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.PagerAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,23 +27,23 @@ import java.util.List;
 
 
 /**
- * A class representing the pie chart for PiggyBank.
+ * A class representing the graphs for PiggyBank.
  * When user presses: See Graph, this page will appear.
  * @author Fan Ding
  * @version April 28
  *
  */
-public class PieChartActivity extends AppCompatActivity {
+public class GraphsActivity extends AppCompatActivity {
 
     AnyChartView anyChartView;
     List<String> cateArrayList =new ArrayList<>();
-    List<Integer> totalExpenseArrayList = new ArrayList<>();
+    List<Double> totalExpenseArrayList = new ArrayList<>();
 
     /**
      * Key for pulling an object of monthlyData in the HistoryDetailedActivity
      * @see #onCreate(Bundle)
      */
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
@@ -62,8 +61,42 @@ public class PieChartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pie_chart);
-        anyChartView=findViewById(R.id.any_chart_view);
+        setContentView(R.layout.activity_graphs);
+
+        //TabLayout implemented here, which allow u to switch between different graphs, like pie Chart and line chart.
+        TabLayout tabLayout= findViewById(R.id.tabBar);
+        TabItem pieChartTab= findViewById(R.id.pieChartTab);
+        TabItem columnChartTab=findViewById(R.id.columnChartTab);
+        TabItem lineChartTab= findViewById(R.id.lineChartTab);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
+
+        PagerAdapter pagerAdapter=new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pagerAdapter);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+
+
+
+        //anyChartView=findViewById(R.id.any_chart_view);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setLabelVisibilityMode(1);
         Menu menu = navView.getMenu();
@@ -73,29 +106,27 @@ public class PieChartActivity extends AppCompatActivity {
 
         //Retrieve passed in MonthlyData object and extract date/categories
         Intent intent = getIntent();
-        current_month = intent.getParcelableExtra(PIE_CHART_DATA_INTENT);
+        current_month = intent.getParcelableExtra(Graphs_DATA_INTENT);
         settings = intent.getParcelableExtra(SETTINGS_INTENT);
 
         categoryArrayList= current_month.getCategoriesAsArray();
         for (int i=0; i<categoryArrayList.size();i++){
             Category c = categoryArrayList.get(i);
-            Log.d("what", c.getName());
             cateArrayList.add(c.getName());
-            Log.d("price", formatMoneyString(Double.toString(getTotalExpense(c)/100.00)));
-            totalExpenseArrayList.add(getTotalExpense(c));
+            totalExpenseArrayList.add(getTotalExpense(c)/100.00);
         }
-
-        setupPieChart();
     }
 
-    /**
-     * Gets the total expenses from each expense in the category
-     *
-     * @param c the category we want the total expense
-     * @return
-     */
-    private int getTotalExpense(Category c) {
-        int ret=0;
+    public List<String> getCateArrayList(){
+        return cateArrayList;
+    }
+
+    public List<Double> getTotalExpenseArrayList(){
+        return totalExpenseArrayList;
+    }
+
+    private double getTotalExpense(Category c) {
+        double ret=0;
         ArrayList<Expense> expenseArray= c.getExpenses();
         for (int i=0; i<expenseArray.size(); i++){
             ret+=expenseArray.get(i).getCost();
@@ -104,64 +135,7 @@ public class PieChartActivity extends AppCompatActivity {
         return ret;
     }
 
-    /**
-     * Sets up the PieChart by filling in the values for each data entry
-     */
-    public void setupPieChart(){
 
-        Pie pie= AnyChart.pie();
-        List<DataEntry> dataEntries = new ArrayList<>();
-        for (int i=0; i<cateArrayList.size(); i++){
-            dataEntries.add(new ValueDataEntry(cateArrayList.get(i), totalExpenseArrayList.get(i)));
-        }
-
-        pie.data(dataEntries);
-        anyChartView.setChart(pie);
-    }
-
-    /**
-     * Properly formats the money strings based on the values we get from the database
-     *
-     * @param valueToFormat the value we want to format to a money string
-     * @return
-     */
-    private String formatMoneyString(String valueToFormat){
-        // Add formatting for whole numbers
-        if(valueToFormat.indexOf('.') == -1){
-            valueToFormat = valueToFormat.concat(".00");
-        }else{
-            //Ensure only valid input
-            int costLength = valueToFormat.length();
-            int decimalPlace = valueToFormat.indexOf(".");
-
-            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
-            if (costLength - decimalPlace == 1) {
-                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) +  "00";
-            }
-            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
-            // appends a 0 to the end
-            else if (costLength - decimalPlace == 2) {
-                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
-            }
-            // If the user inputs a number with >= 2 decimal places, only displays up to 2
-            else {
-                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
-            }
-        }
-
-        int hundredthComma = valueToFormat.length() - 6;
-        int thousandthComma = valueToFormat.length() - 9;
-        if(valueToFormat.length() <= 6){
-            return valueToFormat;
-        }else if(valueToFormat.length() <= 9){
-            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
-        }
-        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
-    }
-
-    /**
-     * The bottom nav UI bar
-     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override

@@ -10,35 +10,33 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.cse110.Model.Database;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.Database;
+import com.example.cse110.R;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Calendar;
 
-/**
- *
- */
+
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
+    public static final String PIE_CHART_DATA_INTENT = "GraphsActivity monthlyData";
+
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
-
     private Settings settings;
     private Database base = Database.Database(); // create a Database object
 
@@ -184,20 +182,22 @@ public class SettingsActivity extends AppCompatActivity {
                             base.getMyRef().addListenerForSingleValueEvent(Listener2);
                             return true;
                         case R.id.navigation_graphs:
+
                             base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                                    Intent i = new Intent(getBaseContext(), GraphsActivity.class);
 
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
 
+
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
-                                    i.putExtra(PieChartActivity.SETTINGS_INTENT, settings);
+                                    i.putExtra(GraphsActivity.SETTINGS_INTENT, settings);
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }

@@ -141,7 +141,7 @@ public class Database {
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
                 if (!ds.exists()) { // check if there are any category in user's account
                     break; // if NOT, break the loop
-            }
+                }
                 // get the data of current category
                 String cate_name = ds.child("Name").getValue().toString();
                 String c_budget = ds.child("Budget").getValue().toString();
@@ -176,10 +176,10 @@ public class Database {
                 // create category
                 thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year).setTotalExpenses();
                 thisMonthsData = this.RetrieveCateData(ds, thisMonthsData);
-                }
             }
-        return thisMonthsData;
         }
+        return thisMonthsData;
+    }
 
 
     public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData pastMonthsData, int year, int month) {
@@ -324,6 +324,7 @@ public class Database {
 
         return pastMonths;
     }
+
 
     /**
      * Another signature for the method that allows the user to input strings instead of integers for month & year
