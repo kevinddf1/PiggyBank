@@ -10,18 +10,17 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.cse110.Model.Database;
-import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.R;
-import com.example.cse110.Controller.Settings;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.Database;
+import com.example.cse110.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
