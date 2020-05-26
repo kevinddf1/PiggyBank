@@ -17,7 +17,7 @@ import com.example.cse110.Model.Database;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Controller.Settings;
-
+import com.example.cse110.Model.FormattingTool;
 import java.util.Calendar;
 
 import com.example.cse110.View.history.HistoryActivity;
@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Database base = Database.Database(); // create a Database object
 
+    /**
+     * Formatting tool to avoid redundancies.
+     */
+    private FormattingTool formattingTool = new FormattingTool();
     /**
      * TextViews to display budget and total expenses
      */
@@ -107,11 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
             //Bind our month's expenses and budget to proper display
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            String budgetRendering = "Total Budget: " +formatIntMoneyString( list[0]);
+            String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString( list[0]);
             totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            String expensesRendering = "Total Expenses: " + formatMoneyString(formatDecimal(Double.toString(Long.parseLong(list[1])/100.00)));
+            String expensesRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(Long.parseLong(list[1])/100.00)));
             totalExpenseDisplay.setText(expensesRendering);
         }
 
@@ -266,11 +270,11 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
 
                 totalBudgetDisplay = findViewById(R.id.currentCash);
-                String budgetRendering = "Total Budget: " + formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
+                String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
                 totalBudgetDisplay.setText(budgetRendering);
 
                 totalExpenseDisplay = findViewById(R.id.totalExpenses);
-                String expenseRendering = "Total Expenses: " + formatMoneyString(formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100)));
+                String expenseRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100)));
 
                 totalExpenseDisplay.setText(expenseRendering);
                 Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
@@ -394,98 +398,11 @@ public class MainActivity extends AppCompatActivity {
         // Do nothing on back button press because we don't want the user to be able to go back to login page
     }
 
-    /**
-     * Helper method to instantiate current month upon creation
-     */
-    private void instantiateCurrentMonth(){
-        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
-            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                Calendar today = Calendar.getInstance();
-                int month = today.get(Calendar.MONTH);
-                int year = today.get(Calendar.YEAR);
 
-                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-                i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
-                startActivityForResult(i, 1);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Failed to read value
-            }
-        });
-    }
 
-    /**
-     * Helper method to format a display of money value, including cents
-     * @param valueToFormat The string to manipulate
-     * @return The new string to display
-     */
-    private String formatIntMoneyString(String valueToFormat){
-        int hundredthComma = valueToFormat.length() - DISTANCE_FROM_THOUSANDS_COMMA_NO_DECIMAL;
-        int millionsComma = valueToFormat.length() - DISTANCE_FROM_MILLIONS_COMMA_NO_DECIMAL;
 
-        if (valueToFormat.length() <= LENGTH_LESS_THAN_THOUSANDS_NO_DECIMAL){
-            return  valueToFormat;
-        }else if (valueToFormat.length() <= LENGTH_LESS_THAN_MILLIONS_NO_DECIMALS){
-            return valueToFormat.substring(BEGIN_INDEX, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
-        }
-        return valueToFormat.substring(BEGIN_INDEX, millionsComma) + "," + valueToFormat.substring(millionsComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
-    }
 
-    /**
-     * Helper method to format the rendering in regards to decimal places
-     * @param valueToFormat The string to fix decimal placement
-     * @return The formatted string
-     */
-    private String formatDecimal(String valueToFormat){
-        String costString = valueToFormat;
 
-        // Add formatting for whole numbers
-        if(costString.indexOf('.') == MISSING_DECIMAL){
-            costString = costString.concat(".00");
-        }else{
-            //Ensure only valid input
-            int costLength = costString.length();
-            int decimalPlace = costString.indexOf(".");
-
-            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
-            if (costLength - decimalPlace == TOO_SHORT_DECIMAL) {
-                costString = costString.substring(BEGIN_INDEX, decimalPlace + 1) +  "00";
-            }
-            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
-            // appends a 0 to the end
-            else if (costLength - decimalPlace == CORRECT_DECIMAL) {
-                costString = costString.substring(BEGIN_INDEX, decimalPlace + CORRECT_DECIMAL) + "0";
-            }
-            // If the user inputs a number with >= 2 decimal places, only displays up to 2
-            else {
-                costString = costString.substring(BEGIN_INDEX, costString.indexOf(".") + CORRECT_DECIMAL + 1);
-            }
-        }
-
-        return costString;
-
-    }
-
-    /**
-     * Helper method to format a display of money value, only integers
-     * @param valueToFormat The String to manipulate
-     * @return The new string to display
-     */
-    private String formatMoneyString(String valueToFormat){
-        int thousandsComma = valueToFormat.length() - DISTANCE_FROM_THOUSANDS_COMMA;
-        int millionsComma = valueToFormat.length() - DISTANCE_FROM_MILLIONS_COMMA;
-        if(valueToFormat.length() <= LENGTH_LESS_THAN_THOUSANDS){
-            return valueToFormat;
-        }else if(valueToFormat.length() <= LENGTH_LESS_THAN_MILLIONS){
-            return valueToFormat.substring(BEGIN_INDEX, thousandsComma) + "," + valueToFormat.substring(thousandsComma);
-        }
-
-        return valueToFormat.substring(BEGIN_INDEX, millionsComma) + "," + valueToFormat.substring(millionsComma , thousandsComma) + "," + valueToFormat.substring(thousandsComma );
-    }
 
 }
 

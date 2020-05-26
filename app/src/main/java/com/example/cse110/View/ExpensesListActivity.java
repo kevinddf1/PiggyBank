@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.cse110.Model.FormattingTool;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cse110.Controller.Category;
@@ -20,6 +20,7 @@ import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.Database;
+import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
@@ -43,9 +44,8 @@ public class ExpensesListActivity extends AppCompatActivity {
      * Constants for error checking
      */
     private static final int MAX_EXPENSE_VALUE = 9999999;
-    //Our max allowable int is 9,999,999 which is 7 place values
-    private static final int MAX_BUDGET = 7;
-    public static final double DOUBLE = 100.00;
+    private static final int MAX_BUDGET = 7;    //Our max allowable int is 9,999,999 which is 7 place values
+    private static final double DOUBLE = 100.00;
 
 
     /**
@@ -77,10 +77,11 @@ public class ExpensesListActivity extends AppCompatActivity {
     /**
      * Formatting tool for money displays.
      */
-    private FormattingTool formattingTool = new FormattingTool();
+    private final FormattingTool formattingTool = new FormattingTool();
 
     /**
      * Main method that handles front-end interactions and directs new changes.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -114,6 +115,7 @@ public class ExpensesListActivity extends AppCompatActivity {
 
     /**
      * Extracts the MonthlyData from incoming intents and identifies which category is being displayed
+     *
      * @return The name of the category we are currently displaying.
      */
     private String initializeCurrentCategory() {
@@ -236,7 +238,7 @@ public class ExpensesListActivity extends AppCompatActivity {
     }
 
     /**
-     * Handle the user selecting to change budget
+     * Handle the user selecting to change budget.
      */
     private void handleBudgetChanges() {
         //Detect User Changes for category BUDGET
@@ -269,14 +271,13 @@ public class ExpensesListActivity extends AppCompatActivity {
                             //Update new budget info to database
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
 
+                            //Render new budget
                             String newCategoryBudgetRendering = "$" + formattingTool.formatIntMoneyString(category.getBudgetAsString());
                             categoryBudget.setText(newCategoryBudgetRendering);
-                            // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
-                            if (category.getBudget() < category.getTotalExpenses() / 100.00) {
-                                Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getBaseContext(), "Category budget successfully updated!", Toast.LENGTH_LONG).show();
-                            }
+
+                            //Check if the user overspent
+                            overSpendingChecker();
+
                         } catch (Exception e) {
                             Toast.makeText(getBaseContext(), "Invalid input", Toast.LENGTH_LONG).show();
                         }
@@ -284,6 +285,19 @@ public class ExpensesListActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    /**
+     * Compares budget to total expenses and makes user aware of overspending.
+     */
+    private void overSpendingChecker() {
+        // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
+        if (category.getBudget() < category.getTotalExpenses() / 100.00) {
+            Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getBaseContext(), "Category budget successfully updated!", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -331,6 +345,7 @@ public class ExpensesListActivity extends AppCompatActivity {
 
     /**
      * Handler for an intent into this page from a backpress or navBar press
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -347,6 +362,9 @@ public class ExpensesListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Attaches most recent MonthlyData of the user, -> CategoriesListActivity
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -354,7 +372,6 @@ public class ExpensesListActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
         super.onBackPressed();
     }
-
 
 
     //Handle pressing away from setting category
@@ -378,16 +395,15 @@ public class ExpensesListActivity extends AppCompatActivity {
     }
 
 
-
     /**
-     * Update the display for expenseList, used by the adapter
+     * Update the display for expenseList, used by the adapter.
+     *
+     * @param toDisplay The new total expenses for a category once an item was deleted.
      */
     public void updateTotalExpenseDisplay(String toDisplay) {
         totalExpensesDisplay.setText(toDisplay);
         // Displays a Toast message that confirms the expense was deleted
         Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
-
-        totalExpensesDisplay.setText(toDisplay);
     }
 
 

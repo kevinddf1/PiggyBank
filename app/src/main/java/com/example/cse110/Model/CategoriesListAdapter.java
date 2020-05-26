@@ -14,53 +14,64 @@ import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
-import com.example.cse110.View.MainActivity;
 
 import java.util.ArrayList;
 
+/**
+ * The adapter handles interactions between frontend and backend when displaying/modifying a user's categories.
+ *
+ * @author Peter Gonzalez
+ */
 public class CategoriesListAdapter extends ArrayAdapter<Category> {
     //Declare core elements that cause changes
-    Button btnDelete, btnEdit;
+    private Button btnDelete;
 
-    private MonthlyData monthlyData;
+    /**
+     * Static info to display
+     */
+    private TextView categoryName;
+    private final MonthlyData monthlyData;
 
-    private ArrayList<Category> itemsList;
-    private Context context;
+    /**
+     * Primary data structure to check for duplicate naming
+     */
+    private final ArrayList<Category> itemsList;
 
-    // Constructor
+    //Allow for global scope
+    private final Context context;
+
+    /**
+     * Formatting tool to avoid redundancies.
+     */
+    private final FormattingTool formattingTool = new FormattingTool();
+
+    /**
+     * Custom adapter allows for specific renderings for categories and handles frontend <-> backend interactions.
+     *
+     * @param context     The context in which this adapter is being used.
+     * @param items       The data structure to hold all the categories to display.
+     * @param monthlyData The current month to which these categories belong.
+     */
     public CategoriesListAdapter(Context context, ArrayList<Category> items, MonthlyData monthlyData) {
         super(context, 0, items);
+
+        //Set global context
         this.itemsList = items;
         this.monthlyData = monthlyData;
         this.context = context;
     }
 
-//    private AlertDialog AskOption() {
-//        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
-//            // set message, title, and icon
-//            .setTitle("Confirm Deletion")
-//            .setMessage("Delete the category " + + "?")
-//            .setIcon(R.drawable.delete)
-//
-//            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int whichButton) {
-//                    //your deleting code
-//                    dialog.dismiss();
-//                }
-//            })
-//            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                }
-//            })
-//            .create();
-//        return myQuittingDialogBox;
-//    }
-//    AlertDialog diaBox = AskOption();
-//    diaBox.show();
 
+    /**
+     * Converts views for individual Category items to render all pertinent information.
+     *
+     * @param position    The position of the category in the list.
+     * @param convertView The view to modify and return.
+     * @param parent      The parent file from which the adapter will attach to.
+     * @return listItemView The modified view to render all the Category item's components.
+     */
     @Override
-    public View getView(int position, View convertView,  ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -71,18 +82,31 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
         final Category item = getItem(position);
         assert item != null;
 
-        // Lookup view for data population
-        final TextView categoryName = convertView.findViewById(R.id.category_name);
-        TextView categoryBudget = convertView.findViewById(R.id.category_budget);
-        categoryName.setText(item.getName());
-        categoryBudget.setText("Budget: " + "$" + formatIntMoneyString(item.getBudgetAsString()));
+        //Render static info like name and budget of the category
+        renderStaticInfo(convertView, item);
 
+        //Set up delete button and handle user clicks
+        initializeDeleteButtonAndHandler(position, convertView, item);
+
+        // Return the completed view to render on screen
+        return convertView;
+    }
+
+    /**
+     * Initialize the delete button and handle the user deleting a Category.
+     *
+     * @param position    The position of the expense in the list.
+     * @param convertView The front-end rendering to display.
+     * @param item        The current Expense object.
+     */
+    private void initializeDeleteButtonAndHandler(int position, View convertView, final Category item) {
         // Create buttons to delete row or edit category
         btnDelete = convertView.findViewById(R.id.delete_category);
-
         //Set event handler for DELETE item
         btnDelete.setTag(position);
-        btnDelete.setOnClickListener(new View.OnClickListener(){
+
+        //Set up a onclick listener -- MINXUAN
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getTag() != null) {
@@ -98,10 +122,10 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                             monthlyData.deleteCategory(item.getName());
                             itemsList.remove(item);
                             notifyDataSetChanged();
-                            ((CategoriesListActivity)context).confirmDeletion(categoryName);
+                            ((CategoriesListActivity) context).confirmDeletion(categoryName);
                             dialog.dismiss();
                         }
-                     });
+                    });
                     alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -111,26 +135,25 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                 }
             }
         });
-
-        // Return the completed view to render on screen
-        return convertView;
     }
 
-    public void setMonthlyData(MonthlyData monthlyData) {
-        this.monthlyData = monthlyData;
-        itemsList = monthlyData.getCategoriesAsArray();
+    /**
+     * Render static info such as category name and budget.
+     *
+     * @param convertView The view to modify.
+     * @param item        The current category the user is dealing with.
+     */
+    private void renderStaticInfo(View convertView, Category item) {
+        // Lookup view for data population
+        categoryName = convertView.findViewById(R.id.category_name);
+        categoryName.setText(item.getName());
+
+        //Budget rendering
+        TextView categoryBudget = convertView.findViewById(R.id.category_budget);
+        String budgetRendering = "Budget: " + "$" + formattingTool.formatIntMoneyString(item.getBudgetAsString());
+        categoryBudget.setText(budgetRendering);
     }
 
-    private String formatIntMoneyString(String valueToFormat){
-        int hundredthComma = valueToFormat.length() - 3;
-        int thousandthComma = valueToFormat.length() - 6;
 
-        if (valueToFormat.length() <= 3){
-            return  valueToFormat;
-        }else if (valueToFormat.length() <= 6){
-            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
-        }
-        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
-    }
 }
 

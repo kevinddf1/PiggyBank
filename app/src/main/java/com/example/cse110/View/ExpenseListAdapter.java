@@ -10,27 +10,45 @@ import android.widget.TextView;
 
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
+import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
 
+/**
+ * The adapter handles interactions between the frontend and backend.
+ *
+ * @author Peter Gonzalez
+ */
 class ExpenseListAdapter extends ArrayAdapter<Expense> {
 
     private static final String LOG_TAG = ExpenseListAdapter.class.getSimpleName();
+    private static final double DOUBLE = 100.00;
 
     //Declare core elements that cause changes
-    Button btnDelete, btnEdit;
-    final ArrayList<Expense> itemsList;
+    private Button btnDelete;
+    private final ArrayList<Expense> itemsList;
 
-    private Category category;
-    Context context;
+    /**
+     * Formatting tool to avoid redundancies
+     */
+    private final FormattingTool formattingTool = new FormattingTool();
+    private final Category category;
+    private final Context context;
 
-    // Constructor
+
+    /**
+     * Custom adapter allows for specific renderings for expenses and handles frontend <-> backend interactions.
+     *
+     * @param context  The context in which this adapter is being used.
+     * @param items    The data structure to hold all the expenses to display
+     * @param category The current category to which these expenses belong
+     */
     public ExpenseListAdapter(Context context, ArrayList<Expense> items, Category category) {
         super(context, 0, items);
 
-        this.category = category;
         // Allow for class wide scope
+        this.category = category;
         itemsList = items;
         this.context = context;
 
@@ -38,24 +56,53 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
     }
 
 
+    /**
+     * Converts views for individual Expense items to render all pertinent information.
+     *
+     * @param position    The position of the expense in the list.
+     * @param convertView The view to modify and return.
+     * @param parent      The parent file from which the adapter will attach to
+     * @return listItemView The modified view to render all the expense item's components.
+     */
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
 
+        //Initialize xml files and front end rendering
         View listItemView = convertView;
-        if(listItemView == null){
+        if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_expense, parent, false);
         }
 
+        //Identify the expense the user is currently being shown
         final Expense item = getItem(position);
-        TextView expenseName = listItemView.findViewById(R.id.expense_name);
-        expenseName.setText(item.getName());
-        TextView expenseCost = listItemView.findViewById(R.id.expense_cost);
-        expenseCost.setText("$" + formatMoneyString(item.getCostAsString()));
 
+        //Render static info such as expense name and cost
+        assert item != null;
+        renderStaticInfo(listItemView, item);
+
+        //Initialize the delete button and user clicks on deleting an expense
+        deleteButtonAndHandler(position, listItemView, item);
+
+        // Return the completed view to render on screen
+        return listItemView;
+    }
+
+    /**
+     * Initialize the delete button and handle the user deleting an expense.
+     *
+     * @param position     The position of the expense in the list.
+     * @param listItemView The front-end rendering to display.
+     * @param item         The current Expense object.
+     */
+    private void deleteButtonAndHandler(int position, View listItemView, final Expense item) {
+
+        //Attach to xml file
         btnDelete = listItemView.findViewById(R.id.delete);
         btnDelete.setTag(position);
-        btnDelete.setOnClickListener(new View.OnClickListener(){
+
+        //Handle user presses
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getTag() != null) {
@@ -63,54 +110,29 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
                     category.deleteExpense(item.getId());
 
                     //Allow the updating of the expense list activity
-                    double calculatedRemainder = (double) category.getTotalExpenses() / 100.00;
+                    double calculatedRemainder = (double) category.getTotalExpenses() / DOUBLE;
                     String totalExpenseString = Double.valueOf(calculatedRemainder).toString();
 
-                    ((ExpensesListActivity)context).updateTotalExpenseDisplay("$" + formatMoneyString(totalExpenseString));
+                    ((ExpensesListActivity) context).updateTotalExpenseDisplay("$" + formattingTool.formatMoneyString(totalExpenseString));
 
                     //Add fine tuning on expense Display
                     notifyDataSetChanged();
                 }
             }
         });
-
-        // Return the completed view to render on screen
-        return listItemView;
     }
 
-    private String formatMoneyString(String valueToFormat){
-
-        // Add formatting for whole numbers
-        if(valueToFormat.indexOf('.') == -1){
-            valueToFormat = valueToFormat.concat(".00");
-        }else{
-            //Ensure only valid input
-            int costLength = valueToFormat.length();
-            int decimalPlace = valueToFormat.indexOf(".");
-
-            // If the user inputs a number formatted as "<num>.", appends a 00 after the decimal
-            if (costLength - decimalPlace == 1) {
-                valueToFormat = valueToFormat.substring(0, decimalPlace + 1) +  "00";
-            }
-            // If the user inputs a number formatted as "<num>.1", where 1 could be any number,
-            // appends a 0 to the end
-            else if (costLength - decimalPlace == 2) {
-                valueToFormat = valueToFormat.substring(0, decimalPlace + 1 + 1) + "0";
-            }
-            // If the user inputs a number with >= 2 decimal places, only displays up to 2
-            else {
-                valueToFormat = valueToFormat.substring(0, valueToFormat.indexOf(".") + 2 + 1);
-            }
-        }
-        int hundredthComma = valueToFormat.length() - 6;
-        int thousandthComma = valueToFormat.length() - 9;
-        if(valueToFormat.length() <= 6){
-            return valueToFormat;
-        }else if(valueToFormat.length() <= 9){
-            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
-        }
-
-        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+    /**
+     * Render non-changing info such as name and cost.
+     *
+     * @param listItemView The front-end rendering to display.
+     * @param item         The current Expense object we are modifying.
+     */
+    private void renderStaticInfo(View listItemView, Expense item) {
+        TextView expenseName = listItemView.findViewById(R.id.expense_name);
+        expenseName.setText(item.getName());
+        TextView expenseCost = listItemView.findViewById(R.id.expense_cost);
+        expenseCost.setText("$" + formattingTool.formatMoneyString(item.getCostAsString()));
     }
 
 
