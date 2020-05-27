@@ -56,7 +56,7 @@ public class HistoryActivity extends AppCompatActivity {
     /**
      * Database singleton to get most up to date information from the user's account
      */
-    private final Database base = Database.Database(); // create a Database object
+    private Database base = Database.getInstance(); // create a Database object
 
 
     /**

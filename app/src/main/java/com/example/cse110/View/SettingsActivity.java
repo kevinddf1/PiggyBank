@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
     private MonthlyData thisMonthsData;
 
     private Settings settings;
-    private Database base = Database.Database(); // create a Database object
+    private Database base = Database.getInstance(); // create a Database object
 
     /**
      *

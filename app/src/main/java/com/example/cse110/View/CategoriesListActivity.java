@@ -56,7 +56,7 @@ public class CategoriesListActivity extends AppCompatActivity {
     /**
      * Retrieves our database singleton
      */
-    private final Database base = Database.Database();
+    private Database base = Database.getInstance(); // create a Database object
 
     /**
      * The front-end components that are rendered and/or handle user interaction

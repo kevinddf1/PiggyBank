@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Settings settings;
 
-    private Database base = Database.Database(); // create a Database object
+    private Database base = Database.getInstance(); // create a Database object
 
     /**
      * Formatting tool to avoid redundancies.

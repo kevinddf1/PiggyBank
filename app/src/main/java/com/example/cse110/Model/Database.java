@@ -29,7 +29,7 @@ public class Database {
     ////////////////////////////////////////////////// CONSTRUCTORS AND GETTERS FUNCTION //////////////////////////////////////////////////
 
     // static method to create single instance of Database class
-    public static Database Database() {
+    public static Database getInstance() {
         // This If statement ensures only one instance is created
         if (single_instance == null) {
             single_instance = new Database();

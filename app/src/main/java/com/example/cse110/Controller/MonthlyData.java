@@ -19,7 +19,7 @@ public class MonthlyData implements Parcelable {
     // This is not serialized but is repopulated from categories so that categories and categoriesArrayList refer to the same Category objects
     private ArrayList<Category> categoriesArrayList;
     // create a Database object
-    private Database base = Database.Database();
+    private Database base = Database.getInstance(); // create a Database object
 
     /*
     Constructor for an empty MonthlyData.
