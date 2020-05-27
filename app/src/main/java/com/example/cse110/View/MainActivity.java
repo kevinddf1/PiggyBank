@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -228,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
 
                 //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
@@ -306,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
-                                    base.insertMonthlydata(year, month);
+                                    base.insertMonthlyData(year, month);
 
                                     //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);

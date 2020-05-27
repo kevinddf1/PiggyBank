@@ -138,7 +138,7 @@ public class SettingsActivity extends AppCompatActivity {
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
-                                    base.insertMonthlydata(year, month);
+                                    base.insertMonthlyData(year, month);
 
                                     //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
                                     monthlyData = base.RetrieveDataCurrent(dataSnapshot, monthlyData, year, month);
