@@ -271,6 +271,9 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(navListener);
     }
 
+    /**
+     * method which controls the nav bar
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -279,90 +282,17 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.navigation_home:
                             return true;
                         case R.id.navigation_lists:
-                                     /* Read from the database
-        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not trigger again.
-        / This is useful for data that only needs to be loaded once and isn't expected to change frequently or require active listening.
-        */
-                            ValueEventListener Listener = new ValueEventListener() {
-                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-
-                                    Calendar today = Calendar.getInstance();
-                                    int month = today.get(Calendar.MONTH);
-                                    int year = today.get(Calendar.YEAR);
-                                    base.insertMonthlydata(year, month);
-
-                                    //pastMonthsData = base.RetrieveDataforPast(dataSnapshot, pastMonthsData, year, month);
-                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-
-                                    intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                                    startActivityForResult(intent, 1);
-                                    overridePendingTransition(0, 0);
-
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Failed to read value
-                                }
-                            };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener);
-                    return true;
-
+                            listsPageHandler();
+                            return true;
                         case R.id.navigation_history:
-                            ValueEventListener Listener2 = new ValueEventListener() {
-                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-
-                                    Calendar today = Calendar.getInstance();
-                                    int month = today.get(Calendar.MONTH);
-                                    int year = today.get(Calendar.YEAR);
-
-                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-                                    //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
-
-                                    i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
-                                    startActivityForResult(i, 1);
-                                    overridePendingTransition(0, 0);
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Failed to read value
-                                }
-                            };
-                            base.getMyRef().addListenerForSingleValueEvent(Listener2);
+                            historyPageHandler();
                             return true;
                         case R.id.navigation_graphs:
-                            base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
-                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent i = new Intent(getBaseContext(), GraphsActivity.class);
-
-                                    Calendar today = Calendar.getInstance();
-                                    int month = today.get(Calendar.MONTH);
-                                    int year = today.get(Calendar.YEAR);
-
-                                    thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-
-                                    i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
-
-                                    startActivityForResult(i, 1);
-                                    overridePendingTransition(0, 0);
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Failed to read value
-                                }
-                            });
+                            graphPageHandler();
                             return true;
                         case R.id.navigation_settings:
-                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(0, 0);
+                            settingsPageHandler();
+                            return true;
                     }
                     return false;
                 }
