@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Erdong's navbar
      * The user shall enter any page through clicking the icon in this nav bar
      */
     private void setUpNavBar() {
