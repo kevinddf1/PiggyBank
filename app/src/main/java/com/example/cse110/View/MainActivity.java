@@ -64,13 +64,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-       // navView.setLabelVisibilityMode(1);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(0);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
-        //Bind button to go to expense list
+        //set up nav bar
+        setUpNavBar();
 
         //Instantiate monthlyData only if currently null
        // if(thisMonthsData == null){
@@ -261,6 +256,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        // Create the bottom navigation bar
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // make all icons' names visible
+        navView.setLabelVisibilityMode(1);
+        // Check the icon
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
