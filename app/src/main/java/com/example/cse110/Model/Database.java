@@ -19,9 +19,6 @@ public class Database {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
-
-
-
     // static method to create single instance of Database class
     public static Database Database() {
         // To ensure only one instance is created
@@ -102,9 +99,9 @@ public class Database {
         myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).removeValue();
     }
 
-    public void delete_exp(String parent_name, int id, int year, int month) {
+    public void delete_exp(String cate_name, int id, int year, int month) {
         String str_ID = Integer.toString(id);
-        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + parent_name).child("Expense").child(str_ID).removeValue();
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + cate_name).child("Expense").child(str_ID).removeValue();
     }
 
     public void delete_account() {
@@ -117,18 +114,32 @@ public class Database {
 
     public ArrayList<String> RetrieveT_Budget_Exp(DataSnapshot dataSnapshot, int year, int month) {
         DataSnapshot ds = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
-        String T_Budget = ds.child("Total Budget").getValue().toString();
-        String T_Expense = ds.child("Total Expense").getValue().toString();
         ArrayList<String> list = new ArrayList<String>(2);
-        list.add(T_Budget);
-        list.add(T_Expense);
-
+        if (ds.child("Total Budget").getValue() == null || ds.child("Total Expense").getValue() == null) {
+            list.add("0");
+            list.add("0");
+        }
+        else {
+            String T_Budget = ds.child("Total Budget").getValue().toString();
+            String T_Expense = ds.child("Total Expense").getValue().toString();
+            list.add(T_Budget);
+            list.add(T_Expense);
+        }
         return list;
     }
 
     public MonthlyData RetrieveDataCurrent(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, int year, int month) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
             thisMonthsData = new MonthlyData(month, year);
+            DataSnapshot dsMonthlyData = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
+            if(dsMonthlyData == null || dsMonthlyData.child("Total Budget").getValue() == null || dsMonthlyData.child("Total Expense").getValue() ==  null){
+                thisMonthsData.setTotalBudgetDatabase("0");
+                thisMonthsData.setTotalExpensesDatabase("0");
+
+            }else {
+                thisMonthsData.setTotalBudgetDatabase(dsMonthlyData.child("Total Budget").getValue().toString());
+                thisMonthsData.setTotalExpensesDatabase(dsMonthlyData.child("Total Expense").getValue().toString());
+            }
 
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
@@ -157,7 +168,7 @@ public class Database {
                     String Day = ds2.child("Day").getValue().toString();
                     String Name = ds2.child("Name").getValue().toString();
                     String ID = ds2.child("ID").getValue().toString();
-                    double dCost = Double.parseDouble(Cost)/100;
+                    double dCost = Double.parseDouble(Cost)/100.00;
                     int iYear = Integer.parseInt(Year);
                     int iMonth = Integer.parseInt(Month);
                     int iDay = Integer.parseInt(Day);
@@ -227,13 +238,13 @@ public class Database {
             String Day = ds2.child("Day").getValue().toString();
             String Name = ds2.child("Name").getValue().toString();
             String ID = ds2.child("ID").getValue().toString();
-            int iCost = Integer.parseInt(Cost);
+            double dCost = Double.parseDouble(Cost)/100.00;
             int iYear = Integer.parseInt(Year);
             int iMonth = Integer.parseInt(Month);
             int iDay = Integer.parseInt(Day);
             int iID = Integer.parseInt(ID);
             // create expense
-            Expense expense = new Expense(iID, Name, iCost, iYear, iMonth, iDay, cate_name);
+            Expense expense = new Expense(iID, Name, dCost, iYear, iMonth, iDay, cate_name);
             expenses.add(expense);
         }
         // create category
