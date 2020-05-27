@@ -95,7 +95,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                             category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
 
                             //Update totalBudget
-                            monthlyData.setTotalBudget();
+                            monthlyData.calculateTotalBudget();
 
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
 
