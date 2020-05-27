@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        // On-click listener for login button
         final Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -90,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // On-click listener for account creation button
         final Button createAccountButton = findViewById(R.id.createAccountButton);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -98,6 +100,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
                 intent.putExtra(USERNAME_FIELD, enteredUsername);
+                startActivity(intent);
+            }
+        });
+
+        // On-click listener for account recovery button
+        final Button accountRecoveryButton = findViewById(R.id.accountRecoveryButton);
+        accountRecoveryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, AccountRecoveryActivity.class);
                 startActivity(intent);
             }
         });

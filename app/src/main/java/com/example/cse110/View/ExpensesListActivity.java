@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.Controller.Settings;
+import com.example.cse110.R;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.R;
@@ -66,7 +66,6 @@ public class ExpensesListActivity extends AppCompatActivity {
      * Backend objects to retrieve and update a user's information
      */
     private MonthlyData monthlyData;
-    private Settings settings;
     private Category category;
 
     /**
@@ -92,7 +91,6 @@ public class ExpensesListActivity extends AppCompatActivity {
         //Initializes the current category being displayed
         final String categoryNameFromParent = initializeCurrentCategory();
 
-
         //Render the initial static info (budget and category CAN be changed)
         renderStaticComponents();
 
@@ -110,7 +108,6 @@ public class ExpensesListActivity extends AppCompatActivity {
 
         //Handle the user pressing the '+' button which indicates adding an expense
         handleExpenseAdditions();
-
     }
 
     /**
@@ -127,7 +124,6 @@ public class ExpensesListActivity extends AppCompatActivity {
         //Identify and initialized selected month
         final String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
         category = monthlyData.getCategory(categoryNameFromParent);
-        settings = intent.getParcelableExtra(SETTINGS_INTENT);
         return categoryNameFromParent;
     }
 
@@ -176,17 +172,13 @@ public class ExpensesListActivity extends AppCompatActivity {
                         //Update adapter
                         expenseAdapter.notifyDataSetChanged();
                     } catch (Exception overflow) {
-                        if (settings.getEnableNotifications()) {
-                            Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getBaseContext(), "Please provide expense cost less than $9,999,999", Toast.LENGTH_LONG).show();
                     }
 
                 } else {
-                    if (settings.getEnableNotifications()) {
-                        // Insufficient number of filled fields results in an error warning.
-                        Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in expense name and cost.", Toast.LENGTH_SHORT);
-                        missingInformationWarning.show();
-                    }
+                    // Insufficient number of filled fields results in an error warning.
+                    Toast missingInformationWarning = Toast.makeText(getBaseContext(), "Please fill in expense name and cost.", Toast.LENGTH_SHORT);
+                    missingInformationWarning.show();
                 }
             }
         });
@@ -267,7 +259,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                             category.setBudget(Integer.parseInt(categoryBudget.getText().toString()));
 
                             //Update monthly totalBudget
-                            monthlyData.setTotalBudget();
+                            monthlyData.calculateTotalBudget();
                             //Update new budget info to database
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
 
@@ -405,6 +397,4 @@ public class ExpensesListActivity extends AppCompatActivity {
         // Displays a Toast message that confirms the expense was deleted
         Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
     }
-
-
 }

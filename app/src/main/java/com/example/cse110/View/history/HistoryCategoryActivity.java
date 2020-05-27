@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.history.HistoryCategoryItem;
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.Controller.Settings;
 import com.example.cse110.Model.history.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
@@ -46,7 +45,6 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     private static final String SETTINGS_INTENT = "SettingsActivity settings";
     private static String CATEGORY_NAME = "category_name";
     private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
-    private Settings settings;
 
     //Display the month and year
 
@@ -128,7 +126,6 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         //Retrieve passed in MonthlyData object and extract date
         Intent i = getIntent();
         current_month = i.getParcelableExtra(HISTORY_DATA_INTENT);
-        settings = i.getParcelableExtra(SETTINGS_INTENT);
 
         //Update our local variables to match
         assert current_month != null;
@@ -243,11 +240,8 @@ public class HistoryCategoryActivity extends AppCompatActivity {
                         case R.id.navigation_settings:
                             Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
                             setResult(RESULT_OK, inten);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
+                            //inten.putExtra(HISTORY_DATA_INTENT, current_month);
+                            //inten.putExtra(MONTHLY_DATA_INTENT, current_month);
                             startActivityForResult(inten, 1);
                             overridePendingTransition(0, 0);
                             return true;

@@ -13,15 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.Controller.Settings;
-
 import com.example.cse110.Model.FormattingTool;
+import com.example.cse110.R;
+
 import java.util.Calendar;
 
 import com.example.cse110.View.history.HistoryActivity;
 
 import com.example.cse110.Model.Database;
-import com.example.cse110.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MonthlyData thisMonthsData;
     private MonthlyData pastMonthsData;
-
-    private Settings settings;
 
     private Database base = Database.Database(); // create a Database object
 
@@ -197,14 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSettingsClick(View v) {
         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-        // TODO: grab this from the database
-        if (settings == null) {
-            settings = new Settings();
-        }
-        intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
     // TODO: Month Year UPDATE FROM CATEGORY
@@ -228,10 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                 intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                if (settings == null) {
-                    settings = new Settings();
-                }
-                intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
                 startActivityForResult(intent, 1);
             }
             @Override
@@ -271,10 +257,6 @@ public class MainActivity extends AppCompatActivity {
                 String expenseRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100)));
 
                 totalExpenseDisplay.setText(expenseRendering);
-                Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
-                if (settings != null) {
-                    this.settings = settings;
-                }
             }
         }
     }
@@ -306,10 +288,6 @@ public class MainActivity extends AppCompatActivity {
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                                     intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                                    if (settings == null) {
-                                        settings = new Settings();
-                                    }
-                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
                                     startActivityForResult(intent, 1);
                                     overridePendingTransition(0, 0);
 
@@ -360,7 +338,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
-
                                     i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
 
                                     startActivityForResult(i, 1);
@@ -373,18 +350,9 @@ public class MainActivity extends AppCompatActivity {
                             });
                             return true;
                         case R.id.navigation_settings:
-
                             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-                            // TODO: grab this from the database
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
-                            startActivityForResult(intent, 1);
+                            startActivity(intent);
                             overridePendingTransition(0, 0);
-
                     }
                     return false;
                 }
@@ -394,12 +362,5 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do nothing on back button press because we don't want the user to be able to go back to login page
     }
-
-
-
-
-
-
-
 }
 
