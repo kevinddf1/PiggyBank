@@ -223,7 +223,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
-
+                // set up calendar
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);

@@ -49,12 +49,13 @@ public class HistoryDetailedActivity extends AppCompatActivity {
     private static final int DISTANCE_FOR_THOUSANDS_COMMA_NO_DECIMALS = 3;
     private static final int SIZE_LESS_THAN_THOUSANDS_NO_DECIMALS = 3;
     private static final int SIZE_LESS_THAN_MILLIONS_NO_DECIMALS = 6;
+    public static final int NAV_BAR_INDEX = 3;
 
     //nav bar need
     private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     private static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
-    public static final int NAV_BAR_INDEX = 3;
+
     private MonthlyData current_month;
     private Settings settings; //DEPRECATED
     private MonthlyData thisMonthsData;
