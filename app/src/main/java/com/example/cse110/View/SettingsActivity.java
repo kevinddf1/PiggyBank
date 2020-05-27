@@ -40,8 +40,8 @@ public class SettingsActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(4);
         menuItem.setChecked(true);
         navView.setOnNavigationItemSelectedListener(navListener);
-        Intent intent = getIntent();
 
+        // On-click listener for sign out button
         final Button signOutButton = findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -55,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // On-click listener for change passsword button
         final Button changePasswordButton = findViewById(R.id.change_password_button);
         changePasswordButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -65,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // On-click listener for delete account button
         final Button deleteAccountButton = findViewById(R.id.delete_account_button);
         deleteAccountButton.setOnClickListener(new View.OnClickListener(){
             @Override
