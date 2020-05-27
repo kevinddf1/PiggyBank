@@ -36,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String SETTINGS_INTENT = "SettingsActivity settings";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    private static final String LIST_OF_MONTHS = "List of Months";
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
 
@@ -178,6 +179,7 @@ public class SettingsActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.navigation_history:
+
                             ValueEventListener Listener2 = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
@@ -192,6 +194,9 @@ public class SettingsActivity extends AppCompatActivity {
                                     //thisMonthsData = base.RetrieveDatafromDatabase(dataSnapshot, thisMonthsData, year, month);
 
                                     i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
+
+                                    //Add the past month's history (includes current)
+                                    i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }
