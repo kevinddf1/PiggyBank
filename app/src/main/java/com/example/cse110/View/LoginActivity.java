@@ -7,19 +7,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.cse110.Model.Database;
 import com.example.cse110.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String USERNAME_FIELD = "com.example.test.USERNAME_FIELD";
 
     private FirebaseAuth mAuth;
+    private Database base;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        // On-click listener for login button
         final Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -47,17 +56,42 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getBaseContext(), "Logged in.", Toast.LENGTH_LONG).show();
+                            base =  Database.Database(); // create a Database object
+                            ValueEventListener Listener = new ValueEventListener() {
+                                //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    // Intent i = new Intent(getBaseContext(), HistoryActivity.class);
 
-                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                            startActivity(intent);
+                                    Calendar today = Calendar.getInstance();
+                                    int month = today.get(Calendar.MONTH);
+                                    int year = today.get(Calendar.YEAR);
+                                    ArrayList<String> list =  base.RetrieveT_Budget_Exp(dataSnapshot, year, month);
+
+                                    Bundle b = new Bundle();
+                                    b.putStringArray("Total Budget and Expense", new String[]{list.get(0), list.get(1)});
+
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                    intent.putExtras(b);
+
+                                    startActivity(intent);
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Failed to read value
+                                }
+                            };
+                            base.getMyRef().addListenerForSingleValueEvent(Listener);
                         } else {
                             Toast.makeText(getBaseContext(), "Login failed. " + task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+
             }
         });
 
+        // On-click listener for account creation button
         final Button createAccountButton = findViewById(R.id.createAccountButton);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -66,6 +100,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
                 intent.putExtra(USERNAME_FIELD, enteredUsername);
+                startActivity(intent);
+            }
+        });
+
+        // On-click listener for account recovery button
+        final Button accountRecoveryButton = findViewById(R.id.accountRecoveryButton);
+        accountRecoveryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, AccountRecoveryActivity.class);
                 startActivity(intent);
             }
         });

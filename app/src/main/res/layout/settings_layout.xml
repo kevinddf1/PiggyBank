@@ -43,18 +43,6 @@
             android:text="@string/account" />
 
         <Button
-            android:id="@+id/edit_profile_button"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="@string/edit_profile" />
-
-        <Switch
-            android:id="@+id/notifications_switch"
-            android:layout_width="378dp"
-            android:layout_height="wrap_content"
-            android:text="@string/enable_notifications" />
-
-        <Button
             android:id="@+id/change_password_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"

@@ -108,32 +108,42 @@ public class Database {
         myRef.child("User").child(key).removeValue();
     }
 
-    //First remove the "old" category and then insert a "new" category with the updated NAME
-//    public void rename_cate(String oldName, int oldYear, int oldMonth, String newName) {
-//        DatabaseReference cur_categories_ref = myRef.child("User").child(key).child(this.getMonth(oldMonth) + oldYear).child("< Categories >");
-//        DatabaseReference old_cate_ref = cur_categories_ref.child("Category " + oldName);
-//        //Set up the "new" category tree
-//        cur_categories_ref.child("Category " + newName).child("Budget").setValue(old_cate_ref.child("Budget").);
-//        cur_categories_ref.child("Category " + newName).child("Expense").setValue(old_cate_ref.child("Expense"));
-//        cur_categories_ref.child("Category " + newName).child("Month").setValue(old_cate_ref.child("Month"));
-//        cur_categories_ref.child("Category " + newName).child("Year").setValue(old_cate_ref.child("Year"));
-//        cur_categories_ref.child("Category " + newName).child("Name").setValue(newName);
-//        //Delete the "old" category
-//        delete_cate(oldName, oldYear, oldMonth);
-//    }
+    public ArrayList<String> RetrieveT_Budget_Exp(DataSnapshot dataSnapshot, int year, int month) {
+        DataSnapshot ds = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
+        ArrayList<String> list = new ArrayList<String>(2);
+        if (ds.child("Total Budget").getValue() == null || ds.child("Total Expense").getValue() == null) {
+            list.add("0");
+            list.add("0");
+        }
+        else {
+            String T_Budget = ds.child("Total Budget").getValue().toString();
+            String T_Expense = ds.child("Total Expense").getValue().toString();
+            list.add(T_Budget);
+            list.add(T_Expense);
+        }
+        return list;
+    }
 
     public MonthlyData RetrieveDataCurrent(DataSnapshot dataSnapshot, MonthlyData thisMonthsData, int year, int month) {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
             thisMonthsData = new MonthlyData(month, year);
+            DataSnapshot dsMonthlyData = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
+            if(dsMonthlyData == null || dsMonthlyData.child("Total Budget").getValue() == null || dsMonthlyData.child("Total Expense").getValue() ==  null){
+                thisMonthsData.setTotalBudgetDatabase("0");
+                thisMonthsData.setTotalExpensesDatabase("0");
+
+            }else {
+                thisMonthsData.setTotalBudgetDatabase(dsMonthlyData.child("Total Budget").getValue().toString());
+                thisMonthsData.setTotalExpensesDatabase(dsMonthlyData.child("Total Expense").getValue().toString());
+            }
 
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
                 if (!ds.exists()) { // check if there are any category in user's account
                     break; // if NOT, break the loop
-            }
+                }
                 // get the data of current category
                 String cate_name = ds.child("Name").getValue().toString();
-                System.out.println(cate_name);
                 String c_budget = ds.child("Budget").getValue().toString();
                 int cate_budget = Integer.parseInt(c_budget);
                 String c_year = ds.child("Year").getValue().toString();
@@ -166,10 +176,10 @@ public class Database {
                 // create category
                 thisMonthsData.createExistCategory(cate_name, cate_budget, expenses, cate_month, cate_year).setTotalExpenses();
                 thisMonthsData = this.RetrieveCateData(ds, thisMonthsData);
-                }
             }
-        return thisMonthsData;
         }
+        return thisMonthsData;
+    }
 
 
     public MonthlyData RetrieveDataPast(DataSnapshot dataSnapshot, MonthlyData pastMonthsData, int year, int month) {
@@ -314,6 +324,7 @@ public class Database {
 
         return pastMonths;
     }
+
 
     /**
      * Another signature for the method that allows the user to input strings instead of integers for month & year

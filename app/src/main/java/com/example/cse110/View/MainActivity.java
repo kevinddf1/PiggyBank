@@ -2,10 +2,6 @@ package com.example.cse110.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,32 +9,47 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.cse110.Model.Database;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.cse110.Controller.MonthlyData;
+import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.R;
-import com.example.cse110.Controller.Settings;
+
 import java.util.Calendar;
 
+import com.example.cse110.View.history.HistoryActivity;
+
+import com.example.cse110.Model.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
-    LinearLayout expenseListButton, historyButton, pieChartButton, settingsButton;
+
+    LinearLayout expenseListButton, historyButton, GraphsButton, settingsButton;
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String SETTINGS_INTENT = "CategoriesListActivity settings";
-    public static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
+    public static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
     private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
+
+
+
+
 
     private MonthlyData thisMonthsData;
     private MonthlyData pastMonthsData;
 
-    private Settings settings;
-
     private Database base = Database.Database(); // create a Database object
 
+    /**
+     * Formatting tool to avoid redundancies.
+     */
+    private FormattingTool formattingTool = new FormattingTool();
     /**
      * TextViews to display budget and total expenses
      */
@@ -54,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         thisMonthsData = intent.getParcelableExtra(MONTHLY_DATA_INTENT);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setLabelVisibilityMode(1);
+       // navView.setLabelVisibilityMode(1);
         Menu menu = navView.getMenu();
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
@@ -74,20 +85,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Bind our month's expenses and budget to proper display
-        //totalBudgetDisplay = findViewById(R.id.currentCash);
-        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
-        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
 
+        if(thisMonthsData != null) {
+            totalBudgetDisplay = findViewById(R.id.currentCash);
+            String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
+            totalBudgetDisplay.setText(budgetRendering);
 
+            totalExpenseDisplay = findViewById(R.id.totalExpenses);
+            String expenseRendering = "Total Expenses: " + Long.toString(thisMonthsData.getTotalExpensesAsCents()/100);
 
+            totalExpenseDisplay.setText(expenseRendering);
+        } else {
+            // Get Bundle object that contain the array
+            Bundle b = this.getIntent().getExtras();
+            String[] list = b.getStringArray("Total Budget and Expense");
 
-        //Bind our month's expenses and budget to proper display
-        //totalBudgetDisplay = findViewById(R.id.currentCash);
-        //totalBudgetDisplay.setText(totalBudgetDisplay.getText() + " $" + thisMonthsData.getTotalBudget());
-        //totalExpenseDisplay = findViewById(R.id.totalExpenses);
+            //Bind our month's expenses and budget to proper display
+            totalBudgetDisplay = findViewById(R.id.currentCash);
+            String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString( list[0]);
+            totalBudgetDisplay.setText(budgetRendering);
 
-
+            totalExpenseDisplay = findViewById(R.id.totalExpenses);
+            String expensesRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(Long.parseLong(list[1])/100.00)));
+            totalExpenseDisplay.setText(expensesRendering);
+        }
 
 
         historyButton = findViewById(R.id.HistoryButton);
@@ -98,11 +119,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pieChartButton = findViewById(R.id.PieChartButton);
-        pieChartButton.setOnClickListener(new View.OnClickListener(){
+        GraphsButton = findViewById(R.id.GraphsButton);
+        GraphsButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                onPieChartClick(v);
+                onGraphsClick(v);
             }
         });
 
@@ -134,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
 
-                //Add the past month's history (includes current)
+                //Add the past month's history (includes current)e
                 i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
             }
@@ -146,12 +167,12 @@ public class MainActivity extends AppCompatActivity {
         base.getMyRef().addListenerForSingleValueEvent(Listener);
     }
 
-    private void onPieChartClick(View v){
+    private void onGraphsClick(View v){
         base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
             //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                Intent i = new Intent(getBaseContext(), GraphsActivity.class);
 
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
@@ -159,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
-                i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+                i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
                 startActivityForResult(i, 1);
             }
             @Override
@@ -173,14 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSettingsClick(View v) {
         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-        // TODO: grab this from the database
-        if (settings == null) {
-            settings = new Settings();
-        }
-        intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
     // TODO: Month Year UPDATE FROM CATEGORY
@@ -204,10 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                 intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                if (settings == null) {
-                    settings = new Settings();
-                }
-                intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
                 startActivityForResult(intent, 1);
             }
             @Override
@@ -238,10 +248,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
-                Settings settings = data.getParcelableExtra(SettingsActivity.SETTINGS_INTENT);
-                if (settings != null) {
-                    this.settings = settings;
-                }
+
+                totalBudgetDisplay = findViewById(R.id.currentCash);
+                String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
+                totalBudgetDisplay.setText(budgetRendering);
+
+                totalExpenseDisplay = findViewById(R.id.totalExpenses);
+                String expenseRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100)));
+
+                totalExpenseDisplay.setText(expenseRendering);
             }
         }
     }
@@ -273,10 +288,6 @@ public class MainActivity extends AppCompatActivity {
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
 
                                     intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                                    if (settings == null) {
-                                        settings = new Settings();
-                                    }
-                                    intent.putExtra(CategoriesListActivity.SETTINGS_INTENT, settings);
                                     startActivityForResult(intent, 1);
                                     overridePendingTransition(0, 0);
 
@@ -319,14 +330,16 @@ public class MainActivity extends AppCompatActivity {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Intent i = new Intent(getBaseContext(), PieChartActivity.class);
+                                    Intent i = new Intent(getBaseContext(), GraphsActivity.class);
 
                                     Calendar today = Calendar.getInstance();
                                     int month = today.get(Calendar.MONTH);
                                     int year = today.get(Calendar.YEAR);
 
                                     thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-                                    i.putExtra(PIE_CHART_DATA_INTENT, thisMonthsData);
+
+                                    i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+
                                     startActivityForResult(i, 1);
                                     overridePendingTransition(0, 0);
                                 }
@@ -337,18 +350,9 @@ public class MainActivity extends AppCompatActivity {
                             });
                             return true;
                         case R.id.navigation_settings:
-
                             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-
-                            // TODO: grab this from the database
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            intent.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
-                            startActivityForResult(intent, 1);
+                            startActivity(intent);
                             overridePendingTransition(0, 0);
-
                     }
                     return false;
                 }
@@ -357,30 +361,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Do nothing on back button press because we don't want the user to be able to go back to login page
-    }
-
-    /**
-     * Helper method to instantiate current month upon creation
-     */
-    private void instantiateCurrentMonth(){
-        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
-            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Intent i = new Intent(getBaseContext(), HistoryActivity.class);
-                Calendar today = Calendar.getInstance();
-                int month = today.get(Calendar.MONTH);
-                int year = today.get(Calendar.YEAR);
-
-                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
-                i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
-                startActivityForResult(i, 1);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Failed to read value
-            }
-        });
     }
 }
 

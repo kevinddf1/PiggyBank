@@ -1,4 +1,4 @@
-package com.example.cse110.Model;
+package com.example.cse110.Model.history;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
+import com.example.cse110.Model.FormattingTool;
 import androidx.annotation.NonNull;
 
-import com.example.cse110.Controller.HistoryCategoryItem;
+import com.example.cse110.Controller.history.HistoryCategoryItem;
 import com.example.cse110.R;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +27,11 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
 
     //Declare our TextViews to edit
     private TextView name, budget, totalExpenses;
+
+    /**
+     * Helper method to avoid redundancies.
+     */
+    private FormattingTool formattingTool = new FormattingTool();
 
     /**
      * The only constructor for the adapter, connects the adapter to HistoryItem ArrayList.
@@ -59,50 +65,35 @@ public class HistoryCategoryAdapter extends ArrayAdapter<HistoryCategoryItem> {
         final HistoryCategoryItem item = getItem(position);
         assert item != null;
 
-        //Look up view for data population
-        name = convertView.findViewById(R.id.category_name);
-        name.setText(item.getName());
-        budget = convertView.findViewById(R.id.history_budget);
-        budget.setText("Budget: $" + formatIntMoneyString(Integer.toString(item.getBudget())));
-        totalExpenses = convertView.findViewById(R.id.history_expenses);
-        totalExpenses.setText("Total Expenses: -$" + formatMoneyString(item.getFormattedTotalExpenses()));
+        //Render all displays
+        renderStaticInfo(convertView, item);
 
         return convertView;
 
     }
 
     /**
-     * Helper method to format a display of money value, only integers
-     * @param valueToFormat The String to manipulate
-     * @return The new string to display
+     * Displays all attributes for a category
+     * @param convertView
+     * @param item
      */
-    private String formatMoneyString(String valueToFormat){
-        int hundredthComma = valueToFormat.length() - 6;
-        int thousandthComma = valueToFormat.length() - 9;
-        if(valueToFormat.length() <= 6){
-            return valueToFormat;
-        }else if(valueToFormat.length() <= 9){
-            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
-        }
+    private void renderStaticInfo(View convertView, HistoryCategoryItem item) {
+        //Look up view for data population
+        //Render name
+        name = convertView.findViewById(R.id.category_name);
+        name.setText(item.getName());
 
-        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
+        //Render budget
+        budget = convertView.findViewById(R.id.history_budget);
+        String budgetRender ="Budget: $" + formattingTool.formatIntMoneyString(Integer.toString(item.getBudget()));
+        budget.setText(budgetRender);
+
+        //Render total expenses
+        totalExpenses = convertView.findViewById(R.id.history_expenses);
+        String expenseRender = "Total Expenses: -$" + formattingTool.formatMoneyString(item.getFormattedTotalExpenses());
+        totalExpenses.setText(expenseRender);
     }
 
-    /**
-     * Helper method to format a display of money value, including cents
-     * @param valueToFormat The string to manipulate
-     * @return The new string to display
-     */
-    private String formatIntMoneyString(String valueToFormat){
-        int hundredthComma = valueToFormat.length() - 3;
-        int thousandthComma = valueToFormat.length() - 6;
 
-        if (valueToFormat.length() <= 3){
-            return  valueToFormat;
-        }else if (valueToFormat.length() <= 6){
-            return valueToFormat.substring(0, hundredthComma) + "," + valueToFormat.substring(hundredthComma);
-        }
-        return valueToFormat.substring(0, thousandthComma) + "," + valueToFormat.substring(thousandthComma , hundredthComma) + "," + valueToFormat.substring(hundredthComma );
-    }
 
 }
