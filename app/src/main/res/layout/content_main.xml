@@ -251,8 +251,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemIconTint="#26C6DA"
-        app:itemTextColor="#26C6DA"
+        app:itemIconTint="#5B5A5A"
+        app:itemTextColor="#5B5A5A"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
