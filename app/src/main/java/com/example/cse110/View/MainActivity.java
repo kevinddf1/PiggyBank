@@ -144,20 +144,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*
-    public void onHistoryCLick(View v) {
-        Intent intent = new Intent(getBaseContext(), MessagingPage.class);
-        startActivity(intent);
-    }
-    public void onLogoutCLick(View v) {
-        Intent intent = new Intent(getBaseContext(), MapPage.class);
-        startActivity(intent);
-    }
-    public void onSettingsCLick(View v) {
-        Intent intent = new Intent(getBaseContext(), FAQPage.class);
-        startActivity(intent);
-    }*/
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
