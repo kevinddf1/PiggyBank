@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.history.HistoryItem;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
+import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.Model.history.HistoryItemAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
@@ -95,6 +96,7 @@ public class HistoryActivity extends AppCompatActivity {
      */
     private HistoryItem currentItem;
 
+    private FormattingTool formattingTool = new FormattingTool();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,8 +203,8 @@ public class HistoryActivity extends AppCompatActivity {
                         //Parse the month and year selected to pull from database
                         String[] separateMonthYear = currentItem.getMonthYear().split(" ");
                         thisMonthsData = null; //Ensure to pull from database on every call
-                        thisMonthsData = base.RetrieveDataPast(dataSnapshot, null,
-                                separateMonthYear[0], separateMonthYear[1]);
+                        thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, null,
+                                Integer.parseInt(separateMonthYear[1]), Integer.parseInt(separateMonthYear[0]));
 
                         //Attach the monthlyData associated w/ the chosen month and start next activity
                         i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);

@@ -30,11 +30,10 @@ public class MonthlyData implements Parcelable {
         categories = new HashMap<>();
         categoriesArrayList = new ArrayList<>();
 
-        base.insertTotalBudget(this.year, this.month, this.totalBudget);
-        base.insertTotalExpense(this.year, this.month, this.totalExpensesAsCents);
         //Update monthly data
         calculateTotalBudget();
         calculateTotalExpensesAsCents();
+
     }
 
     /**

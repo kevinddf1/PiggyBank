@@ -134,14 +134,14 @@ public class Database {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
             thisMonthsData = new MonthlyData(month, year);
             DataSnapshot dsMonthlyData = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
-            if(dsMonthlyData == null || dsMonthlyData.child("Total Budget").getValue() == null || dsMonthlyData.child("Total Expense").getValue() ==  null){
+           /**if(dsMonthlyData == null || dsMonthlyData.child("Total Budget").getValue() == null || dsMonthlyData.child("Total Expense").getValue() ==  null){
                 thisMonthsData.setTotalBudgetDatabase("0");
                 thisMonthsData.setTotalExpensesDatabase("0");
 
             }else {
                 thisMonthsData.setTotalBudgetDatabase(dsMonthlyData.child("Total Budget").getValue().toString());
                 thisMonthsData.setTotalExpensesDatabase(dsMonthlyData.child("Total Expense").getValue().toString());
-            }
+            }**/
 
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
@@ -184,6 +184,8 @@ public class Database {
                 thisMonthsData = this.RetrieveCateData(ds, thisMonthsData);
             }
         }
+        thisMonthsData.calculateTotalExpensesAsCents();
+        thisMonthsData.calculateTotalBudget();
         return thisMonthsData;
     }
 
@@ -366,6 +368,10 @@ public class Database {
                 }
             }
         }
+        thisMonthsData.calculateTotalExpensesAsCents();
+        insertTotalExpense(thisMonthsData.getYear(), thisMonthsData.getIntMonth(),thisMonthsData.getTotalExpensesAsCents());
+        thisMonthsData.calculateTotalBudget();
+        insertTotalBudget(thisMonthsData.getYear(), thisMonthsData.getIntMonth(), thisMonthsData.getTotalBudget());
         return thisMonthsData;
     }
 
