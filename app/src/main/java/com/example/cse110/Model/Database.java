@@ -76,7 +76,7 @@ public class Database {
 
 
     public void insertCategoryExpenses(long expenses, String name, int year, int month) {
-        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).child("Budget").setValue(expenses);
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).child("Expenses").setValue(expenses);
     }
 
     public void insertExpense(double cost, String name, String parent_name, int year, int month, int day, int nextExpenseId) {

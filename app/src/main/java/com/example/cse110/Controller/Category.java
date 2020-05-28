@@ -47,7 +47,6 @@ public class Category implements Parcelable {
         budget = 0;
         name = "";
         expenses = new ArrayList<>();
-        base.insertCategoryExpenses(totalExpenses, this.getName(), this.year, this.month);
     }
 
     /**
@@ -62,6 +61,7 @@ public class Category implements Parcelable {
         this.month = month;
         this.year = year;
         nextExpenseId = 0;
+        this.totalExpenses = getTotalExpenses();
 
         //Identify id
         for (Expense e : expenses) {
