@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cse110.Controller.Category;
@@ -23,6 +26,7 @@ import com.example.cse110.Model.Database;
 import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.R;
 import com.example.cse110.View.history.HistoryActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -41,8 +45,10 @@ public class ExpensesListActivity extends AppCompatActivity {
      * Keys for pulling info into the page and push info to new pages.
      */
     public static final String MONTHLY_DATA_INTENT = "ExpenseListActivity monthlyData";
+    private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String CATEGORY_NAME_INTENT = "ExpenseListActivity categoryName";
-    public static final String SETTINGS_INTENT = "ExpenseListActivity settings";
+    private static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
 
     /**
      * Constants for error checking
@@ -70,6 +76,7 @@ public class ExpensesListActivity extends AppCompatActivity {
      * Backend objects to retrieve and update a user's information
      */
     private MonthlyData monthlyData;
+    private MonthlyData thisMonthsData;
     private Category category;
 
     /**
@@ -97,6 +104,9 @@ public class ExpensesListActivity extends AppCompatActivity {
 
         //Render the initial static info (budget and category CAN be changed)
         renderStaticComponents();
+
+        //Set up navBar components
+        navBarSetUp();
 
         //Render dynamic components like the button and user inputs
         renderVariableComponents();
@@ -403,6 +413,21 @@ public class ExpensesListActivity extends AppCompatActivity {
     }
 
     /**
+     * Set up navBar
+     */
+    private void navBarSetUp() {
+        //create the nav bar view
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        //make all page names visible
+        navView.setLabelVisibilityMode(1);
+        //check the lists icon
+        Menu menu = navView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
+
+    /**
      * Helper method to contain the logic for navigation bar to navigate to the lists page
      */
     private void homePageHandler() {
@@ -474,4 +499,32 @@ public class ExpensesListActivity extends AppCompatActivity {
             }
         });
     }
+
+    // BOTTOM NAVIGATION
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            homePageHandler();
+                            return true;
+                        case R.id.navigation_lists:
+                            return true;
+                        case R.id.navigation_history:
+                            historyPageHandler();
+                            return true;
+                        case R.id.navigation_graphs:
+                            graphPageHandler();
+                            return true;
+                        case R.id.navigation_settings:
+                            //create new intent for settings activity
+                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            return true;
+                    }
+                    return false;
+                }
+            };
 }
