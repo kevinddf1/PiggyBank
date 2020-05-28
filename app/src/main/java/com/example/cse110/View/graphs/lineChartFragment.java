@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.View.graphs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

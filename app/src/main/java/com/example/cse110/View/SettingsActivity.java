@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
 import com.example.cse110.R;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,9 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";

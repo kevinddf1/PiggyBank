@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.View.CategoriesListActivity;
-import com.example.cse110.View.GraphsActivity;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.MainActivity;
 import com.example.cse110.View.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

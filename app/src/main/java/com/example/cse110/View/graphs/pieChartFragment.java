@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.View.graphs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +11,9 @@ import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Cartesian;
-import com.anychart.core.cartesian.series.Column;
+import com.anychart.charts.Pie;
+import com.anychart.enums.Align;
+import com.anychart.enums.LegendLayout;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
@@ -21,14 +22,15 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class columnChartFragment extends Fragment {
-
+public class pieChartFragment extends Fragment {
 
     AnyChartView anyChartView;
     List<String> cateArrayList =new ArrayList<>();
     List<Double> totalExpenseArrayList = new ArrayList<>();
 
-    public columnChartFragment() {
+
+    public pieChartFragment() {
+
         // Required empty public constructor
     }
 
@@ -37,34 +39,46 @@ public class columnChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_column_chart, container, false);
+        return inflater.inflate(R.layout.fragment_pie_chart, container, false);
     }
 
 
     public void onViewCreated(View view,  Bundle savedInstanceState) {
-        anyChartView = (AnyChartView) getView().findViewById(R.id.column_chart_view);
+        anyChartView = (AnyChartView) getView().findViewById(R.id.pie_chart_view);
         GraphsActivity activity=(GraphsActivity) getActivity();
         cateArrayList=activity.getCateArrayList();
         totalExpenseArrayList=activity.getTotalExpenseArrayList();
-        setupcolumnChart();
+        setupPieChart();
     }
 
 
-    public void setupcolumnChart(){
 
-        Cartesian cartesian = AnyChart.column();
-        cartesian.title("Expenses for Each Category of This Month");
-        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
-        cartesian.xAxis(0).title("Category");
-        cartesian.yAxis(0).title("Expenses");
+    public void setupPieChart(){
 
+        Pie pie= AnyChart.pie();
         List<DataEntry> dataEntries = new ArrayList<>();
         for (int i=0; i<cateArrayList.size(); i++){
             dataEntries.add(new ValueDataEntry(cateArrayList.get(i), totalExpenseArrayList.get(i)));
         }
 
-        Column column = cartesian.column(dataEntries);
+        pie.data(dataEntries);
 
-        anyChartView.setChart(cartesian);
+        pie.title("weight of different categories");
+
+        pie.labels().position("outside");
+
+        pie.legend().title().enabled(true);
+        pie.legend().title()
+                .text("categories")
+                .padding(0d, 0d, 10d, 0d);
+
+        pie.legend()
+                .position("center-bottom")
+                .itemsLayout(LegendLayout.HORIZONTAL)
+                .align(Align.CENTER);
+
+
+        anyChartView.setChart(pie);
     }
+
 }

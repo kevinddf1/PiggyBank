@@ -15,7 +15,7 @@ import com.example.cse110.Model.Database;
 import com.example.cse110.Model.history.HistoryItemAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
-import com.example.cse110.View.GraphsActivity;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.MainActivity;
 import com.example.cse110.View.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

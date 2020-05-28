@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import com.example.cse110.R;
 
 import java.util.Calendar;
 
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 
 import com.example.cse110.Model.Database;
@@ -25,8 +25,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 

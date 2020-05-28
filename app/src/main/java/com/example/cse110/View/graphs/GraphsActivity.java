@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.View.graphs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,9 @@ import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Model.PagerAdapter;
 import com.example.cse110.R;
+import com.example.cse110.View.CategoriesListActivity;
+import com.example.cse110.View.MainActivity;
+import com.example.cse110.View.SettingsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabItem;
@@ -87,6 +90,7 @@ public class GraphsActivity extends AppCompatActivity {
         TabItem lineChartTab = findViewById(R.id.lineChartTab);
         final ViewPager viewPager = findViewById(R.id.viewPager);
 
+
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
 
@@ -134,7 +138,6 @@ public class GraphsActivity extends AppCompatActivity {
         for (int i = 0; i < expenseArray.size(); i++) {
             ret += expenseArray.get(i).getCost();
         }
-
         return ret;
     }
 

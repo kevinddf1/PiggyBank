@@ -24,7 +24,7 @@ import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.R;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Model.FormattingTool;
-import com.example.cse110.R;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
