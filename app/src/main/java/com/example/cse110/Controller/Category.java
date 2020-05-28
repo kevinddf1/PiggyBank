@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * A Category item which holds user's expenses. (Backend object)
  *
- * @author Peter Gonzalez and Thuycam Nguyen
+ * @author Peter  Thuycam Minxuan Jack
  */
 public class Category implements Parcelable {
 
@@ -47,6 +47,7 @@ public class Category implements Parcelable {
         budget = 0;
         name = "";
         expenses = new ArrayList<>();
+        base.insertCategoryExpenses(totalExpenses, this.getName(), this.year, this.month);
     }
 
     /**
@@ -242,6 +243,7 @@ public class Category implements Parcelable {
         for (Expense expense : this.expenses) {
             this.totalExpenses += expense.getCost();
         }
+        base.insertCategoryExpenses(totalExpenses, this.getName(), year, month);
 
     }
 }

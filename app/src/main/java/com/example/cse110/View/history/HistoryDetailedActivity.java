@@ -21,7 +21,7 @@ import com.example.cse110.Model.FormattingTool;
  * A class representing the HistoryDetailed window, for PiggyBank.
  * When the user presses on the Category item, it will bring up this specific window.
  *
- * @author Peter Gonzalez
+ * @author Peter Erdong
  * @version 4.27
  */
 public class HistoryDetailedActivity extends AppCompatActivity {

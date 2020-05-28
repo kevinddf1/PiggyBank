@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * The adapter handles interactions between frontend and backend when displaying/modifying a user's categories.
  *
- * @author Peter Gonzalez
+ * @author Peter Thuycam Minxuan
  */
 public class CategoriesListAdapter extends ArrayAdapter<Category> {
     //Declare core elements that cause changes

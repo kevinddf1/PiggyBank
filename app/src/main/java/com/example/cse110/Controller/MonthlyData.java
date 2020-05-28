@@ -30,6 +30,8 @@ public class MonthlyData implements Parcelable {
         categories = new HashMap<>();
         categoriesArrayList = new ArrayList<>();
 
+        base.insertTotalBudget(this.year, this.month, this.totalBudget);
+        base.insertTotalExpense(this.year, this.month, this.totalExpensesAsCents);
         //Update monthly data
         setTotalBudget();
         setTotalExpensesAsCents();
@@ -159,6 +161,7 @@ public class MonthlyData implements Parcelable {
             /****** update the new category info to database ******/
             this.base.insertCategoryName(name, year, month);
             this.base.insertCategoryBudget(budget, name, year, month);
+            this.base.insertCategoryExpenses(totalExpensesAsCents, name, year, month);
             this.base.insertCategoryDate(year, month, name);
             /*************************************************/
             //Update total budget
@@ -176,6 +179,7 @@ public class MonthlyData implements Parcelable {
         categories.put(name, category);
         categoriesArrayList.add(category);
         this.totalBudget += category.getBudget();
+        this.totalExpensesAsCents = category.getTotalExpenses();
         this.setTotalExpensesAsCents();
         return category;
     }
@@ -197,7 +201,7 @@ public class MonthlyData implements Parcelable {
 
 
     /**
-<<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
+<<<<<<< HEAD:app/src/wip/java/com/example/cse110/Model/MonthlyData.java
      * Calculates the total amount budgeted for this month, across all categories.
      * Very expensive function so limit use as much as possible.
      */

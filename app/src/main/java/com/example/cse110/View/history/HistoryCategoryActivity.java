@@ -30,7 +30,7 @@ import java.util.ArrayList;
 /**
  * A class representing the History window for PiggyBank.
  *
- * @author Peter Gonzalez
+ * @author Peter Erdong
  * @version April 23
  */
 public class HistoryCategoryActivity extends AppCompatActivity {
