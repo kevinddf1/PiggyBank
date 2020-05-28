@@ -2,6 +2,8 @@ package com.example.cse110.View.history;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,10 +14,16 @@ import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Model.history.HistoryItemAdapter;
 import com.example.cse110.R;
+import com.example.cse110.View.CategoriesListActivity;
+import com.example.cse110.View.GraphsActivity;
+import com.example.cse110.View.MainActivity;
+import com.example.cse110.View.SettingsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * This class represents the page to display a user month's across the existence of their account.
@@ -40,6 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
      */
     private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
 
+    private static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
     /**
      * Indices for pulling MONTH YEAR BUDGET EXPENSES from entries in allMonths
      */
@@ -47,6 +56,7 @@ public class HistoryActivity extends AppCompatActivity {
     private static final int YEAR_INDEX = 1;
     private static final int BUDGET_INDEX = 2;
     private static final int EXPENSES_INDEX = 3;
+    private static final int NAV_BAR_INDEX = 3;
 
     /**
      * Instantiated with selected month and put as an extra for HistoryCategoryActivity
@@ -100,6 +110,9 @@ public class HistoryActivity extends AppCompatActivity {
 
         //Handle user selection of a particular month
         setUpClickHandler();
+
+        //Set up nav bar
+        setUpNavBar();
     }
 
     /**
@@ -135,12 +148,16 @@ public class HistoryActivity extends AppCompatActivity {
     private void fillInHistoryItemList() {
         listOfHistoryItems = new ArrayList<>();
 
-        //Go through all Strings representing (MONTH YEAR BUDGET EXPENSES(not as cents) and convert to HistoryItem
+        //Go through all Strings representing (MONTH YEAR BUDGET EXPENSES(not as cents) and
+        // convert to HistoryItem
         for (String currentMonth : allMonths) {
-            String[] brokenDownString = currentMonth.split("-"); //Break String into components: MONTH YEAR BUDGET EXPENSES
+            //Break String into components: MONTH YEAR BUDGET EXPENSES
+            String[] brokenDownString = currentMonth.split("-");
 
             //Convert to HistoryItems for rendering purposes
-            HistoryItem currentMonthItem = new HistoryItem(brokenDownString[MONTH_INDEX] + " " + brokenDownString[YEAR_INDEX], brokenDownString[BUDGET_INDEX], brokenDownString[EXPENSES_INDEX]);
+            HistoryItem currentMonthItem = new HistoryItem(brokenDownString[MONTH_INDEX] +
+                    " " + brokenDownString[YEAR_INDEX], brokenDownString[BUDGET_INDEX],
+                    brokenDownString[EXPENSES_INDEX]);
 
             //Add to listOfHistoryItems for Adapter updates
             listOfHistoryItems.add(currentMonthItem);
@@ -155,7 +172,8 @@ public class HistoryActivity extends AppCompatActivity {
         listOfMonths.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             /**
-             * When a certain item is clicked in the list display, the user will be redirected to a detailed view of the chosen category.
+             * When a certain item is clicked in the list display, the user will be redirected to a
+             * detailed view of the chosen category.
              *
              * @param parent   The AdapterView for the ListView.
              * @param view     The View for the HistoryItem.
@@ -171,7 +189,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                     /**
                      * Pulls most recent database info and starts nextActivity
-                     * @param dataSnapshot A "snapshot" of the user's database info @ the current point in time
+                     * @param dataSnapshot A "snapshot" of the user's database info @ the current
+                     *                     point in time
                      */
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -182,7 +201,8 @@ public class HistoryActivity extends AppCompatActivity {
                         //Parse the month and year selected to pull from database
                         String[] separateMonthYear = currentItem.getMonthYear().split(" ");
                         thisMonthsData = null; //Ensure to pull from database on every call
-                        thisMonthsData = base.RetrieveDataPast(dataSnapshot, null, separateMonthYear[0], separateMonthYear[1]);
+                        thisMonthsData = base.RetrieveDataPast(dataSnapshot, null,
+                                separateMonthYear[0], separateMonthYear[1]);
 
                         //Attach the monthlyData associated w/ the chosen month and start next activity
                         i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
@@ -199,5 +219,145 @@ public class HistoryActivity extends AppCompatActivity {
 
         });
     }
+    /**
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        // Create the bottom navigation bar
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // set the label to be visible
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        // Check the icon
+        MenuItem menuItem = menu.getItem(NAV_BAR_INDEX);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
 
+    /**
+     * Helper method to contain the logic for navigation bar to navigate to the home page
+     */
+    private void homePageHandler() {
+        ValueEventListener Listener = new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified
+            // database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //create a new intent for home page activity
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                //set up the date for monthly data
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                base.insertMonthlydata(year, month);
+                // Retrieve the current data from data base
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                // put extra data for categories and expenses
+                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                startActivityForResult(intent, 1);
+                // avoid shifting
+                overridePendingTransition(0, 0);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
+    }
+
+    /**
+     * Helper method to contain the logic for navigation bar to navigate to the lists page
+     */
+    private void listsPageHandler() {
+         /* Read from the database
+        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not
+        trigger again.
+        / This is useful for data that only needs to be loaded once and isn't expected to change
+        frequently or require active listening.
+        */
+        ValueEventListener Listener = new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified
+            // database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                //set up the date for monthly data
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                base.insertMonthlydata(year, month);
+                //Retrieve the monthly data from the database
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                //put extra data into new intent
+                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                startActivityForResult(intent, 1);
+                //avoid shifting
+                overridePendingTransition(0, 0);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
+    }
+
+    /**
+     * Helper method to contain the logic for navigation bar to navigate to the graph page
+     */
+    private void graphPageHandler() {
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified
+            // database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent i = new Intent(getBaseContext(), GraphsActivity.class);
+                //set up the date for monthly data
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                //Retrieve the monthly data from the database
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                //Add the past month's history (includes current)e
+                i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                startActivityForResult(i, 1);
+                //avoid shifting
+                overridePendingTransition(0, 0);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
+    }
+
+    //Helper method to control the functionality of bottom navigation bar
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    // switch statement to handle all the icons in the bottom nav bar
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            homePageHandler();
+                            return true;
+                        case R.id.navigation_lists:
+                            listsPageHandler();
+                            return true;
+                        case R.id.navigation_history:
+                            return true;
+                        case R.id.navigation_graphs:
+                            graphPageHandler();
+                            return true;
+                        case R.id.navigation_settings:
+                            //create new intent for settings activity
+                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            return true;
+                    }
+                    return false;
+                }
+            };
 }
