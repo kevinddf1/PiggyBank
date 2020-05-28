@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * The adapter handles interactions between the frontend and backend.
  *
- * @author Peter Gonzalez
+ * @author Peter Thuycam
  */
 class ExpenseListAdapter extends ArrayAdapter<Expense> {
 
@@ -51,8 +51,6 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
         this.category = category;
         itemsList = items;
         this.context = context;
-
-
     }
 
 

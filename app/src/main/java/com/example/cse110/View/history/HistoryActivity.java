@@ -29,7 +29,7 @@ import java.util.Calendar;
  * This class represents the page to display a user month's across the existence of their account.
  * * When user presses: See History, this page will appear.
  *
- * @author Peter Gonzalez
+ * @author Peter, Erdong
  * @version May 15
  */
 public class HistoryActivity extends AppCompatActivity {

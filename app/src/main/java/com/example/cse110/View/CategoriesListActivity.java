@@ -35,7 +35,7 @@ import java.util.Calendar;
 /**
  * The app page to display the user's categories and add new ones.
  *
- * @author Peter Gonzalez and Thuycam Nguyen
+ * @author Peter  Thuycam Erdong
  * @version 5.24
  */
 public class CategoriesListActivity extends AppCompatActivity {

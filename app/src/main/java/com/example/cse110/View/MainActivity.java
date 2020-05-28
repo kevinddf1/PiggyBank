@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 totalBudgetDisplay.setText(budgetRendering);
 
                 totalExpenseDisplay = findViewById(R.id.totalExpenses);
-                String expenseRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100)));
+                String expenseRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(thisMonthsData.getTotalExpensesAsCents()/100.00)));
 
                 totalExpenseDisplay.setText(expenseRendering);
             }

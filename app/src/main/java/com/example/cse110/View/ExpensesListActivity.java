@@ -37,7 +37,7 @@ import java.util.Calendar;
 /**
  * The app's page for displaying a user's expenses and adding new ones.
  *
- * @author Peter Gonzalez and Thuycam Nguyen
+ * @author Peter Thuycam Erdong Minxuan
  */
 public class ExpensesListActivity extends AppCompatActivity {
 

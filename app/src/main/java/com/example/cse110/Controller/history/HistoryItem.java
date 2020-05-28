@@ -26,8 +26,7 @@ public class HistoryItem {
         this.monthYear = monthYear;
         this.totalBudget = totalBudget;
         this.totalExpenses = totalExpenses;
-
-}
+    }
 
     /**
      * Getter for month and year display
