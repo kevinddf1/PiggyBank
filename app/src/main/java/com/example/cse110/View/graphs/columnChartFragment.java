@@ -65,6 +65,9 @@ public class columnChartFragment extends Fragment {
 
         Column column = cartesian.column(dataEntries);
 
+
+        cartesian.getSeriesAt(0).name("$");
+
         anyChartView.setChart(cartesian);
     }
 }

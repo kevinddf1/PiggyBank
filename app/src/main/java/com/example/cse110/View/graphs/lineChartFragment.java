@@ -25,9 +25,13 @@ import java.util.List;
 public class lineChartFragment extends Fragment {
 
 
+    /**
+     * Indices for pulling MONTH YEAR BUDGET EXPENSES from entries in allMonths
+     */
     private static final int MONTH_INDEX = 0;
     private static final int YEAR_INDEX = 1;
     private static final int EXPENSES_INDEX = 3;
+
     private static final int JANUARY = 0;
     private static final int FEBRUARY = 1;
     private static final int MARCH = 2;
@@ -50,10 +54,9 @@ public class lineChartFragment extends Fragment {
     //string of money of each month
     List<Double> monthExpenseArrayList = new ArrayList<>();
 
-
-    List<Double> totalExpenseArrayList = new ArrayList<>();
+    //string contains all details of past data
     List<String> allMonths = new ArrayList<>();
-    double  currentMonthExpense;
+
 
     public lineChartFragment() {
         // Required empty public constructor
@@ -69,12 +72,17 @@ public class lineChartFragment extends Fragment {
 
     public void onViewCreated(View view,  Bundle savedInstanceState) {
         anyChartView = (AnyChartView) getView().findViewById(R.id.line_chart_view);
+
+        //past allMonths from graphsActivity to This file
         GraphsActivity activity=(GraphsActivity) getActivity();
-        totalExpenseArrayList=activity.getTotalExpenseArrayList();
         allMonths=activity.getAllMonths();
-        currentMonthExpense=getTotalMonthExpense();
 
+        setupArrayList();
 
+        setupLineChart();
+    }
+
+    private void setupArrayList() {
         Collections.reverse(allMonths);
         //Go through all Strings representing (MONTH YEAR BUDGET EXPENSES(not as cents) and
         // convert to HistoryItem
@@ -82,33 +90,17 @@ public class lineChartFragment extends Fragment {
             //Break String into components: MONTH YEAR BUDGET EXPENSES
             String[] brokenDownString = currentMonth.split("-");
 
-
             //add the expenses and month to the 2 array 2 needed
             String month=getMonth(Integer.parseInt(brokenDownString[MONTH_INDEX]));
             String year= brokenDownString[YEAR_INDEX];
             monthArrayList.add(month+" "+year );
             monthExpenseArrayList.add(Double.parseDouble(brokenDownString[EXPENSES_INDEX]));
         }
-
-
-
-
-
-
-        setuplineChart();
     }
 
 
-    public double  getTotalMonthExpense(){
-        double ret=0;
-        for(int i=0; i<totalExpenseArrayList.size(); i++){
-            ret+=totalExpenseArrayList.get(i);
-        }
-        return ret;
-    }
 
-
-    public void setuplineChart(){
+    public void setupLineChart(){
 
         Cartesian cartesian = AnyChart.line();
         cartesian.title("Trend of Total Expenses per Month");
@@ -121,6 +113,7 @@ public class lineChartFragment extends Fragment {
 
         Line line = cartesian.line(dataEntries);
 
+        cartesian.getSeriesAt(0).name("$");
         anyChartView.setChart(cartesian);
     }
 

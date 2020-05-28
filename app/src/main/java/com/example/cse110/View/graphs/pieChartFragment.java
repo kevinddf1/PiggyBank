@@ -29,6 +29,7 @@ public class pieChartFragment extends Fragment {
     List<Double> totalExpenseArrayList = new ArrayList<>();
 
 
+
     public pieChartFragment() {
 
         // Required empty public constructor
@@ -56,6 +57,8 @@ public class pieChartFragment extends Fragment {
     public void setupPieChart(){
 
         Pie pie= AnyChart.pie();
+
+
         List<DataEntry> dataEntries = new ArrayList<>();
         for (int i=0; i<cateArrayList.size(); i++){
             dataEntries.add(new ValueDataEntry(cateArrayList.get(i), totalExpenseArrayList.get(i)));
