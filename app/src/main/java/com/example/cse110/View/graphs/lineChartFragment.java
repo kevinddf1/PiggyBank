@@ -19,10 +19,43 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+/**
+ * A class representing the graphs for PiggyBank.
+ * When user presses: See lineChart Graph, this page will appear.
+ * @author Fan Ding
+ * @version May 28
+ *
+ */
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class lineChartFragment extends Fragment {
+
+    /**
+     * chart object
+     */
+    AnyChartView anyChartView;
+
+
+    /**
+     * string contains all details of past data, Month, year, budgets, costs
+     */
+    private List<String> allMonths = new ArrayList<>();
+
+
+    /**
+     * String List of months, like [March, April, June]
+     */
+    private List<String> monthArrayList =new ArrayList<>();
+
+
+    /**
+     * List of total spent of each months
+     */
+    private List<Double> monthExpenseArrayList = new ArrayList<>();
 
 
     /**
@@ -46,18 +79,9 @@ public class lineChartFragment extends Fragment {
     private static final int DECEMBER = 11;
 
 
-    AnyChartView anyChartView;
-
-    //string of months
-    List<String> monthArrayList =new ArrayList<>();
-
-    //string of money of each month
-    List<Double> monthExpenseArrayList = new ArrayList<>();
-
-    //string contains all details of past data
-    List<String> allMonths = new ArrayList<>();
-
-
+    /**
+     * constructor
+     */
     public lineChartFragment() {
         // Required empty public constructor
     }
@@ -82,6 +106,11 @@ public class lineChartFragment extends Fragment {
         setupLineChart();
     }
 
+
+    /**
+     * allMonths contains string formatting like YEAR, MONTH, BUDGETS, COST.
+     * need to separate them into small partitions and store month and budgets into 2 arrayList.
+     */
     private void setupArrayList() {
         Collections.reverse(allMonths);
         //Go through all Strings representing (MONTH YEAR BUDGET EXPENSES(not as cents) and
@@ -99,7 +128,11 @@ public class lineChartFragment extends Fragment {
     }
 
 
-
+    /**
+     * set up LineChart with 2 arrayLists.
+     * monthArrayList, which contains String List of months
+     * monthExpenseArrayList, which contains cost of each months.
+     */
     public void setupLineChart(){
 
         Cartesian cartesian = AnyChart.line();
@@ -116,6 +149,7 @@ public class lineChartFragment extends Fragment {
         cartesian.getSeriesAt(0).name("$");
         anyChartView.setChart(cartesian);
     }
+
 
     /**
      * Helper method to find the correct month name to display
