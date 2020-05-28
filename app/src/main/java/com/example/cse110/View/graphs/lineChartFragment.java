@@ -16,6 +16,7 @@ import com.anychart.core.cartesian.series.Line;
 import com.example.cse110.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,10 +25,34 @@ import java.util.List;
 public class lineChartFragment extends Fragment {
 
 
+    private static final int MONTH_INDEX = 0;
+    private static final int YEAR_INDEX = 1;
+    private static final int EXPENSES_INDEX = 3;
+    private static final int JANUARY = 0;
+    private static final int FEBRUARY = 1;
+    private static final int MARCH = 2;
+    private static final int APRIL = 3;
+    private static final int MAY = 4;
+    private static final int JUNE = 5;
+    private static final int JULY = 6;
+    private static final int AUGUST = 7;
+    private static final int SEPTEMBER = 8;
+    private static final int OCTOBER = 9;
+    private static final int NOVEMBER = 10;
+    private static final int DECEMBER = 11;
+
+
     AnyChartView anyChartView;
+
+    //string of months
     List<String> monthArrayList =new ArrayList<>();
+
+    //string of money of each month
     List<Double> monthExpenseArrayList = new ArrayList<>();
+
+
     List<Double> totalExpenseArrayList = new ArrayList<>();
+    List<String> allMonths = new ArrayList<>();
     double  currentMonthExpense;
 
     public lineChartFragment() {
@@ -46,20 +71,28 @@ public class lineChartFragment extends Fragment {
         anyChartView = (AnyChartView) getView().findViewById(R.id.line_chart_view);
         GraphsActivity activity=(GraphsActivity) getActivity();
         totalExpenseArrayList=activity.getTotalExpenseArrayList();
+        allMonths=activity.getAllMonths();
         currentMonthExpense=getTotalMonthExpense();
 
-        //need to build monthArrayList and monthExpenseArraylsit let's say 5 months
-        monthArrayList.add("Jan");
-        monthArrayList.add("Feb");
-        monthArrayList.add("Mar");
-        monthArrayList.add("Apr");
-        monthArrayList.add("May");
 
-        monthExpenseArrayList.add(310.00);
-        monthExpenseArrayList.add(214.00);
-        monthExpenseArrayList.add(389.40);
-        monthExpenseArrayList.add(150.87);
-        monthExpenseArrayList.add(currentMonthExpense);
+        Collections.reverse(allMonths);
+        //Go through all Strings representing (MONTH YEAR BUDGET EXPENSES(not as cents) and
+        // convert to HistoryItem
+        for (String currentMonth : allMonths) {
+            //Break String into components: MONTH YEAR BUDGET EXPENSES
+            String[] brokenDownString = currentMonth.split("-");
+
+
+            //add the expenses and month to the 2 array 2 needed
+            String month=getMonth(Integer.parseInt(brokenDownString[MONTH_INDEX]));
+            String year= brokenDownString[YEAR_INDEX];
+            monthArrayList.add(month+" "+year );
+            monthExpenseArrayList.add(Double.parseDouble(brokenDownString[EXPENSES_INDEX]));
+        }
+
+
+
+
 
 
         setuplineChart();
@@ -90,4 +123,53 @@ public class lineChartFragment extends Fragment {
 
         anyChartView.setChart(cartesian);
     }
+
+    /**
+     * Helper method to find the correct month name to display
+     * @param month The month as an int
+     * @return The month as a string
+     */
+    private String getMonth(int month) {
+        switch (month) {
+            case JANUARY:
+                return "January";
+
+            case FEBRUARY:
+                return "February";
+
+            case MARCH:
+                return "March";
+
+            case APRIL:
+                return "April";
+
+            case MAY:
+                return "May";
+
+            case JUNE:
+                return "June";
+
+            case JULY:
+                return "July";
+
+            case AUGUST:
+                return "August";
+
+            case SEPTEMBER:
+                return "September";
+
+            case OCTOBER:
+                return "October";
+
+            case NOVEMBER:
+                return "November";
+
+            case DECEMBER:
+                return "December";
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + month);
+        }
+    }
+
 }

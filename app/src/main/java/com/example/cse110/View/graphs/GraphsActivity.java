@@ -45,10 +45,10 @@ import java.util.List;
 public class GraphsActivity extends AppCompatActivity {
 
     private static final int NAV_BAR_INDEX = 2;
-    AnyChartView anyChartView;
+    private AnyChartView anyChartView;
     List<String> cateArrayList = new ArrayList<>();
     List<Double> totalExpenseArrayList = new ArrayList<>();
-
+    List<String> allMonths = new ArrayList<>();
     /**
      * Key for pulling an object of monthlyData in the HistoryDetailedActivity
      *
@@ -82,6 +82,9 @@ public class GraphsActivity extends AppCompatActivity {
 
         //navBar handling
         setUpNavBar();
+
+        //Extract list of months from an incoming Intent
+        instantiateListOfMonths();
 
         //TabLayout implemented here, which allow u to switch between different graphs, like pie Chart and line chart.
         TabLayout tabLayout = findViewById(R.id.tabBar);
@@ -132,6 +135,8 @@ public class GraphsActivity extends AppCompatActivity {
         return totalExpenseArrayList;
     }
 
+    public List<String> getAllMonths(){return allMonths;}
+
     private double getTotalExpense(Category c) {
         double ret = 0;
         ArrayList<Expense> expenseArray = c.getExpenses();
@@ -140,6 +145,22 @@ public class GraphsActivity extends AppCompatActivity {
         }
         return ret;
     }
+
+
+    /**
+     * Handle incoming intents and extract pastMonthSummary's output
+     */
+    private void instantiateListOfMonths() {
+        //Get data from incoming Intent
+        Bundle bundle = getIntent().getExtras();
+
+        //Null error handling
+        assert bundle != null;
+
+        //Extract months summary
+        allMonths = bundle.getStringArrayList(LIST_OF_MONTHS);
+    }
+
 
     /**
      * The user shall enter any page through clicking the icon in this nav bar
