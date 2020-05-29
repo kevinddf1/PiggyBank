@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@+id/history_expenses" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:background="@drawable/layoutshadow"
@@ -27,25 +27,23 @@
 
         <EditText
             android:id="@+id/expense_name"
-            android:layout_width="196dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:paddingLeft="15sp"
-            android:ems="10"
+            android:layout_weight="1"
+            android:divider="@color/lightGrey"
             android:hint="Name"
-            android:textColor="@color/darkGrey"
             android:inputType="textPersonName"
-            android:divider="@color/lightGrey"/>
+            android:paddingLeft="15sp"
+            android:textColor="@color/darkGrey" />
 
         <EditText
             android:id="@+id/expense_cost"
-            android:layout_width="142dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:ems="10"
+            android:layout_weight="1"
             android:hint="Cost"
-            android:textColor="@color/darkGrey"
-            android:inputType="number|numberDecimal" />
+            android:inputType="number|numberDecimal"
+            android:textColor="@color/darkGrey" />
 
         <Button
             android:id="@+id/AddToList"

@@ -100,7 +100,7 @@ public class HistoryDetailedActivity extends AppCompatActivity {
         // The details for the budget and total expenditures.
         budget.setText("Budget: $" + formatIntMoneyString(currentCategory.getBudgetAsString()));
         totalExpenses = (TextView) findViewById(R.id.total_expenses);
-        totalExpenses.setText("Total Expenditure: $" + formatMoneyString(total));
+        totalExpenses.setText("Total Expenses: $" + formatMoneyString(total));
 
 
 

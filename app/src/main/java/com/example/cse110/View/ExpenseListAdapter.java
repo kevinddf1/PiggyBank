@@ -51,7 +51,8 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
         TextView expenseName = listItemView.findViewById(R.id.expense_name);
         expenseName.setText(item.getName());
         TextView expenseCost = listItemView.findViewById(R.id.expense_cost);
-        expenseCost.setText("$" + formatMoneyString(item.getCostAsString()));
+        String expenseCostAdapt = "$" + formatMoneyString(item.getCostAsString());
+        expenseCost.setText(expenseCostAdapt);
 
         btnDelete = listItemView.findViewById(R.id.delete);
         btnDelete.setTag(position);
@@ -66,7 +67,8 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
                     double calculatedRemainder = (double) category.getTotalExpenses() / 100.00;
                     String totalExpenseString = Double.valueOf(calculatedRemainder).toString();
 
-                    ((ExpensesListActivity)context).updateTotalExpenseDisplay("$" + formatMoneyString(totalExpenseString));
+                    String expenseCostActivity = "Total Expenses: $" + formatMoneyString(totalExpenseString);
+                    ((ExpensesListActivity)context).updateTotalExpenseDisplay(expenseCostActivity);
 
                     //Add fine tuning on expense Display
                     notifyDataSetChanged();

@@ -8,250 +8,219 @@
     android:background="#FFFFFF"
     tools:context=".View.MainActivity">
 
-    <ImageView
-        android:id="@+id/topBar"
-        android:layout_width="422dp"
-        android:layout_height="201dp"
-        app:srcCompat="@drawable/mainheaderbackground"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <TextView
-        android:id="@+id/welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:fontFamily="@font/semibold"
-        android:shadowColor="#4D000000"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="25"
-        android:singleLine="false"
-        android:text="@string/welcome"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/topBar"
-        app:layout_constraintEnd_toStartOf="@+id/underline"
-        app:layout_constraintHorizontal_bias="0.366"
-        app:layout_constraintStart_toEndOf="@+id/currentCash"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.512" />
-
-    <TextView
-        android:id="@+id/currentCash"
-        android:layout_width="172dp"
-        android:layout_height="32dp"
-        android:fontFamily="@font/semibold"
-        android:shadowColor="#4D000000"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="25"
-        android:text="@string/currentCash"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/totalExpenses"
-        app:layout_constraintEnd_toStartOf="@+id/totalExpenses"
-        app:layout_constraintHorizontal_bias="0.668"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/totalExpenses"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:fontFamily="@font/semibold"
-        android:shadowColor="#4D000000"
-        android:shadowDx="0"
-        android:shadowDy="1.0"
-        android:shadowRadius="25"
-        android:text="@string/totalExpenses"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-        app:layout_constraintEnd_toStartOf="@+id/topBar"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
-        app:layout_constraintTop_toBottomOf="@+id/currentCash" />
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/topBar"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
-
-    <ImageView
-        android:id="@+id/underline"
-        android:layout_width="291dp"
-        android:layout_height="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/currentCash"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/line" />
-
-    <ImageView
-        android:id="@+id/homeIcon"
-        android:layout_width="22dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/home"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@+id/topBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/home" />
-
-    <TextView
-        android:id="@+id/home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/semibold"
-        android:text="@string/home"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/homeIcon"
-        app:layout_constraintEnd_toStartOf="@+id/topBar"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/homeIcon"
-        app:layout_constraintTop_toTopOf="@+id/homeIcon" />
-
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="411dp"
-        android:layout_height="530dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topBar">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/ExpensesButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:orientation="vertical">
-                
-                <TextView
-                    android:id="@+id/ExpensesText"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:fontFamily="@font/semibold"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:onClick="onExpensesCLick"
-                    android:text="Manage My Expenses"
-                    android:textAlignment="gravity"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black" />
-
-                <ImageView
-                    android:id="@+id/ExpensesImage"
-                    android:layout_width="202dp"
-                    android:layout_height="170dp"
-                    app:srcCompat="@drawable/money" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/HistoryButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/HistoryText"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:fontFamily="@font/semibold"
-                    android:text="Track My History" />
-
-                <ImageView
-                    android:id="@+id/HistoryImage"
-                    android:layout_width="211dp"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/calendar" />
-            </LinearLayout>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/PieChartButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/GraphsText"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="#FFFFFF"
-                    android:fontFamily="@font/semibold"
-                    android:text="@string/graphs" />
-
-                <ImageView
-                    android:id="@+id/GraphsImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/stock" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/SettingsButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/SettingsText"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:fontFamily="@font/semibold"
-                    android:text="Settings" />
-
-                <ImageView
-                    android:id="@+id/SettingsImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/setting" />
-            </LinearLayout>
-
-        </TableRow>
-    </TableLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:itemIconTint="#26C6DA"
-        app:itemTextColor="#26C6DA"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@drawable/mainheaderbackground"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="15sp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/homeIcon"
+                    android:layout_width="22dp"
+                    android:layout_height="33dp"
+                    app:srcCompat="@drawable/home" />
+
+                <TextView
+                    android:id="@+id/home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5sp"
+                    android:fontFamily="@font/semibold"
+                    android:text="@string/home"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/semibold"
+                android:shadowColor="#4D000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="25"
+                android:singleLine="false"
+                android:text="@string/welcome"
+                android:textColor="@color/white"
+                android:textSize="28sp" />
+
+            <ImageView
+                android:id="@+id/underline"
+                android:layout_width="291dp"
+                android:layout_height="1dp"
+                app:srcCompat="@drawable/line" />
+
+            <TextView
+                android:id="@+id/totalExpenses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/semibold"
+                android:shadowColor="#4D000000"
+                android:shadowDx="0"
+                android:shadowDy="1.0"
+                android:shadowRadius="25"
+                android:text="@string/totalExpenses"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/totalBudget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/semibold"
+                android:shadowColor="#4D000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="25"
+                android:text="@string/totalBudget"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/ExpensesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/ExpensesText"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/semibold"
+                        android:text="Manage My Expenses"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/ExpensesImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/money" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/HistoryButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/HistoryText"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/semibold"
+                        android:text="Track My History" />
+
+                    <ImageView
+                        android:id="@+id/HistoryImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/calendar" />
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/PieChartButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/GraphsText"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        android:fontFamily="@font/semibold"
+                        android:text="@string/graphs" />
+
+                    <ImageView
+                        android:id="@+id/GraphsImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/stock" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/SettingsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/SettingsText"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/semibold"
+                        android:text="Settings" />
+
+                    <ImageView
+                        android:id="@+id/SettingsImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/setting" />
+                </LinearLayout>
+
+            </TableRow>
+        </TableLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="?android:attr/windowBackground"
+            app:itemIconTint="@color/darkGrey"
+            app:itemTextColor="@color/darkGrey"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

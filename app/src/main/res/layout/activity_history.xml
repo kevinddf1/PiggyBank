@@ -20,7 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:background="#FFFFFF"
+            android:background="@color/lightGrey"
+            android:divider="@drawable/layoutshadow"
+            android:dividerHeight="4dp"
             android:cacheColorHint="#FFFFFF"
             android:clickable="true"
             android:focusable="true"
@@ -35,8 +37,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:itemIconTint="#26C6DA"
-            app:itemTextColor="#26C6DA"
+            app:itemIconTint="@color/darkGrey"
+            app:itemTextColor="@color/darkGrey"
             android:background="?android:attr/windowBackground"
             app:menu="@menu/bottom_nav_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>

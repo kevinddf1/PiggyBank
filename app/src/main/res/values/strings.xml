@@ -21,7 +21,7 @@
     <string name="type_in_the_list_to_create">Type in the list to create</string>
     <string name="expenses">Expenses</string>
     <string name="welcome">Welcome Back</string>
-    <string name="currentCash">Current Cash:</string>
+    <string name="totalBudget">Total Budget:</string>
     <string name="totalExpenses">Total Expenses:</string>
 
     <!-- Strings used for login -->

@@ -65,11 +65,12 @@ public class ExpensesListActivity extends AppCompatActivity {
         categoryName.setText(category.getName());
         //Category BUDGET in the top bar
         categoryBudget = findViewById((R.id.budget_display_history)); //Brent
-        categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
+        categoryBudget.setText("Budget: $" + formatIntMoneyString(category.getBudgetAsString()));
         //Category "TOTAL EXPENSES" in the top bar
 
         totalExpensesDisplay = findViewById(R.id.total_expenses);
-        totalExpensesDisplay.setText("$" + formatMoneyString(Long.toString(category.getTotalExpenses()/100))); //Account for initial lack of decimal values
+        String totalExpensesInitial = "Total Expenses: $" + formatMoneyString(Long.toString(category.getTotalExpenses()/100));
+        totalExpensesDisplay.setText(totalExpensesInitial); //Account for initial lack of decimal values
 
         // Bind element from XML file
         expenseName = findViewById(R.id.expense_name);
@@ -91,7 +92,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(), "A category cannot have a budget greater than $9,999,999.", Toast.LENGTH_LONG).show();
                     } else if (categoryBudget.getText().toString().isEmpty()) {
                         //In the case of of an empty string
-                        categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
+                        categoryBudget.setText("Budget: $" + formatIntMoneyString(category.getBudgetAsString()));
                     } else {
                         //Ensure valid input
                         try {
@@ -103,7 +104,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                             //Update new budget info to database
                             base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
 
-                            categoryBudget.setText("$" + formatIntMoneyString(category.getBudgetAsString()));
+                            categoryBudget.setText("Budget: $" + formatIntMoneyString(category.getBudgetAsString()));
                             // Sends a Toast message if the user changes the category's budget and the new budgets is less than total expenses
                             if (category.getBudget() < category.getTotalExpenses()/100.00) {
                                 Toast.makeText(getBaseContext(), "Uh oh! The total has exceeded the " + category.getName() + " budget.", Toast.LENGTH_LONG).show();
@@ -182,7 +183,8 @@ public class ExpensesListActivity extends AppCompatActivity {
                         category.createExpense(expenseName.getText().toString(), Double.parseDouble(expenseCost.getText().toString()), today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
                        // Update total expenses for this category
                         double currentTotalExpense = category.getTotalExpenses()/100.00;
-                        totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense)));
+                        String totalExpensesText = "Total Expenses: $" + formatMoneyString( Double.toString(currentTotalExpense));
+                        totalExpensesDisplay.setText(totalExpensesText);
 
                         // Displays a Toast message if the user goes over their budget when adding an expense
                         if (category.getBudget() < currentTotalExpense) {
@@ -193,8 +195,9 @@ public class ExpensesListActivity extends AppCompatActivity {
                         }
 
                         base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
+                        String totalExpensesTextUpdate = "Total Expenses: $" + formatMoneyString( Double.toString(currentTotalExpense));
                        // Update total expenses for this category
-                        totalExpensesDisplay.setText("$" + formatMoneyString( Double.toString(currentTotalExpense )));
+                        totalExpensesDisplay.setText(totalExpensesTextUpdate);
 
                         expenseName.getText().clear();
                         expenseCost.getText().clear();
