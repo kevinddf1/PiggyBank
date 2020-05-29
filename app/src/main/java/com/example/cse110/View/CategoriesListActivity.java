@@ -263,9 +263,13 @@ public class CategoriesListActivity extends AppCompatActivity {
      *
      * @param nameOfCategory The name of the category that was deleted
      */
-    public void confirmDeletion(TextView nameOfCategory) {
-        Toast.makeText(getBaseContext(), nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+//    public void confirmDeletion(TextView nameOfCategory) {
+//        Toast.makeText(getBaseContext(), nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+//    }
+    public void confirmDeletion(String nameOfCategory) {
+        Toast.makeText(getBaseContext(), "Category \"" + nameOfCategory + "\" was deleted.", Toast.LENGTH_SHORT).show();
     }
+
 
     /**
      * Helper method to contain the logic for navigation bar to navigate to the lists page

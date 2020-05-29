@@ -3,12 +3,16 @@ package com.example.cse110.Model;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.MonthlyData;
@@ -107,22 +111,24 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
 
         //Set up a onclick listener -- MINXUAN
         btnDelete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 if (v.getTag() != null) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
                     alertDialog.setTitle("Confirm Deletion");
-                    alertDialog.setMessage("Delete category \"" + item.getName() + "\"?");
+                    //Display category name as bold
+                    alertDialog.setMessage(Html.fromHtml("Delete category \"" + "<b>" + item.getName() + "</b>" + "\"?", Html.FROM_HTML_MODE_LEGACY));
+                    //alertDialog.setMessage("Delete category \"" + item.getName() + "\"?");
                     alertDialog.setIcon(R.drawable.delete);
 
                     alertDialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            //your deleting code
                             // Remove item from MonthlyData and update adapter
                             monthlyData.deleteCategory(item.getName());
                             itemsList.remove(item);
                             notifyDataSetChanged();
-                            ((CategoriesListActivity) context).confirmDeletion(categoryName);
+                            ((CategoriesListActivity) context).confirmDeletion(item.getName());   //categoryName
                             dialog.dismiss();
                         }
                     });
