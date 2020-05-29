@@ -58,6 +58,11 @@ public class HistoryDetailedActivity extends AppCompatActivity {
     private static final String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
 
     /**
+     * For past months data
+     */
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
+
+    /**
      * The data structure to hold the HistoryDetailedItems.
      */
     private final ArrayList<HistoryDetailedItem> historyDetailedItems = new ArrayList<>();
@@ -271,6 +276,8 @@ public class HistoryDetailedActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                //Add the past month's history (includes current)e
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);

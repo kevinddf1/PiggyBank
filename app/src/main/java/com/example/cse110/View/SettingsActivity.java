@@ -32,7 +32,7 @@ import androidx.appcompat.app.AlertDialog;
 public class SettingsActivity extends AppCompatActivity {
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
-    private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months data
     private static final int NAV_BAR_INDEX = 4;
 
     private MonthlyData monthlyData;
