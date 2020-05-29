@@ -224,6 +224,8 @@ public class SettingsActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                //Add the past month's history (includes current)e
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);
