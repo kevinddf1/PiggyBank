@@ -234,6 +234,8 @@ public class ExpensesListActivity extends AppCompatActivity {
                             //App display the new name
                             categoryName.setText(category.getName());
                             Toast.makeText(getBaseContext(), "Category successfully renamed!", Toast.LENGTH_LONG).show();
+
+                            handleCategoryNameChanges(category.getName());
                         }
                     }
                 } else {
