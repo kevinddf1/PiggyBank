@@ -15,16 +15,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.history.HistoryCategoryItem;
 import com.example.cse110.Controller.MonthlyData;
-import com.example.cse110.Controller.Settings;
+import com.example.cse110.Model.Database;
 import com.example.cse110.Model.history.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
 import com.example.cse110.View.MainActivity;
-import com.example.cse110.View.PieChartActivity;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -39,14 +43,14 @@ public class HistoryCategoryActivity extends AppCompatActivity {
      *
      * @see #onCreate(Bundle)
      */
+
     private static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     private static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
-    private static final String PIE_CHART_DATA_INTENT = "PieChartActivity monthlyData";
-    private static final String SETTINGS_INTENT = "SettingsActivity settings";
-    private static final String CATEGORY_NAME = "category_name";
-    private static final String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
+    private static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
+    private static String CATEGORY_NAME = "category_name";
+    private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
+    private static final int NAV_BAR_INDEX = 3;
 
-    private Settings settings; //DEPRECATED
     //Display the month and year
 
     /**
@@ -55,11 +59,17 @@ public class HistoryCategoryActivity extends AppCompatActivity {
      * @see #onCreate(Bundle)
      */
     private MonthlyData current_month;
+    private MonthlyData thisMonthsData;
 
     /**
      * The display of the list on the History page.
      */
     private ListView pastCategories;
+
+    /**
+     * Database singleton to get most up to date information from the user's account
+     */
+    private final Database base = Database.Database(); // create a Database object
 
     /**
      * The adapter to connect Category data to list display.
@@ -104,20 +114,6 @@ public class HistoryCategoryActivity extends AppCompatActivity {
 
         //Handle user clicks
         setUpClickHandling();
-
-
-    }
-
-
-    /**
-     * Erdong's navbar
-     */
-    private void setUpNavBar() {
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        Menu menu = navView.getMenu();
-        MenuItem menuItem = menu.getItem(3);
-        menuItem.setChecked(true);
-        navView.setOnNavigationItemSelectedListener(navListener);
     }
 
     /**
@@ -127,7 +123,6 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         //Retrieve passed in MonthlyData object and extract date
         Intent i = getIntent();
         current_month = i.getParcelableExtra(HISTORY_DATA_INTENT);
-        settings = i.getParcelableExtra(SETTINGS_INTENT);
 
         //Update our local variables to match
         assert current_month != null;
@@ -201,56 +196,143 @@ public class HistoryCategoryActivity extends AppCompatActivity {
         }
     }
 
-    //ERDONG'S NAVBAR
+    /**
+     * The user shall enter any page through clicking the icon in this nav bar
+     */
+    private void setUpNavBar() {
+        // Create the bottom navigation bar
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // set the label to be visible
+        navView.setLabelVisibilityMode(1);
+        Menu menu = navView.getMenu();
+        // Check the icon
+        MenuItem menuItem = menu.getItem(NAV_BAR_INDEX);
+        menuItem.setChecked(true);
+        navView.setOnNavigationItemSelectedListener(navListener);
+    }
+
+    /**
+     * Helper method to contain the logic for navigation bar to navigate to the home page
+     */
+    private void homePageHandler() {
+        ValueEventListener Listener = new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified
+            // database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //create a new intent for home page activity
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                //set up the date for monthly data
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                base.insertMonthlydata(year, month);
+                // Retrieve the current data from data base
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                // put extra data for categories and expenses
+                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                startActivityForResult(intent, 1);
+                // avoid shifting
+                overridePendingTransition(0, 0);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
+    }
+
+    /**
+     * Helper method to contain the logic for navigation bar to navigate to the lists page
+     */
+    private void listsPageHandler() {
+         /* Read from the database
+        / Read data once: addListenerForSingleValueEvent() method triggers once and then does not
+        trigger again.
+        / This is useful for data that only needs to be loaded once and isn't expected to change
+        frequently or require active listening.
+        */
+        ValueEventListener Listener = new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified
+            // database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
+                //set up the date for monthly data
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                base.insertMonthlydata(year, month);
+                //Retrieve the monthly data from the database
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                //put extra data into new intent
+                intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
+                startActivityForResult(intent, 1);
+                //avoid shifting
+                overridePendingTransition(0, 0);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
+    }
+
+    /**
+     * Helper method to contain the logic for navigation bar to navigate to the graph page
+     */
+    private void graphPageHandler() {
+        base.getMyRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            //The onDataChange() method is called every time data is changed at the specified
+            // database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent i = new Intent(getBaseContext(), GraphsActivity.class);
+                //set up the date for monthly data
+                Calendar today = Calendar.getInstance();
+                int month = today.get(Calendar.MONTH);
+                int year = today.get(Calendar.YEAR);
+                //Retrieve the monthly data from the database
+                thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
+                //Add the past month's history (includes current)e
+                i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                startActivityForResult(i, 1);
+                //avoid shifting
+                overridePendingTransition(0, 0);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        });
+    }
+
+    //Helper method to control the functionality of bottom navigation bar
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    // switch statement to handle all the icons in the bottom nav bar
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            Intent i = new Intent(getBaseContext(), MainActivity.class);
-                            setResult(RESULT_OK, i);
-                            i.putExtra(HISTORY_DATA_INTENT, current_month);
-                            i.putExtra(MONTHLY_DATA_INTENT, current_month);
-                            startActivityForResult(i, 1);
-                            overridePendingTransition(0, 0);
+                            homePageHandler();
                             return true;
                         case R.id.navigation_lists:
-                            Intent intent = new Intent(getBaseContext(), CategoriesListActivity.class);
-/*
-                            // TODO: grab this from the database
-                            if (thisMonthsData == null) {
-                                Calendar today = Calendar.getInstance();
-                                thisMonthsData = new MonthlyData(today.get(Calendar.MONTH), today.get(Calendar.YEAR));
-                            }
-*/
-                            //intent.putExtra(CategoriesListActivity.MONTHLY_DATA_INTENT, thisMonthsData);
-                            intent.putExtra(HISTORY_DATA_INTENT, current_month);
-                            intent.putExtra(MONTHLY_DATA_INTENT, current_month);
-                            startActivityForResult(intent, 1);
-                            overridePendingTransition(0, 0);
+                            listsPageHandler();
                             return true;
-
                         case R.id.navigation_history:
                             return true;
                         case R.id.navigation_graphs:
-                            Intent inte = new Intent(getBaseContext(), PieChartActivity.class);
-                            inte.putExtra(PIE_CHART_DATA_INTENT, current_month);
-                            startActivityForResult(inte, 1);
-                            overridePendingTransition(0, 0);
+                            graphPageHandler();
                             return true;
                         case R.id.navigation_settings:
-                            Intent inten = new Intent(getBaseContext(), SettingsActivity.class);
-                            setResult(RESULT_OK, inten);
-                            if (settings == null) {
-                                settings = new Settings();
-                            }
-                            inten.putExtra(SettingsActivity.SETTINGS_INTENT, settings);
-
-                            startActivityForResult(inten, 1);
+                            //create new intent for settings activity
+                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                            startActivity(intent);
                             overridePendingTransition(0, 0);
                             return true;
-
                     }
                     return false;
                 }

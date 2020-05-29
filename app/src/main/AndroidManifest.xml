@@ -15,10 +15,14 @@
         <activity android:name=".View.history.HistoryActivity" />
         <activity android:name=".View.SettingsActivity" />
         <activity android:name=".View.ExpensesListActivity" />
-        <activity android:name=".View.MainActivity" />
         <activity android:name=".View.CreateAccountActivity" />
+        <activity android:name=".View.AccountRecoveryActivity" />
         <activity android:name=".View.CategoriesListActivity" />
-        <activity android:name=".View.PieChartActivity" />
+        <activity android:name=".View.graphs.GraphsActivity" />
+        <activity android:name=".View.MainActivity" />
+
+
+
         <activity
             android:name=".View.LoginActivity"
             android:label="@string/app_name"

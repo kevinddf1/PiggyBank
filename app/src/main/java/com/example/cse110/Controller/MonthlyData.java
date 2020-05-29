@@ -21,9 +21,9 @@ public class MonthlyData implements Parcelable {
     // create a Database object
     private Database base = Database.getInstance(); // create a Database object
 
-    /*
-    Constructor for an empty MonthlyData.
-    */
+    /**
+     * Constructor for an empty MonthlyData.
+     */
     public MonthlyData(int month, int year) {
         this.month = month;
         this.year = year;
@@ -31,10 +31,13 @@ public class MonthlyData implements Parcelable {
         categoriesArrayList = new ArrayList<>();
 
         //Update monthly data
-        setTotalBudget();
-        setTotalExpensesAsCents();
+        calculateTotalBudget();
+        calculateTotalExpensesAsCents();
     }
 
+    /**
+     * Constructor for a MonthlyData from a Parcel.
+     */
     protected MonthlyData(Parcel in) {
         month = in.readInt();
         year = in.readInt();
@@ -60,7 +63,6 @@ public class MonthlyData implements Parcelable {
 
     @Override
     public int describeContents() {
-        // TODO
         return 0;
     }
 
@@ -71,22 +73,30 @@ public class MonthlyData implements Parcelable {
         parcel.writeMap(categories);
     }
 
-
+    /**
+     * Getter for current year as an int.
+     */
     public int getYear() {
         return year;
     }
 
+    /**
+     * Getter for Category by its name.
+     */
     public Category getCategory(String name) {
-        // Return NULL if category name NOT FOUND
         return categories.get(name);
     }
 
-    //Return month as int 1 - 12
+    /**
+     * Getter for current month as an int.
+     */
     public int getIntMonth(){
         return month;
     }
 
-    // Getters
+    /**
+     * Getter for current month as a string.
+     */
     public String getMonth(){
         switch (month){
             case 0 :
@@ -145,30 +155,33 @@ public class MonthlyData implements Parcelable {
         }
     }
 
-    /*
-    /Return true if category was successfully made, false otherwise
+    /**
+     * Return true if category was successfully made, false otherwise
      */
     public boolean createCategory(String name, int budget) {
-        //Check that no category exists with the same name
+        // Check that no category exists with the same name
         if(!categories.containsKey(name)) {
             Category category = new Category(month, year);
             category.setName(name);
             category.setBudget(budget);
             categories.put(name, category);
             categoriesArrayList.add(category);
-            /****** update the new category info to database ******/
+
+            // Update the database with the new Category
             this.base.insertCategoryName(name, year, month);
             this.base.insertCategoryBudget(budget, name, year, month);
             this.base.insertCategoryDate(year, month, name);
-            /*************************************************/
-            //Update total budget
+
+            // Update total budget
             this.totalBudget += category.getBudget();
             return true;
         }
         return false;
     }
 
-    // This function is used to create a category from database data
+    /**
+     * Creates a Category from existing data and return the new Category.
+     */
     public Category createExistCategory(String name, int budget, ArrayList<Expense> expenses, int Month, int Year) {
         Category category = new Category(budget, name, expenses, Month, Year);
         category.setName(name);
@@ -176,12 +189,15 @@ public class MonthlyData implements Parcelable {
         categories.put(name, category);
         categoriesArrayList.add(category);
         this.totalBudget += category.getBudget();
-        this.setTotalExpensesAsCents();
+        this.calculateTotalExpensesAsCents();
         return category;
     }
 
+    /**
+     * Deletes a Category with some name.
+     */
     public void deleteCategory(String name) {
-        //Update total budget
+        // Update total budget
         this.totalBudget -= categories.get(name).getBudget();
         categories.remove(name);
         for (int i = 0; i < categoriesArrayList.size(); i++) {
@@ -190,33 +206,29 @@ public class MonthlyData implements Parcelable {
                 break;
             }
         }
-        //delete category from database
+        // Delete category from database
         base.delete_cate(name, year, month);
     }
 
-
-
     /**
-<<<<<<< HEAD:app/src/main/java/com/example/cse110/Model/MonthlyData.java
-     * Calculates the total amount budgeted for this month, across all categories.
-     * Very expensive function so limit use as much as possible.
+     * Iterates through all Categories and sums up the total budget.
      */
-    public void setTotalBudget() {
+    public void calculateTotalBudget() {
         this.totalBudget = 0;
-        // Possible bug: Exceeding a float's value
-        //Loop through all categories and add values
+
+        // Loop through all categories and add budget
         for(Category category : categoriesArrayList) {
             this.totalBudget += category.getBudget();
         }
     }
 
     /**
-     * Goes through all expenses and adds them to total expenses for the month.
-     * Calculates all expenses so avoid using too much
+     * Iterates through all Categories and calculates this object's totalExpensesAsCents.
      */
-    public void setTotalExpensesAsCents(){
+    public void calculateTotalExpensesAsCents(){
         this.totalExpensesAsCents = 0;
-        //Loop through all categories a
+
+        // Loop through all categories and add up expenses
         for (Category category: categoriesArrayList){
             this.totalExpensesAsCents += category.getTotalExpenses();
         }
@@ -224,13 +236,15 @@ public class MonthlyData implements Parcelable {
 
     /**
      * Getter for total expenses as cents
-     * @return
      */
     public long getTotalExpensesAsCents(){
-        setTotalExpensesAsCents();
-        return  this.totalExpensesAsCents;
+        calculateTotalExpensesAsCents();
+        return this.totalExpensesAsCents;
     }
 
+    /**
+     * Getter for all Categories as an ArrayList.
+     */
     public ArrayList<Category> getCategoriesAsArray() {
         return categoriesArrayList;
     }
@@ -239,7 +253,7 @@ public class MonthlyData implements Parcelable {
      * Getter for total budget
      */
     public long getTotalBudget(){
-        setTotalBudget();
+        calculateTotalBudget();
         return totalBudget;
     }
     public void setTotalBudgetDatabase(String budget){

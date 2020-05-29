@@ -33,6 +33,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.username)).setText(intent.getStringExtra(LoginActivity.USERNAME_FIELD));
 
         final Button createAccountButton = findViewById(R.id.signUpButton);
+        // On-click listener for create account button
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText usernameField = findViewById(R.id.username);
@@ -50,8 +51,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
 
                 if (enteredPassword.equals(enteredConfirmPassword)) {
-                    // TODO: check if the email already exists as a user
-
                     mAuth.createUserWithEmailAndPassword(enteredUsername, enteredPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

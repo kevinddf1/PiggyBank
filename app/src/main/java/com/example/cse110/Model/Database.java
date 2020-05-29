@@ -1,9 +1,9 @@
 /*
-* This file includes implementation of functions to
-* - upload and retrieve data
-* - delete account or data
-* from database.
-*/
+ * This file includes implementation of functions to
+ * - upload and retrieve data
+ * - delete account or data
+ * from database.
+ */
 package com.example.cse110.Model;
 // import Expense and MonthlyData class Controller
 import com.example.cse110.Controller.Expense;
@@ -313,5 +313,3 @@ public class Database {
         }
     }
 }
-
-
