@@ -36,6 +36,10 @@ public class Database {
         key = User.getUid();
     }
 
+    //Set single instance to null
+    public void setNull(){
+        single_instance = null;
+    }
     public DatabaseReference getMyRef() {
         return myRef;
     }
