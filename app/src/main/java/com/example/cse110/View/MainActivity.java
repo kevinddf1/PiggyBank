@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if(thisMonthsData != null) {
-            totalBudgetDisplay = findViewById(R.id.currentCash);
+            totalBudgetDisplay = findViewById(R.id.totalBudget);
             String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
             totalBudgetDisplay.setText(budgetRendering);
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             String[] list = b.getStringArray("Total Budget and Expense");
 
             //Bind our month's expenses and budget to proper display
-            totalBudgetDisplay = findViewById(R.id.currentCash);
+            totalBudgetDisplay = findViewById(R.id.totalBudget);
             String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString( list[0]);
             totalBudgetDisplay.setText(budgetRendering);
 
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
 
-                totalBudgetDisplay = findViewById(R.id.currentCash);
+                totalBudgetDisplay = findViewById(R.id.totalBudget);
                 String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
                 totalBudgetDisplay.setText(budgetRendering);
 
