@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.View.graphs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,16 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
 import com.example.cse110.Controller.Category;
-import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
 import com.example.cse110.Model.PagerAdapter;
 import com.example.cse110.R;
+import com.example.cse110.View.CategoriesListActivity;
+import com.example.cse110.View.MainActivity;
+import com.example.cse110.View.SettingsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabItem;
@@ -41,10 +39,42 @@ import java.util.List;
  */
 public class GraphsActivity extends AppCompatActivity {
 
-    private static final int NAV_BAR_INDEX = 2;
-    AnyChartView anyChartView;
-    List<String> cateArrayList = new ArrayList<>();
-    List<Double> totalExpenseArrayList = new ArrayList<>();
+
+    /**
+     * String List of category names of current month
+     */
+    private List<String> cateArrayList = new ArrayList<>();
+
+
+    /**
+     * List of category cost of current month
+     */
+    private List<Double> cateCostArrayList = new ArrayList<>();
+
+
+    /**
+     * string contains all details of past data, Month, year, budgets, costs
+     */
+    private List<String> allMonths = new ArrayList<>();
+
+
+    /**
+     * change cents to dollar, need to divided by 100
+     */
+    public static final double CentsToDollar = 100.00;
+
+
+    /**
+     * current_month is an object that have all data we want to display for current Month
+     */
+    private MonthlyData current_month;
+
+
+    /**
+     * Retrieves our database singleton
+     */
+    private final Database base = Database.Database();
+
 
     /**
      * Key for pulling an object of monthlyData in the HistoryDetailedActivity
@@ -55,20 +85,12 @@ public class GraphsActivity extends AppCompatActivity {
     public static final String MONTHLY_DATA_INTENT = "CategoriesListActivity monthlyData";
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
-
-    private MonthlyData current_month;
+    private static final int NAV_BAR_INDEX = 2;
     private MonthlyData thisMonthsData;
 
-    private ArrayList<Category> categoryArrayList;
-
-    /**
-     * Retrieves our database singleton
-     */
-    private final Database base = Database.Database();
 
     /**
      * The only constructor for instantiating the pie chart page
-     *
      * @param savedInstanceState
      * @see AppCompatActivity
      */
@@ -77,66 +99,98 @@ public class GraphsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphs);
 
-        //navBar handling
+        /**
+         * navBar handling
+         */
         setUpNavBar();
 
-        //TabLayout implemented here, which allow u to switch between different graphs, like pie Chart and line chart.
+        /**
+         * Extract list of months with Year, Month, Budgets, and Expense
+         */
+        instantiateListOfMonths();
+
+        /**
+         * TabLayout implemented here, which allow u to switch between different graphs,
+         * like pie Chart and line chart.
+         */
         TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem pieChartTab = findViewById(R.id.pieChartTab);
         TabItem columnChartTab = findViewById(R.id.columnChartTab);
         TabItem lineChartTab = findViewById(R.id.lineChartTab);
-        final ViewPager viewPager = findViewById(R.id.viewPager);
 
+        /**
+         * set click listener
+         */
+        PagerAdapterSetUp(tabLayout);
+
+        /**
+         * Retrieve passed in MonthlyData object and extract date/categories
+         */
+        Intent intent = getIntent();
+        current_month = intent.getParcelableExtra(Graphs_DATA_INTENT);
+
+        /**
+         * store the current_month category and expense into ArrayLists,
+         * which will be past to different graphs Fragment and to be used.
+         */
+        ArrayList<Category> categoryArrayList = current_month.getCategoriesAsArray();
+        for (int i = 0; i < categoryArrayList.size(); i++) {
+            Category c = categoryArrayList.get(i);
+            cateArrayList.add(c.getName());
+            cateCostArrayList.add(c.getTotalExpenses() / CentsToDollar);
+        }
+    }
+
+
+
+    public List<String> getCateArrayList() {return cateArrayList;}
+
+    public List<Double> getCateCostArrayList() {return cateCostArrayList;}
+
+    public List<String> getAllMonths(){return allMonths;}
+
+
+    /**
+     * lead user to other fragment when clicking different tab on tabLayout,
+     * like pieChart leads user to pieChart fragment.
+     * @param tabLayout
+     */
+    private void PagerAdapterSetUp(TabLayout tabLayout) {
+        final ViewPager viewPager = findViewById(R.id.viewPager);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
-
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        //Retrieve passed in MonthlyData object and extract date/categories
-        Intent intent = getIntent();
-        current_month = intent.getParcelableExtra(Graphs_DATA_INTENT);
-
-        categoryArrayList = current_month.getCategoriesAsArray();
-        for (int i = 0; i < categoryArrayList.size(); i++) {
-            Category c = categoryArrayList.get(i);
-            cateArrayList.add(c.getName());
-            totalExpenseArrayList.add(getTotalExpense(c) / 100.00);
-        }
     }
 
-    public List<String> getCateArrayList() {
-        return cateArrayList;
+
+    /**
+     * Handle incoming intents and extract pastMonthSummary's output
+     */
+    private void instantiateListOfMonths() {
+        //Get data from incoming Intent
+        Bundle bundle = getIntent().getExtras();
+
+        //Null error handling
+        assert bundle != null;
+
+        //Extract months summary
+        allMonths = bundle.getStringArrayList(LIST_OF_MONTHS);
     }
 
-    public List<Double> getTotalExpenseArrayList() {
-        return totalExpenseArrayList;
-    }
-
-    private double getTotalExpense(Category c) {
-        double ret = 0;
-        ArrayList<Expense> expenseArray = c.getExpenses();
-        for (int i = 0; i < expenseArray.size(); i++) {
-            ret += expenseArray.get(i).getCost();
-        }
-
-        return ret;
-    }
 
     /**
      * The user shall enter any page through clicking the icon in this nav bar

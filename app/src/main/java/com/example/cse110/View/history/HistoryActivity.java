@@ -16,7 +16,7 @@ import com.example.cse110.Model.FormattingTool;
 import com.example.cse110.Model.history.HistoryItemAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
-import com.example.cse110.View.GraphsActivity;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.MainActivity;
 import com.example.cse110.View.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -323,6 +323,8 @@ public class HistoryActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                //Add the past month's history (includes current)e
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);

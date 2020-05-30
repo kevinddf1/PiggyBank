@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.Database;
 import com.example.cse110.R;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,14 +27,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String HISTORY_DATA_INTENT = "HistoryActivity monthlyData";
     public static final String Graphs_DATA_INTENT = "GraphsActivity monthlyData";
-    private static final String LIST_OF_MONTHS = "List of Months"; //For past months in HistoryActivity.java
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months data
     private static final int NAV_BAR_INDEX = 4;
 
     private MonthlyData monthlyData;
@@ -225,6 +224,8 @@ public class SettingsActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                //Add the past month's history (includes current)e
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);

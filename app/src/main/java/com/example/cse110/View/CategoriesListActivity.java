@@ -19,10 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cse110.Controller.Category;
 import com.example.cse110.Controller.MonthlyData;
 import com.example.cse110.Model.CategoriesListAdapter;
-import com.example.cse110.Model.CategoriesListAdapter;
 import com.example.cse110.R;
 import com.example.cse110.Model.Database;
-import com.example.cse110.R;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.history.HistoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -330,6 +329,8 @@ public class CategoriesListActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                //Add the past month's history (includes current)e
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);

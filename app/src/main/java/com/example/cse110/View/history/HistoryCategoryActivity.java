@@ -20,7 +20,7 @@ import com.example.cse110.Model.history.HistoryCategoryAdapter;
 import com.example.cse110.R;
 import com.example.cse110.View.CategoriesListActivity;
 import com.example.cse110.View.MainActivity;
-import com.example.cse110.View.GraphsActivity;
+import com.example.cse110.View.graphs.GraphsActivity;
 import com.example.cse110.View.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +50,7 @@ public class HistoryCategoryActivity extends AppCompatActivity {
     private static String CATEGORY_NAME = "category_name";
     private static String HISTORY_DETAILED_INTENT = "historyDetailedIntent";
     private static final int NAV_BAR_INDEX = 3;
-
+    private static final String LIST_OF_MONTHS = "List of Months"; //For past months data
     //Display the month and year
 
     /**
@@ -298,6 +298,8 @@ public class HistoryCategoryActivity extends AppCompatActivity {
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
+                //Add the past month's history (includes current)e
+                i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
                 startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);

@@ -1,4 +1,4 @@
-package com.example.cse110.View;
+package com.example.cse110.View.graphs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,15 +19,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A class representing the graphs for PiggyBank.
+ * When user presses: See columnChart Graph, this page will appear.
+ * @author Fan Ding
+ * @version May 28
+ *
+ */
+
+/**
  * A simple {@link Fragment} subclass.
  */
 public class columnChartFragment extends Fragment {
 
 
+    /**
+     * graph object
+     */
     AnyChartView anyChartView;
-    List<String> cateArrayList =new ArrayList<>();
-    List<Double> totalExpenseArrayList = new ArrayList<>();
 
+    /**
+     * String List of category names of current month
+     */
+    List<String> cateArrayList =new ArrayList<>();
+
+    /**
+     * List each category cost of current month
+     */
+    List<Double> cateCostArrayList = new ArrayList<>();
+
+    /**
+     * constructor
+     */
     public columnChartFragment() {
         // Required empty public constructor
     }
@@ -43,14 +65,24 @@ public class columnChartFragment extends Fragment {
 
     public void onViewCreated(View view,  Bundle savedInstanceState) {
         anyChartView = (AnyChartView) getView().findViewById(R.id.column_chart_view);
+
+        /**
+         * create an graphsActivity object to archive the arrayList we want to build the graph
+         */
         GraphsActivity activity=(GraphsActivity) getActivity();
         cateArrayList=activity.getCateArrayList();
-        totalExpenseArrayList=activity.getTotalExpenseArrayList();
-        setupcolumnChart();
+        cateCostArrayList =activity.getCateCostArrayList();
+
+        setupColumnChart();
     }
 
 
-    public void setupcolumnChart(){
+    /**
+     * set up ColumnChart with 2 arrayLists.
+     * cateArrayList, which contains String List of category names of current month
+     * cateCostArrayList, which contains each category cost of current month
+     */
+    public void setupColumnChart(){
 
         Cartesian cartesian = AnyChart.column();
         cartesian.title("Expenses for Each Category of This Month");
@@ -60,10 +92,12 @@ public class columnChartFragment extends Fragment {
 
         List<DataEntry> dataEntries = new ArrayList<>();
         for (int i=0; i<cateArrayList.size(); i++){
-            dataEntries.add(new ValueDataEntry(cateArrayList.get(i), totalExpenseArrayList.get(i)));
+            dataEntries.add(new ValueDataEntry(cateArrayList.get(i), cateCostArrayList.get(i)));
         }
 
         Column column = cartesian.column(dataEntries);
+
+        cartesian.getSeriesAt(0).name("$");
 
         anyChartView.setChart(cartesian);
     }
