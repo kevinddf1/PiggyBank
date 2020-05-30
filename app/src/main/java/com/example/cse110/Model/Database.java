@@ -48,6 +48,8 @@ public class Database {
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
+        insertTotalBudget(year, month, 0);
+        insertTotalExpense(year, month, 0);
     }
 
     public void insertTotalBudget(int year, int month, long totalBudget) {
@@ -321,9 +323,21 @@ public class Database {
             String str_year = ds.child("Year").getValue().toString();
             int int_year = Integer.parseInt(str_year); // YEAR
 
-            String str_budget = ds.child("Total Budget").getValue().toString(); //TOTAL BUDGET
+            //Checking of the user not having any categories
+            String str_budget;
+            try {
+                str_budget = ds.child("Total Budget").getValue().toString(); //TOTAL BUDGET
+            }catch (Exception notFound){
+                str_budget = "0";
+            }
 
-            String str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
+            //Checking of the user not having any expenses
+            String str_expenses;
+            try {
+                str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
+            }catch (Exception notFound){
+                str_expenses = "0";
+            }
 
             //Add the info into one ArrayList entry w/ proper format
             pastMonths.add(str_month + "-" + str_year + "-" + str_budget + "-" + str_expenses);

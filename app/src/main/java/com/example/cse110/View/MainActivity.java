@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(thisMonthsData != null) {
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            String budgetRendering = "Total Budget: " + Long.toString(thisMonthsData.getTotalBudget());
+            String budgetRendering = "Total Budget: $" + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
             totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            String expenseRendering = "Total Expenses: " + Long.toString(thisMonthsData.getTotalExpensesAsCents()/100);
+            String expenseRendering = "Total Expenses: $" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents()/100)));
 
             totalExpenseDisplay.setText(expenseRendering);
         } else {
@@ -88,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
 
             //Bind our month's expenses and budget to proper display
             totalBudgetDisplay = findViewById(R.id.currentCash);
-            String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString( list[0]);
+            String budgetRendering = "Total Budget: $" + formattingTool.formatIntMoneyString( list[0]);
             totalBudgetDisplay.setText(budgetRendering);
 
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            String expensesRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(Long.parseLong(list[1])/100.00)));
+            String expensesRendering = "Total Expenses: $" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(Long.parseLong(list[1])/100.00)));
             totalExpenseDisplay.setText(expensesRendering);
         }
 
@@ -150,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
 
                 totalBudgetDisplay = findViewById(R.id.currentCash);
-                String budgetRendering = "Total Budget: " + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
+                String budgetRendering = "Total Budget: $" + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
                 totalBudgetDisplay.setText(budgetRendering);
 
                 totalExpenseDisplay = findViewById(R.id.totalExpenses);
-                String expenseRendering = "Total Expenses: " + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(thisMonthsData.getTotalExpensesAsCents()/100.00)));
+                String expenseRendering = "Total Expenses: $" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(thisMonthsData.getTotalExpensesAsCents()/100.00)));
 
                 totalExpenseDisplay.setText(expenseRendering);
             }
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra(HISTORY_DATA_INTENT, thisMonthsData);
                 //Add the past month's history (includes current)e
                 i.putExtra(LIST_OF_MONTHS, base.getPastMonthSummary(dataSnapshot));
-                startActivity(i);
+                startActivityForResult(i, 1);
                 //avoid shifting
                 overridePendingTransition(0, 0);
             }
@@ -255,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
                 //Retrieve the monthly data from the database
+
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //Add the past month's history (includes current)e
                 i.putExtra(Graphs_DATA_INTENT, thisMonthsData);
