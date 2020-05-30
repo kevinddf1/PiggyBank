@@ -100,7 +100,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_expenselist);
 
         //Initializes the current category being displayed
-        final String categoryNameFromParent = initializeCurrentCategory();
+        initializeCurrentCategory();
 
         //Render the initial static info (budget and category CAN be changed)
         renderStaticComponents();
@@ -118,7 +118,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         handleBudgetChanges();
 
         //handle the user clicking on the CategoryName EditText
-        handleCategoryNameChanges(categoryNameFromParent);
+        handleCategoryNameChanges();
 
         //Handle the user pressing the '+' button which indicates adding an expense
         handleExpenseAdditions();
@@ -129,7 +129,7 @@ public class ExpensesListActivity extends AppCompatActivity {
      *
      * @return The name of the category we are currently displaying.
      */
-    private String initializeCurrentCategory() {
+    private void initializeCurrentCategory() {
 
         //Initialize user's current Month
         Intent intent = getIntent();
@@ -138,7 +138,7 @@ public class ExpensesListActivity extends AppCompatActivity {
         //Identify and initialized selected month
         final String categoryNameFromParent = intent.getStringExtra(CATEGORY_NAME_INTENT);
         category = monthlyData.getCategory(categoryNameFromParent);
-        return categoryNameFromParent;
+
     }
 
     /**
@@ -199,7 +199,7 @@ public class ExpensesListActivity extends AppCompatActivity {
     }
 
     //MINXUAN
-    private void handleCategoryNameChanges(final String categoryNameFromParent) {
+    private void handleCategoryNameChanges() {
         //Detect User Changes for category NAME
         categoryName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -213,26 +213,37 @@ public class ExpensesListActivity extends AppCompatActivity {
                             categoryName.setText(category.getName());
                             Toast.makeText(getBaseContext(), "Category name already exists!", Toast.LENGTH_LONG).show();
                         } else {
-                            category.setName(categoryName.getText().toString());
+                            //Retrieve current category name
+                            String previousCatName = category.getName();
+                            String newCatName = categoryName.getText().toString();
+
+
                             //Update current category name in the monthly category list
-                            monthlyData.renameCategory(categoryNameFromParent, category.getName());
+                            monthlyData.renameCategory(previousCatName, newCatName);
+
+                            //Get recently change name
+                            category.setName(newCatName);
+
                             /* Reflect the NAME change in database */
-                            String name = category.getName(); // NEW NAME
                             int year, month;
                             year = monthlyData.getYear();
                             month = monthlyData.getIntMonth();
+
                             //insert "new" category
-                            base.insertCategoryName(name, year, month);
-                            base.insertCategoryBudget(category.getBudget(), name, year, month);
-                            base.insertCategoryDate(year, month, name);
+                            base.insertCategoryName(newCatName, year, month);
+                            base.insertCategoryBudget(category.getBudget(), newCatName, year, month);
+                            base.insertCategoryDate(year, month, newCatName);
+
                             //insert expenses from the "old" category
                             for (Expense ex : category.getExpenses()) {
-                                base.insertExpense(ex.getCost(), ex.getName(), name, year, month, ex.getDay(), ex.getId());
+                                base.insertExpense(ex.getCost(), ex.getName(), newCatName, year, month, ex.getDay(), ex.getId());
                             }
+
                             // Delete the "old" category
-                            base.delete_cate(categoryNameFromParent, year, month);
+                            base.delete_cate(previousCatName, year, month);
+
                             //App display the new name
-                            categoryName.setText(category.getName());
+                            categoryName.setText(newCatName);
                             Toast.makeText(getBaseContext(), "Category successfully renamed!", Toast.LENGTH_LONG).show();
                         }
                     }
