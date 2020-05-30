@@ -43,6 +43,18 @@
             android:text="@string/account" />
 
         <Button
+            android:id="@+id/edit_profile_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/edit_profile" />
+
+        <Switch
+            android:id="@+id/notifications_switch"
+            android:layout_width="378dp"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_notifications" />
+
+        <Button
             android:id="@+id/change_password_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -77,8 +89,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemIconTint="#5B5A5A"
-        app:itemTextColor="#5B5A5A"
+        app:itemIconTint="@color/darkGrey"
+        app:itemTextColor="@color/darkGrey"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

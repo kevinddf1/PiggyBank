@@ -2,37 +2,43 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
+    android:background="@color/white"
     >
 
     <TextView
         android:id="@+id/month_year_separate_display"
-        android:layout_width="119dp"
-        android:layout_height="48dp"
-        android:layout_weight="0"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:paddingStart="10sp"
         android:paddingTop="5sp"
         android:text="@string/categoryName"
+        android:textColor="@color/darkGrey"
+        android:textSize="16sp"
         android:fontFamily="@font/semibold" />
 
     <TextView
         android:id="@+id/total_budget_display"
-        android:layout_width="119dp"
-        android:layout_height="48dp"
-        android:layout_weight="0"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingLeft="50sp"
         android:paddingTop="5sp"
         android:text="@string/budgetDisplay"
+        android:textSize="12sp"
         android:textColor="@color/green"
         android:fontFamily="@font/semibold"/>
 
     <TextView
         android:id="@+id/total_expense_display"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_weight="0"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
         android:gravity="end"
         android:paddingTop="5sp"
-        android:paddingEnd="10sp"
+        android:paddingEnd="15sp"
         android:text="@string/expenses"
+        android:textSize="12sp"
         android:textColor="@color/red"
         android:fontFamily="@font/semibold"/>
 
