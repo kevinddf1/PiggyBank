@@ -33,7 +33,7 @@
         android:id="@+id/total_expense_display"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="end"
         android:paddingTop="5sp"
         android:paddingEnd="15sp"
