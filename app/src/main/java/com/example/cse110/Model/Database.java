@@ -41,12 +41,16 @@ public class Database {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser User = mAuth.getCurrentUser();
-        key = User.getUid();
+        key = mAuth.getCurrentUser().getUid();
     }
     // This getter function allows Database object in other Activity classes be able to call listener functions
     public DatabaseReference getMyRef() {
         return myRef;
+    }
+    // reset the database object when user log out
+    public void clear()
+    {
+        single_instance = null;
     }
 
     ////////////////////////////////////////////////// INSERTION FUNCTIONS //////////////////////////////////////////////////

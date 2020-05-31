@@ -59,6 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v){
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.signOut();
+                base.clear(); // reset the database object for next user login
 
                 // Start login activity
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
