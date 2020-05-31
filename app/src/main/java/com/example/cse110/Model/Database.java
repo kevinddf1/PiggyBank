@@ -36,6 +36,10 @@ public class Database {
         key = User.getUid();
     }
 
+    public void setKey(){
+        FirebaseUser User = mAuth.getCurrentUser();
+        key = User.getUid();
+    }
     //Set single instance to null
     public void setNull(){
         single_instance = null;

@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "Logged in.", Toast.LENGTH_LONG).show();
                             
                             base =  Database.Database(); // create a Database object
+                            base.setKey();
                             ValueEventListener Listener = new ValueEventListener() {
                                 //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
                                 @Override
