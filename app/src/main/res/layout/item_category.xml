@@ -11,10 +11,10 @@
 
     <TextView
         android:id="@+id/category_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="start"
+        android:gravity="start|center_vertical"
         android:fontFamily="@font/semibold"
         android:textSize="20sp"
         android:layout_marginLeft="15dp"
@@ -22,10 +22,11 @@
 
     <TextView
         android:id="@+id/category_budget"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="16sp"
+        android:gravity="center_vertical"
         android:textColor="@color/green"
         android:fontFamily="@font/semibold"/>
 
@@ -34,6 +35,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_weight="0"
+        android:gravity="center_vertical"
         android:background="@drawable/delete"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"/>

@@ -2,27 +2,29 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
-    android:backgroundTint="@color/white">
+    android:backgroundTint="@color/white"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:paddingStart="10sp"
-        android:paddingTop="5sp"
+        android:gravity="center_vertical"
         android:text="@string/categoryName"
         android:fontFamily="@font/semibold"
+        android:textSize="16sp"
         android:textColor="@color/darkGrey"/>
 
     <TextView
         android:id="@+id/history_budget"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingLeft="100sp"
-        android:paddingTop="5sp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center_vertical"
         android:textSize="12sp"
+        android:paddingLeft="50sp"
         android:text="@string/budgetDisplay"
         android:textColor="@color/green"
         android:fontFamily="@font/semibold" />
@@ -30,16 +32,14 @@
     <TextView
         android:id="@+id/history_expenses"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:gravity="end"
-        android:paddingTop="5sp"
-        android:paddingLeft="120sp"
-        android:textSize="12sp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingEnd="15sp"
+        android:fontFamily="@font/semibold"
         android:text="@string/expenses"
         android:textColor="@color/red"
-        android:fontFamily="@font/semibold"/>
-
+        android:textSize="12sp"
+        android:gravity="end|center_vertical"/>
 
 
 </LinearLayout>

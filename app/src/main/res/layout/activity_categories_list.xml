@@ -35,7 +35,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:background="@drawable/layoutshadow"
@@ -43,24 +43,23 @@
 
         <EditText
             android:id="@+id/category_name_category"
-            android:layout_width="235dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:fontFamily="@font/semibold"
             android:autofillHints=""
-            android:ems="5"
+            android:divider="@color/lightGrey"
+            android:fontFamily="@font/semibold"
             android:gravity="top|left"
             android:hint="@string/type_category_name_updated"
-            android:inputType="textPersonName"
-            android:divider="@color/lightGrey"/>
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/category_budget"
-            android:layout_width="143dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:fontFamily="@font/semibold"
-            android:autofillHints=""
+            android:layout_weight="5"
             android:ems="10"
+            android:fontFamily="@font/semibold"
             android:hint="Budget"
             android:inputType="number" />
 
@@ -69,7 +68,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0"
             android:background="#00000000"
             android:gravity="center"
             android:text="@string/plus_sign"
@@ -106,8 +104,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemIconTint="#5B5A5A"
-        app:itemTextColor="#5B5A5A"
+        app:itemIconTint="@color/darkGrey"
+        app:itemTextColor="@color/darkGrey"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu" />
 

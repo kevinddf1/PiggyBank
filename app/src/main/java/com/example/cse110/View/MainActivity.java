@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         if (thisMonthsData != null) {
 
             //Render total budget
-            totalBudgetDisplay = findViewById(R.id.currentCash);
+            totalBudgetDisplay = findViewById(R.id.totalBudget);
             String budgetRendering = "Total Budget: $" + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
             totalBudgetDisplay.setText(budgetRendering);
 
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             String[] list = b.getStringArray("Total Budget and Expense");
 
             //Render total budget
-            totalBudgetDisplay = findViewById(R.id.currentCash);
+            totalBudgetDisplay = findViewById(R.id.totalBudget);
             assert list != null;
             String budgetRendering = "Total Budget: $" + formattingTool.formatIntMoneyString(list[0]);
             totalBudgetDisplay.setText(budgetRendering);
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 thisMonthsData = data.getParcelableExtra(CategoriesListActivity.MONTHLY_DATA_INTENT);
 
                 //Render total budget
-                totalBudgetDisplay = findViewById(R.id.currentCash);
+                totalBudgetDisplay = findViewById(R.id.totalBudget);
                 String budgetRendering = "Total Budget: $" + formattingTool.formatIntMoneyString(Long.toString(thisMonthsData.getTotalBudget()));
                 totalBudgetDisplay.setText(budgetRendering);
 
