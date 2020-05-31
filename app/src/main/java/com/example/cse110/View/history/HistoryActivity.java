@@ -66,7 +66,7 @@ public class HistoryActivity extends AppCompatActivity {
     /**
      * Database singleton to get most up to date information from the user's account
      */
-    private final Database base = Database.Database(); // create a Database object
+    private Database base = Database.getInstance(); // create a Database object
 
 
     /**
@@ -249,7 +249,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
                 // Retrieve the current data from data base
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 // put extra data for categories and expenses
@@ -286,7 +286,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
                 //Retrieve the monthly data from the database
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //put extra data into new intent

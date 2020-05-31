@@ -82,7 +82,7 @@ public class ExpensesListActivity extends AppCompatActivity {
     /**
      * Gets our Database singleton.
      */
-    private final Database base = Database.Database();
+    private Database base = Database.getInstance(); // create a Database object
 
     /**
      * Formatting tool for money displays.

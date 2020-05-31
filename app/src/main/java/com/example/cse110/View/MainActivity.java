@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MonthlyData thisMonthsData;
 
-    private Database base = Database.Database(); // create a Database object
+    private Database base = Database.getInstance(); // create a Database object
 
     /**
      * Formatting tool to avoid redundancies.
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setUpNavBar();
 
         //Instantiate monthlyData only if currently null
-       // if(thisMonthsData == null){
-         //   base.
+        // if(thisMonthsData == null){
+        //   base.
         //Bind button to go to expense list
         expenseListButton = findViewById(R.id.ExpensesButton);
         expenseListButton.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
                 //Retrieve the monthly data from the database
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //put extra data into new intent
@@ -306,4 +306,3 @@ public class MainActivity extends AppCompatActivity {
         // Do nothing on back button press because we don't want the user to be able to go back to login page
     }
 }
-
