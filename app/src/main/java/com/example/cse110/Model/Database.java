@@ -26,7 +26,7 @@ public class Database {
     private String key;                                     // String variable to store the UiD of a user
     private CloudData data;                                 // an class to store received data from database
 
-    ////////////////////////////////////////////////// CONSTRUCTORS AND GETTERS FUNCTION //////////////////////////////////////////////////
+    ////////////////////////////////////////////////// CONSTRUCTORS, DESTRUCTOR AND GETTER FUNCTION //////////////////////////////////////////////////
 
     // static method to create single instance of Database class
     public static Database getInstance() {
