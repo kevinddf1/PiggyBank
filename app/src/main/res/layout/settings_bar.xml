@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@drawable/mainheaderbackground">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/settings_icon"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                app:srcCompat="@drawable/settingbar" />
+
+            <EditText
+                android:id="@+id/settings_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/Transparent"
+                android:fontFamily="@font/semibold"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:gravity="end|center">
+
+            <Button
+                android:id="@+id/sign_out_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@drawable/log"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:id="@+id/sign_out_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:fontFamily="@font/semibold"
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:text="@string/sign_out"
+                android:textAllCaps="true"
+                android:layout_marginEnd="15dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>

@@ -120,6 +120,20 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        // On-click listener for meet the team button
+        final Button meetTeamButton = findViewById(R.id.meet_the_team_button);
+        meetTeamButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
+
+                // Start login activity
+                Intent i = new Intent(getBaseContext(), MeetTheTeamActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     /**

@@ -54,6 +54,18 @@
     <string name="title_history">History</string>
     <string name="title_settings">Settings</string>
 
+    <!-- Meet the team strings -->
+    <string name="leland">Leland Long - Project Manager</string>
+    <string name="erdong">Erdong Wang - Software Architect</string>
+    <string name="minxuan">Minxuan Liu - Senior System Analyst</string>
+    <string name="fan">Fan Ding - Software Development Lead</string>
+    <string name="jack">Jack Sun - Database Specialist</string>
+    <string name="brenton">Brenton Porter - Quality Assurance Lead</string>
+    <string name="thuycam">Thuycam Nguyen - Algorithm Specialist</string>
+    <string name="peter">Peter Gonzalez - Algorithm Specialist</string>
+    <string name="isaac">Isaac Bi - User Interface Specialist</string>
+    <string name="kriti">Kriti Jain - Business Analyst</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

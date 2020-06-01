@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/lightGrey">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Team BIT"
+            android:gravity="center"
+            android:textColor="@color/gradientDark"
+            android:textSize="40dp"
+            android:fontFamily="@font/semibold"/>
+
+        <ImageView
+            android:id="@+id/piggybank_meet"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/altlogo" />
+
+        <TextView
+        android:id="@+id/project_manager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/leland"
+        android:textSize="20sp"
+        android:fontFamily="@font/semibold"
+        android:textColor="@color/darkGrey"
+        android:layout_marginTop="10sp"/>
+
+        <TextView
+        android:id="@+id/software_architect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/erdong"
+        android:textSize="20sp"
+        android:fontFamily="@font/semibold"
+        android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/senior_system_analyst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/minxuan"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/software_development_lead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fan"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/database_specialist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/jack"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/quality_assurance_lead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/brenton"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/alg_specialist_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thuycam"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/alg_specialist_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/peter"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/user_interface_specialist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/isaac"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+        <TextView
+            android:id="@+id/business_analyst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kriti"
+            android:textSize="20sp"
+            android:fontFamily="@font/semibold"
+            android:textColor="@color/darkGrey" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
