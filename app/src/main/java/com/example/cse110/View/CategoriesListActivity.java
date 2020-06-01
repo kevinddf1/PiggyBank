@@ -265,6 +265,25 @@ public class CategoriesListActivity extends AppCompatActivity {
      */
     public void confirmDeletion(String toDelete) {
         Toast.makeText(getBaseContext(), toDelete + " was deleted.", Toast.LENGTH_SHORT).show();
+
+        ValueEventListener Listener = new ValueEventListener() {
+
+            //The onDataChange() method is called every time data is changed at the specified database reference, including changes to children.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
+                base.insertTotalBudget(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalBudget());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Failed to read value
+            }
+        };
+        base.getMyRef().addListenerForSingleValueEvent(Listener);
     }
 
     /**

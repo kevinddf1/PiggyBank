@@ -199,27 +199,31 @@ public class MonthlyData implements Parcelable {
      * Deletes a Category with some name.
      */
     public void deleteCategory(String name) {
+        //Retrieve total budget and expense first
+        int totalBudget = 0;
+        long totalExpense = 0;
+
         // Update total budget
         this.totalBudget -= categories.get(name).getBudget();
         categories.remove(name);
         for (int i = 0; i < categoriesArrayList.size(); i++) {
             if (categoriesArrayList.get(i).getName().equals(name)) {
+                totalBudget = categoriesArrayList.get(i).getBudget();
+                totalExpense = categoriesArrayList.get(i).getTotalExpenses();
                 categoriesArrayList.remove(i);
                 break;
             }
         }
+
+
+
         // Delete category from database
-        base.delete_cate(name, year, month);
+        base.delete_cate(name, year, month, totalBudget, totalExpense);
     }
 
     /**
-<<<<<<< HEAD
-     * Iterates through all Categories and sums up the total budget.
-=======
-<<<<<<< HEAD:app/src/wip/java/com/example/cse110/Model/MonthlyData.java
      * Calculates the total amount budgeted for this month, across all categories.
      * Very expensive function so limit use as much as possible.
->>>>>>> version_p
      */
     public void calculateTotalBudget() {
         this.totalBudget = 0;

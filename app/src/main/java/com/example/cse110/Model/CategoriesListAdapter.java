@@ -25,6 +25,10 @@ import java.util.ArrayList;
 public class CategoriesListAdapter extends ArrayAdapter<Category> {
     //Declare core elements that cause changes
     private Button btnDelete;
+    /**
+     * Allows us to pull most up to date info from the database.
+     */
+    private final Database base = Database.Database(); // create a Database object
 
     /**
      * Static info to display
@@ -125,6 +129,8 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                             notifyDataSetChanged();
                             ((CategoriesListActivity) context).confirmDeletion(toDelete);
                             dialog.dismiss();
+
+
                         }
                     });
                     alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

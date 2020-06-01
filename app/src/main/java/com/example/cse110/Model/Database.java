@@ -1,12 +1,18 @@
 package com.example.cse110.Model;
 
+import android.provider.ContactsContract;
+
+import androidx.annotation.NonNull;
+
 import com.example.cse110.Controller.Expense;
 import com.example.cse110.Controller.MonthlyData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -99,10 +105,16 @@ public class Database {
         ref.child("ID").setValue(nextExpenseId);
     }
 
-    public void delete_cate(String name, int year, int month) {
+    public void delete_cate(String name, final int year, final int month, final int categoryTotal, final long categoryExpense) {
         myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).removeValue();
+
+
     }
 
+    public void delete_cate(String name, final int year, final int month) {
+        myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).removeValue();
+
+    }
     public void delete_exp(String cate_name, int id, int year, int month) {
         String str_ID = Integer.toString(id);
         myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + cate_name).child("Expense").child(str_ID).removeValue();
