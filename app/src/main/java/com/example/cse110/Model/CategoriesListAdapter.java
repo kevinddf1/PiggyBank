@@ -119,10 +119,11 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             //your deleting code
                             // Remove item from MonthlyData and update adapter
+                            String toDelete = item.getName();
                             monthlyData.deleteCategory(item.getName());
                             itemsList.remove(item);
                             notifyDataSetChanged();
-                            ((CategoriesListActivity) context).confirmDeletion(categoryName);
+                            ((CategoriesListActivity) context).confirmDeletion(toDelete);
                             dialog.dismiss();
                         }
                     });

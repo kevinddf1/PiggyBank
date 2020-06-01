@@ -261,10 +261,10 @@ public class CategoriesListActivity extends AppCompatActivity {
     /**
      * Confirm a category being deleted.
      *
-     * @param nameOfCategory The name of the category that was deleted
+     * @param toDelete The name of the category that was deleted
      */
-    public void confirmDeletion(TextView nameOfCategory) {
-        Toast.makeText(getBaseContext(), nameOfCategory.getText().toString() + " was deleted.", Toast.LENGTH_SHORT).show();
+    public void confirmDeletion(String toDelete) {
+        Toast.makeText(getBaseContext(), toDelete + " was deleted.", Toast.LENGTH_SHORT).show();
     }
 
     /**
