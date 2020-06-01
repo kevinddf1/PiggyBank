@@ -13,6 +13,8 @@ import com.example.cse110.R;
 import com.example.cse110.Model.FormattingTool;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+
 /**
  * The adapter that contains the details for each month in the History.
  * @author Peter Gonzalez
@@ -179,4 +181,6 @@ public class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
     }
 
 }
+
+
 

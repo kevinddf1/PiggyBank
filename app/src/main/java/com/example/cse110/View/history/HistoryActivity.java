@@ -25,6 +25,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * This class represents the page to display a user month's across the existence of their account.
@@ -98,6 +101,12 @@ public class HistoryActivity extends AppCompatActivity {
 
     private FormattingTool formattingTool = new FormattingTool();
 
+    /**
+     * Helper data structure to sort months
+     * @param savedInstanceState
+     */
+    ArrayList<Integer> existingMonths = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Match to rendering in activity_history.xml
@@ -165,6 +174,10 @@ public class HistoryActivity extends AppCompatActivity {
             listOfHistoryItems.add(currentMonthItem);
 
         }
+
+        Collections.sort(listOfHistoryItems, new Sort());
+
+
     }
 
     /**
@@ -364,4 +377,29 @@ public class HistoryActivity extends AppCompatActivity {
                     return false;
                 }
             };
+}
+
+/**
+ * Comparator Class allows us to display the months in a chronological order.
+ */
+class Sort implements Comparator<HistoryItem> {
+
+    public int compare(HistoryItem oneMonth, HistoryItem secondMonth){
+
+        //Parse the month and year from the items we are comparing
+        String[] separateMonthYear = oneMonth.getMonthYear().split(" ");
+        String[] separateMonthYearSecond = secondMonth.getMonthYear().split(" ");
+
+
+        //Compare months first
+        if(Integer.parseInt(separateMonthYear[0]) != Integer.parseInt(separateMonthYearSecond[0])){
+            return Integer.parseInt(separateMonthYearSecond[0]) - Integer.parseInt(separateMonthYear[0]);
+        }
+
+        //if months were equivalent, compare year.
+        return Integer.parseInt(separateMonthYearSecond[1]) - Integer.parseInt(separateMonthYear[1]);
+
+
+    }
+
 }
