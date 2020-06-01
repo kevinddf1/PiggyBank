@@ -51,7 +51,8 @@
             android:fontFamily="@font/semibold"
             android:gravity="top|left"
             android:hint="@string/type_category_name_updated"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:scrollHorizontally="false" />
 
         <EditText
             android:id="@+id/category_budget"

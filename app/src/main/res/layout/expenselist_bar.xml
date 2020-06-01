@@ -19,6 +19,7 @@
             android:textSize="24sp"
             android:textAllCaps="false"
             android:gravity="start"
+            android:singleLine="true"
             />
 
 

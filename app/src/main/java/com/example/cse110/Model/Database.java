@@ -56,8 +56,6 @@ public class Database {
         DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year);
         ref.child("Year").setValue(year);
         ref.child("Month").setValue(month);
-        insertTotalBudget(year, month, 0);
-        insertTotalExpense(year, month, 0);
     }
 
     public void insertTotalBudget(int year, int month, long totalBudget) {
@@ -101,16 +99,6 @@ public class Database {
         ref.child("ID").setValue(nextExpenseId);
     }
 
-//    public void insertExpenseId(String name, String parent_name, int nextExpenseId) {
-//        String str_ID = Integer.toString(nextExpenseId);
-//        myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child(str_ID).child("").setValue(name);
-//
-//        myRef = myRef.child("User").child(key).child("Category " + parent_name).child("Expense").child();
-//        Map newUserData = new HashMap();
-//        newUserData.put(YOUR_NEW_DATA);
-//        userRef.updateChildren(newUserData);
-//    }
-
     public void delete_cate(String name, int year, int month) {
         myRef.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").child("Category " + name).removeValue();
     }
@@ -125,11 +113,16 @@ public class Database {
     }
 
     public ArrayList<String> RetrieveT_Budget_Exp(DataSnapshot dataSnapshot, int year, int month) {
+
+        DatabaseReference ref = myRef.child("User").child(key).child(this.getMonth(month) + year);
+
         DataSnapshot ds = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
+
         ArrayList<String> list = new ArrayList<String>(2);
         if (ds.child("Total Budget").getValue() == null || ds.child("Total Expense").getValue() == null) {
             list.add("0");
             list.add("0");
+
         }
         else {
             String T_Budget = ds.child("Total Budget").getValue().toString();
@@ -144,14 +137,6 @@ public class Database {
         if (thisMonthsData == null) { // check if the object is NULL, if NULL initialize it with current Date
             thisMonthsData = new MonthlyData(month, year);
             DataSnapshot dsMonthlyData = dataSnapshot.child("User").child(key).child(this.getMonth(month) + year);
-           /**if(dsMonthlyData == null || dsMonthlyData.child("Total Budget").getValue() == null || dsMonthlyData.child("Total Expense").getValue() ==  null){
-                thisMonthsData.setTotalBudgetDatabase("0");
-                thisMonthsData.setTotalExpensesDatabase("0");
-
-            }else {
-                thisMonthsData.setTotalBudgetDatabase(dsMonthlyData.child("Total Budget").getValue().toString());
-                thisMonthsData.setTotalExpensesDatabase(dsMonthlyData.child("Total Expense").getValue().toString());
-            }**/
 
             // this loop retrieve all the categories from database
             for (DataSnapshot ds : dataSnapshot.child("User").child(key).child(this.getMonth(month) + year).child("< Categories >").getChildren()) {
@@ -331,10 +316,12 @@ public class Database {
             String str_year = ds.child("Year").getValue().toString();
             int int_year = Integer.parseInt(str_year); // YEAR
 
+            DataSnapshot monthSnapshot = dataSnapshot.child("User").child(key).child(this.getMonth(int_month) + int_year);
+
             //Checking of the user not having any categories
             String str_budget;
             try {
-                str_budget = ds.child("Total Budget").getValue().toString(); //TOTAL BUDGET
+                str_budget = monthSnapshot.child("Total Budget").getValue().toString(); //TOTAL BUDGET
             }catch (Exception notFound){
                 str_budget = "0";
             }
@@ -342,7 +329,7 @@ public class Database {
             //Checking of the user not having any expenses
             String str_expenses;
             try {
-                str_expenses = ds.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
+                str_expenses = monthSnapshot.child("Total Expense").getValue().toString(); //TOTAL EXPENSES
             }catch (Exception notFound){
                 str_expenses = "0";
             }
@@ -374,10 +361,12 @@ public class Database {
                     break; // if NOT, break the loop
                 }
 
+
                 String str_year = ds.child("Year").getValue().toString();
                 int int_year = Integer.parseInt(str_year);
                 String str_month = ds.child("Month").getValue().toString();
                 int int_month = Integer.parseInt(str_month);
+
 
                 if(str_year.equals(s1) && str_month.equals(s)) {
                     for (DataSnapshot ds3 : ds.child("< Categories >").getChildren()) {

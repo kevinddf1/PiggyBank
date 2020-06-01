@@ -356,7 +356,7 @@ public class ExpensesListActivity extends AppCompatActivity {
 
         //Render category's total expenses
         totalExpensesDisplay = findViewById(R.id.total_expenses);
-        String totalExpensesRendering = "$" + formattingTool.formatMoneyString(Long.toString(category.getTotalExpenses() / 100));
+        String totalExpensesRendering = "$" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(category.getTotalExpenses()/100.00)));
         totalExpensesDisplay.setText(totalExpensesRendering); //Account for initial lack of decimal values
     }
 

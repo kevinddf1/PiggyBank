@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Render total expenses
             totalExpenseDisplay = findViewById(R.id.totalExpenses);
-            String expenseRendering = "Total Expenses: $" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Long.toString(thisMonthsData.getTotalExpensesAsCents() / 100)));
+            String expenseRendering = "Total Expenses: $" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(thisMonthsData.getTotalExpensesAsCents() / 100.00)));
             totalExpenseDisplay.setText(expenseRendering);
         }
         //Upon first login, use the bundle set up by the database
