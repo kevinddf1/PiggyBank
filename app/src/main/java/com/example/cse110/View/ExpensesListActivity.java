@@ -165,7 +165,7 @@ public class ExpensesListActivity extends AppCompatActivity {
                         category.createExpense(expenseName.getText().toString(), Double.parseDouble(expenseCost.getText().toString()), today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
                         // Update total expenses for this category
                         double currentTotalExpense = category.getTotalExpenses() / DOUBLE;
-                        String totalExpensesRendering = "$" + formattingTool.formatMoneyString(Double.toString(currentTotalExpense));
+                        String totalExpensesRendering = "$" + formattingTool.formatMoneyString(formattingTool.formatDecimal(Double.toString(currentTotalExpense)));
                         totalExpensesDisplay.setText(totalExpensesRendering);
 
                         // Displays a Toast message if the user goes over their budget when adding an expense

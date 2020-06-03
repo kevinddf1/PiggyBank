@@ -209,7 +209,6 @@ public class HistoryActivity extends AppCompatActivity {
                      */
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                         //Set up new intent to send to HistoryCategoryActivity
                         Intent i = new Intent(getBaseContext(), HistoryCategoryActivity.class);
 
@@ -228,7 +227,7 @@ public class HistoryActivity extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
                 };
-                base.getMyRef().addValueEventListener(postListener);
+                base.getMyRef().addListenerForSingleValueEvent(postListener);
 
             }
 

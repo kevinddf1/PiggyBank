@@ -111,7 +111,7 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
                     double calculatedRemainder = (double) category.getTotalExpenses() / DOUBLE;
                     String totalExpenseString = Double.valueOf(calculatedRemainder).toString();
 
-                    ((ExpensesListActivity) context).updateTotalExpenseDisplay("$" + formattingTool.formatMoneyString(totalExpenseString));
+                    ((ExpensesListActivity) context).updateTotalExpenseDisplay("$" + formattingTool.formatMoneyString(formattingTool.formatDecimal(totalExpenseString)));
 
                     //Add fine tuning on expense Display
                     notifyDataSetChanged();
@@ -130,7 +130,7 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
         TextView expenseName = listItemView.findViewById(R.id.expense_name);
         expenseName.setText(item.getName());
         TextView expenseCost = listItemView.findViewById(R.id.expense_cost);
-        expenseCost.setText("$" + formattingTool.formatMoneyString(item.getCostAsString()));
+        expenseCost.setText("$" + formattingTool.formatMoneyString(formattingTool.formatDecimal(item.getCostAsString())));
     }
 
 
