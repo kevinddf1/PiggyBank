@@ -1,7 +1,6 @@
 package com.example.cse110.View.graphs;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +100,9 @@ public class lineChartFragment extends Fragment {
         //past allMonths from graphsActivity to This file
         GraphsActivity activity=(GraphsActivity) getActivity();
         allMonths=activity.getAllMonths();
-        Log.d("kevintest", allMonths.get(0));
+
+        Collections.sort(allMonths);
+        Collections.reverse(allMonths);
 
         setupArrayList();
 
@@ -125,7 +126,7 @@ public class lineChartFragment extends Fragment {
             String month=getMonth(Integer.parseInt(brokenDownString[MONTH_INDEX]));
             String year= brokenDownString[YEAR_INDEX];
             monthArrayList.add(month+" "+year );
-            monthExpenseArrayList.add(Double.parseDouble(brokenDownString[EXPENSES_INDEX]));
+            monthExpenseArrayList.add(Double.parseDouble(brokenDownString[EXPENSES_INDEX])/100.00);
         }
     }
 
