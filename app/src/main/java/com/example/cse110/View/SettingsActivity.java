@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private MonthlyData monthlyData;
     private MonthlyData thisMonthsData;
-    private Database base = Database.Database(); // create a Database object
+    private Database base = Database.getInstance(); // create a Database object
 
     /**
      *
@@ -166,7 +166,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
                 // Retrieve the current data from data base
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 // put extra data for categories and expenses
@@ -203,7 +203,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
                 //Retrieve the monthly data from the database
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //put extra data into new intent

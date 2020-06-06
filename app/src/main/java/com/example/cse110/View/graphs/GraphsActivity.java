@@ -73,7 +73,7 @@ public class GraphsActivity extends AppCompatActivity {
     /**
      * Retrieves our database singleton
      */
-    private final Database base = Database.Database();
+    private final Database base = Database.getInstance();
 
 
     /**
@@ -270,7 +270,7 @@ public class GraphsActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
                 //Retrieve the monthly data from the database
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);
                 //put extra data into new intent

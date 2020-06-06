@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Allows us to pull most up to date info from the database.
      */
-    private final Database base = Database.Database(); // create a Database object
+    private final Database base = Database.getInstance(); // create a Database object
 
     /**
      * Formatting tool to avoid redundancies.
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 Calendar today = Calendar.getInstance();
                 int month = today.get(Calendar.MONTH);
                 int year = today.get(Calendar.YEAR);
-                base.insertMonthlydata(year, month);
+                base.insertMonthlyData(year, month);
 
                 //Retrieve the monthly data from the database
                 thisMonthsData = base.RetrieveDataCurrent(dataSnapshot, thisMonthsData, year, month);

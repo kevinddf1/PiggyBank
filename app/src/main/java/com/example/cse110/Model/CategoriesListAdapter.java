@@ -28,7 +28,7 @@ public class CategoriesListAdapter extends ArrayAdapter<Category> {
     /**
      * Allows us to pull most up to date info from the database.
      */
-    private final Database base = Database.Database(); // create a Database object
+    private final Database base = Database.getInstance(); // create a Database object
 
     /**
      * Static info to display

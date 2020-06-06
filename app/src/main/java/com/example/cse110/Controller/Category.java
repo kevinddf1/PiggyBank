@@ -33,7 +33,7 @@ public class Category implements Parcelable {
     /**
      * Our database singleton
      */
-    private final Database base = Database.Database(); // create a Database object
+    private final Database base = Database.getInstance(); // create a Database object
 
     /**
      * Constructor for an empty Category.
