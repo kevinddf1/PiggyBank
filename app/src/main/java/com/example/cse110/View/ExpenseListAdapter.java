@@ -113,6 +113,9 @@ class ExpenseListAdapter extends ArrayAdapter<Expense> {
 
                     ((ExpensesListActivity) context).updateTotalExpenseDisplay("$" + formattingTool.formatMoneyString(formattingTool.formatDecimal(totalExpenseString)));
 
+                    // Update database
+                    category.setTotalExpenses();
+
                     //Add fine tuning on expense Display
                     notifyDataSetChanged();
                 }

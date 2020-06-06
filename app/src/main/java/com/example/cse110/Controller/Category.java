@@ -115,10 +115,13 @@ public class Category implements Parcelable {
         expenses.add(expense);
 
         //Update the database
-        this.base.insertExpense(expense.getCost(), name, this.name, year, month, day, nextExpenseId); // update category to database
+        this.base.insertExpense(expense.getCost(), name, this.name, year, month, day, nextExpenseId - 1); // update category to database
 
         //Update total expenses so far
         this.totalExpenses = totalExpenses + expense.getCost();
+
+        setTotalExpenses();
+
         return expense;
     }
 
@@ -147,6 +150,7 @@ public class Category implements Parcelable {
                 break;
             }
         }
+       setTotalExpenses();
     }
 
     /**
@@ -240,6 +244,7 @@ public class Category implements Parcelable {
      * Calculates totalExpenses for this object. Is a costly operation as it is O(n).
      */
     public void setTotalExpenses() {
+        this.totalExpenses = 0;
         for (Expense expense : this.expenses) {
             this.totalExpenses += expense.getCost();
         }

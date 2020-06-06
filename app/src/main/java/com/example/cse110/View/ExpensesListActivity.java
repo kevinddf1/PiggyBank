@@ -421,6 +421,10 @@ public class ExpensesListActivity extends AppCompatActivity {
         totalExpensesDisplay.setText(toDisplay);
         // Displays a Toast message that confirms the expense was deleted
         Toast.makeText(getBaseContext(), "Item deleted.", Toast.LENGTH_SHORT).show();
+
+        //Update the database with most current expenses
+        base.insertTotalExpense(monthlyData.getYear(), monthlyData.getIntMonth(), monthlyData.getTotalExpensesAsCents());
+
     }
 
     /**
